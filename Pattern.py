@@ -14,7 +14,6 @@ class Pattern:
         self.circles = circles
         self.lines = lines
         self.col = col
-        print(lines)
 
         self.generate_shape()
         if self.circles:
@@ -57,14 +56,18 @@ class Pattern:
     def draw_triangle(self, angle=0):
         points = []
         points.append(self.new_point(self.center, self.size/2, 210+angle))
-        self.c.circle(*points[-1], r=1, stroke=0, fill=1) 
+        if self.circles:
+            self.c.circle(*points[-1], r=1, stroke=0, fill=1) 
         rotation_angle = angle
         for _ in range(2):
             points.append(self.new_point(points[-1], self.size*3/2/3**0.5, rotation_angle))
-            self.c.circle(*points[-1], r=1, stroke=0, fill=1)
-            self.c.line(*points[-2], *points[-1])
+            if self.circles:
+                self.c.circle(*points[-1], r=1, stroke=0, fill=1)
+            if self.lines:
+                self.c.line(*points[-2], *points[-1])
             rotation_angle += 120
-        self.c.line(*points[0], *points[-1])
+        if self.lines:
+            self.c.line(*points[0], *points[-1])
 
 
     def new_point(self, start_point, length, angle_degrees):
