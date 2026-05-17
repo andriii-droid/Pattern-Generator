@@ -4,7 +4,7 @@ import math
 
 
 class Pattern:
-    def __init__(self, filename="output", shape="rect", num_shapes=1, size=100, can=None, circles=False, lines=False):
+    def __init__(self, filename="output", shape="rect", num_shapes=1, size=100, can=None, circles=False, lines=False, col='#000000'):
         self.shape = shape
         self.num_shapes = num_shapes
         self.size = size
@@ -13,14 +13,17 @@ class Pattern:
         self.center = (self.width / 2 , self.height / 2)
         self.circles = circles
         self.lines = lines
+        self.col = col
+        print(lines)
+
         self.generate_shape()
         if self.circles:
             self.c.circle(*self.center, r=3, stroke=0, fill=1)
 
 
     def generate_shape(self):
-        self.c.setFillColor(colors.black)
-        self.c.setStrokeColor(colors.royalblue)
+        self.c.setFillColor(self.col)
+        self.c.setStrokeColor(self.col)
         self.c.setLineWidth(.2)
         angle = 0
         step = 360 / self.num_shapes

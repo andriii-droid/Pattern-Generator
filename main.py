@@ -20,13 +20,18 @@ current_pdf_path = None
 saved = False
 
 def add_pattern_row():
+    pattern_data = {'row': None, 'shape': None, 'num_shapes': None, 'size': None, 'hex': '#000000'}
+
     with ui.row().classes('items-center w-full bg-slate-50 p-3 rounded-lg shadow-sm') as row:
         shape = ui.select(label='Shape', options=['rect', 'tri'], value='rect').classes('w-28')
         num_shapes = ui.number(label='Number', value=20, min=1, step=1).classes('w-24')
         size = ui.number(label='Size', value=200, min=1).classes('w-24')
         ui.button(icon='delete', on_click=lambda: remove_pattern_row(row, pattern_data)).props('flat color=red')
-
-    pattern_data = {'row': row, 'shape': shape, 'num_shapes': num_shapes, 'size': size}
+        with ui.button(icon='colorize') as button:
+            color = ui.color_picker(on_pick=lambda e: (button.style(f'background-color: {e.color} !important;'), 
+                                                       pattern_data.update({'hex': e.color})))
+            
+    pattern_data.update({'row': row, 'shape': shape, 'num_shapes': num_shapes, 'size': size})
     patterns_list.append(pattern_data)
 
 def remove_pattern_row(row_element, pattern_data):
@@ -59,7 +64,9 @@ def generate_pdf():
                 shape=p['shape'].value,
                 can=c,
                 circles=int(circles.value),
-                lines=int(lines.value)
+                lines=int(lines.value),
+                col=p['hex']
+
             )
         c.showPage()
         c.save()
