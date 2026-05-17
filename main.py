@@ -97,6 +97,7 @@ def save_current_pdf():
     global saved
     ui.notify(f"Saved {current_pdf_path.name} successfully.", type='positive')
     pdf_viewer.set_visibility(False)
+    filename_input.value = ""
 
     current_pdf_path = None
     saved = True
