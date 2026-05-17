@@ -1,89 +1,145 @@
-import random
-from reportlab.lib.pagesizes import A6
+
+from nicegui import ui, app
+import time
 from reportlab.pdfgen import canvas
-from reportlab.lib import colors
-import math
+from reportlab.lib.pagesizes import A6
 from pathlib import Path
-
-class Pattern:
-    def __init__(self, filename="output", shape="rect", num_shapes=1, size=100, can=None):
-        self.shape = shape
-        self.num_shapes = num_shapes
-        self.size = size
-        self.c = can
-        self.width, self.height = A6
-        self.center = (self.width / 2 , self.height / 2)
-        self.generate_shape()
-        self.c.circle(*self.center, r=3, stroke=0, fill=1)
+from Pattern import Pattern
 
 
-    def generate_shape(self):
-        self.c.setFillColor(colors.black)
-        self.c.setStrokeColor(colors.royalblue)
-        self.c.setLineWidth(.2)
-        angle = 0
-        step = 360 / self.num_shapes
-        for _ in range(self.num_shapes):
-            if self.shape == "rect":
-                self.draw_square(angle)
-            elif self.shape == "tri":
-                self.draw_triangle(angle)
-            else:
-                print(f"No Shape with the Name: {self.shape}")
-                break
-                
-            angle += step        
+# Create a local directory to save PDFs if it doesn't exist
+# NiceGUI needs a static folder to serve local files safely to the browser
+static_dir = Path("./static")
+static_dir.mkdir(exist_ok=True)
 
-    def draw_square(self, angle=0):
-        points = []
-        points.append(self.new_point(self.center, self.size/2, 225+angle))
-        self.c.circle(*points[-1], r=1, stroke=0, fill=1) 
-        rotation_angle = angle
-        for _ in range(3):
-            points.append(self.new_point(points[-1], self.size/2*2**0.5, rotation_angle))
-            self.c.circle(*points[-1], r=1, stroke=0, fill=1)
-            self.c.line(*points[-2], *points[-1])
-            rotation_angle += 90
-        self.c.line(*points[0], *points[-1])
+# Tell NiceGUI to serve files from the '/static' folder at the URL path '/download'
+app.add_static_files('/download', str(static_dir))
 
-    def draw_triangle(self, angle=0):
-        points = []
-        points.append(self.new_point(self.center, self.size/2, 210+angle))
-        self.c.circle(*points[-1], r=1, stroke=0, fill=1) 
-        rotation_angle = angle
-        for _ in range(2):
-            points.append(self.new_point(points[-1], self.size*3/2/3**0.5, rotation_angle))
-            self.c.circle(*points[-1], r=1, stroke=0, fill=1)
-            self.c.line(*points[-2], *points[-1])
-            rotation_angle += 120
-        self.c.line(*points[0], *points[-1])
+patterns_list = []
+current_pdf_path = None
+saved = False
 
+def add_pattern_row():
+    with ui.row().classes('items-center w-full bg-slate-50 p-3 rounded-lg shadow-sm') as row:
+        shape = ui.select(label='Shape', options=['rect', 'tri'], value='rect').classes('w-28')
+        num_shapes = ui.number(label='Number', value=20, min=1, step=1).classes('w-24')
+        size = ui.number(label='Size', value=200, min=1).classes('w-24')
+        ui.button(icon='delete', on_click=lambda: remove_pattern_row(row, pattern_data)).props('flat color=red')
 
-    def new_point(self, start_point, length, angle_degrees):
-        x1, y1 = start_point
-        
-        angle_radians = math.radians(angle_degrees)
-        
-        dx = length * math.cos(angle_radians)
-        dy = length * math.sin(angle_radians)
-        
-        x2 = x1 + dx
-        y2 = y1 + dy
-        
-        return (x2, y2)
+    pattern_data = {'row': row, 'shape': shape, 'num_shapes': num_shapes, 'size': size}
+    patterns_list.append(pattern_data)
 
-if __name__ == "__main__":
-    num_patterns = int(input("Number of Patterns: "))
-    filename = input("Filename: ")
-    if filename == "":
-        filename = "output"
-    filename = str(Path(filename).with_suffix(".pdf"))
-    c = canvas.Canvas(filename, pagesize=A6)
-    for _ in range(num_patterns):
-        num_shapes = int(input("Number of Shapes: "))
-        shape = input("Shape: \nrect\ntri\n")
-        size = int(input("Size: "))
-        Pattern(filename=filename, num_shapes=num_shapes, size=size, shape=shape, can=c)
-    c.showPage()
-    c.save()
+def remove_pattern_row(row_element, pattern_data):
+    patterns_container.remove(row_element)
+    patterns_list.remove(pattern_data)
+
+def generate_pdf():
+    global current_pdf_path
+    global saved
+    if not saved:
+        delete_current_pdf()
+        saved = False
+
+    raw_filename = filename_input.value.strip() or "output"
     
+    # Force the PDF to be saved inside our static directory
+    pdf_path = static_dir / Path(raw_filename).with_suffix(".pdf")
+    
+    if not patterns_list:
+        ui.notify("Please add at least one pattern.", type='warning')
+        return
+
+    try:
+        c = canvas.Canvas(str(pdf_path), pagesize=A6)
+        for p in patterns_list:
+            Pattern(
+                filename=str(pdf_path),
+                num_shapes=int(p['num_shapes'].value),
+                size=int(p['size'].value),
+                shape=p['shape'].value,
+                can=c
+            )
+        c.showPage()
+        c.save()
+        
+        ui.notify(f"Generated {pdf_path.name}!", type='positive')
+        current_pdf_path = pdf_path
+        
+        # --- Update the PDF Viewer Section ---
+        # We point the iframe source to the local route we mapped earlier + a timestamp to force refresh
+        pdf_viewer.set_visibility(True)
+        pdf_frame.props(f'src="/download/{pdf_path.name}?t={time.time()}"')
+        
+    except Exception as e:
+        ui.notify(f"Error: {str(e)}", type='negative')
+
+def delete_current_pdf():
+    global current_pdf_path
+    if current_pdf_path and current_pdf_path.exists():
+        try:
+            # 1. Clear iframe source so the browser releases the file lock
+            pdf_frame.props('src=""')
+            
+            # 2. Delete file from local storage
+            current_pdf_path.unlink()
+            ui.notify(f"Deleted {current_pdf_path.name} successfully.", type='positive')
+            
+            # 3. Clean up UI state
+            current_pdf_path = None
+            pdf_viewer.set_visibility(False)
+        except Exception as e:
+            ui.notify(f"Could not delete file: {str(e)}", type='negative')
+    else:
+        ui.notify("No generated file found to delete.", type='warning')
+
+def save_current_pdf():
+    global current_pdf_path
+    global saved
+    ui.notify(f"Saved {current_pdf_path.name} successfully.", type='positive')
+    pdf_viewer.set_visibility(False)
+
+    current_pdf_path = None
+    saved = True
+    
+
+
+
+# --- UI Layout ---
+ui.query('body').classes('bg-slate-100')
+
+# Main layout split into a 2-column grid (Left: Controls, Right: PDF Viewer)
+with ui.grid(columns='1fr 1fr').classes('w-full max-w-6xl mx-auto my-10 gap-6 p-4'):
+    
+    # LEFT COLUMN: Controls Card
+    with ui.card().classes('p-6 shadow-lg rounded-xl bg-white h-fit'):
+        ui.label('PDF Pattern Generator').classes('text-2xl font-bold text-slate-800 mb-2')
+        
+        filename_input = ui.input(label='Filename', placeholder='output', suffix='.pdf').classes('w-full mb-4')
+        
+        ui.separator().classes('my-2')
+        
+        with ui.row().classes('w-full justify-between items-center mb-2'):
+            ui.label('Patterns').classes('text-lg font-semibold text-slate-700')
+            ui.button('Add Row', icon='add', on_click=add_pattern_row).props('outline size=sm color=primary')
+
+        patterns_container = ui.column().classes('w-full gap-3 mb-6')
+        with patterns_container:
+            add_pattern_row() # Initial default row
+            
+        ui.button('Generate & View PDF', icon='picture_as_pdf', on_click=generate_pdf).classes('w-full py-2 text-lg').props('color=primary')
+
+    # RIGHT COLUMN: Dynamic PDF Viewer Card
+    # It starts hidden and reveals itself the first time you click "Generate"
+    with ui.card().classes('p-4 shadow-lg rounded-xl bg-white h-[700px]') as pdf_viewer:
+        pdf_viewer.set_visibility(False) 
+        ui.label('PDF Preview').classes('text-lg font-bold text-slate-700 mb-2')
+        with ui.row():
+            ui.button('Delete PDF', icon='delete_forever', on_click=delete_current_pdf).props('flat color=red size=md')
+            ui.button('Save PDF', icon='save', on_click=save_current_pdf).props('flat color=green size=md')
+
+        
+        # Native HTML iframe configured to fill the card space completely
+        pdf_frame = ui.element('iframe').classes('w-full h-full border-none rounded-lg')
+
+# Start NiceGUI
+ui.run(title="Pattern Generator & Viewer")
