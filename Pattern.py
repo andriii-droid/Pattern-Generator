@@ -32,7 +32,7 @@ class Pattern:
                 self.c.setStrokeColor(col)
 
             points = self.calc_shape(angle=angle, num_points=shape, center=self.center)
-            self.draw_shape(points) 
+            self.draw_shape(points, angle) 
             angle += step   
 
     def savePDF(self):
@@ -61,9 +61,9 @@ class Pattern:
             rotation_angle -= 360/num_points
         return points
     
-    def draw_shape(self, points):
+    def draw_shape(self, points, angle):
         for p1, p2 in zip(points, points[1:]+[points[0]]):
             if self.circles:
                 self.c.circle(*p1, r=1, stroke=0, fill=1)
-            if self.lines: #or (self.sketch and angle==0):
+            if self.lines or (self.sketch and angle == 0):
                 self.c.line(*p1, *p2)
