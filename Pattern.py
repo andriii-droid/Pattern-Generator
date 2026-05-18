@@ -4,7 +4,7 @@ import math
 
 
 class Pattern:
-    def __init__(self, filename="output", shape="rect", num_shapes=1, size=100, can=None, circles=False, lines=False, col='#000000'):
+    def __init__(self, filename="output", shape="rect", num_shapes=1, size=100, can=None, circles=False, lines=False, col='#000000', offset=1):
         self.shape = shape
         self.num_shapes = num_shapes
         self.size = size
@@ -14,6 +14,7 @@ class Pattern:
         self.circles = circles
         self.lines = lines
         self.col = col
+        self.offset = offset
 
         self.generate_shape()
         if self.circles:
@@ -39,7 +40,7 @@ class Pattern:
 
     def draw_square(self, angle=0):
         points = []
-        points.append(self.new_point(self.center, self.size/2, 225+angle))
+        points.append(self.new_point(self.center, (self.size/2)*self.offset, 225+angle))
         if self.circles:
             self.c.circle(*points[-1], r=1, stroke=0, fill=1) 
         rotation_angle = angle
@@ -55,7 +56,7 @@ class Pattern:
 
     def draw_triangle(self, angle=0):
         points = []
-        points.append(self.new_point(self.center, self.size/2, 210+angle))
+        points.append(self.new_point(self.center, (self.size/2)*self.offset, 210+angle))
         if self.circles:
             self.c.circle(*points[-1], r=1, stroke=0, fill=1) 
         rotation_angle = angle
