@@ -1,4 +1,3 @@
-
 from nicegui import ui, app
 import time
 from reportlab.pdfgen import canvas
