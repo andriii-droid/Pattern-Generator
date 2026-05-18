@@ -54,10 +54,10 @@ class Pattern:
             points.append(self.new_point(points[-1], self.size/2*2**0.5, rotation_angle))
             if self.circles:
                 self.c.circle(*points[-1], r=1, stroke=0, fill=1)
-            if self.lines:
+            if self.lines or (self.sketch and angle==0):
                 self.c.line(*points[-2], *points[-1])
             rotation_angle += 90
-        if self.lines:
+        if self.lines or (self.sketch and angle==0):
             self.c.line(*points[0], *points[-1])
 
     def draw_triangle(self, angle=0):
@@ -70,10 +70,10 @@ class Pattern:
             points.append(self.new_point(points[-1], self.size*3/2/3**0.5, rotation_angle))
             if self.circles:
                 self.c.circle(*points[-1], r=1, stroke=0, fill=1)
-            if self.lines:
+            if self.lines or (self.sketch and angle==0):
                 self.c.line(*points[-2], *points[-1])
             rotation_angle += 120
-        if self.lines:
+        if self.lines or (self.sketch and angle==0):
             self.c.line(*points[0], *points[-1])
 
 
