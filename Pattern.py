@@ -12,6 +12,8 @@ class Pattern:
         self.c = canvas.Canvas(filename, pagesize=A6)
         self.width, self.height = A6
         self.center = (self.width / 2 , self.height / 2)
+        self.size = 200
+        self.offset = 1
 
         if self.circles:
             self.c.circle(*self.center, r=3, stroke=0, fill=1)

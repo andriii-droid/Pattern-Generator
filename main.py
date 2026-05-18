@@ -70,14 +70,19 @@ def generate_pdf():
                        circles=int(circles.value),
                        lines=int(lines.value),
                        sketch=int(sketch.value))
-        for p in patterns_list:
-            page.generate_shape(
-                num_shapes=int(p['num_shapes'].value),
-                size=int(p['size'].value),
-                shape=int(p['shape'].value),
-                col=p['hex'],
-                offset=float(p['offset'].value),
-            )
+        page.size = int(radius.value)
+        center_points = page.calc_shape(page.center, num_points=int(num_center_points.value))
+
+        for cp in center_points:
+            page.center = cp
+            for p in patterns_list:
+                page.generate_shape(
+                    num_shapes=int(p['num_shapes'].value),
+                    size=int(p['size'].value),
+                    shape=int(p['shape'].value),
+                    col=p['hex'],
+                    offset=float(p['offset'].value),
+                )
         page.savePDF()
         
         ui.notify(f"Generated {pdf_path.name}!", type='positive')
@@ -139,12 +144,12 @@ with ui.grid(columns='1fr 1fr').classes('w-full max-w-6xl mx-auto my-10 gap-6 p-
         with ui.row().classes('w-full justify-between items-center mb-2'):
             ui.label('Center').classes('text-lg font-semibold text-slate-700')
             num_center_points = ui.number(label='Points', value=1, min=1, step=1).classes('w-24')
-            radius = ui.slider(min=0, max=200, step=1, value=1).classes('w-32 intermediate-class')
+            radius = ui.slider(min=0, max=100, step=1, value=1).classes('w-32 intermediate-class')
             ui.label().bind_text_from(radius, 'value').classes('w-12 text-right')
         
         with ui.row().classes('w-full justify-between items-center mb-2'):
             ui.label('Patterns').classes('text-lg font-semibold text-slate-700')
-            circles = ui.switch('Circles', value=True)
+            circles = ui.switch('Points', value=True)
             lines = ui.switch('Lines', value=True)
             sketch = ui.switch('Sketch', value=False)
             ui.button('Add Row', icon='add', on_click=add_pattern_row).props('outline size=sm color=primary')
