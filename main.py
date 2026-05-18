@@ -30,8 +30,10 @@ def add_pattern_row():
         with ui.button(icon='colorize') as button:
             color = ui.color_picker(on_pick=lambda e: (button.style(f'background-color: {e.color} !important;'), 
                                                        pattern_data.update({'hex': e.color})))
+        offset = ui.slider(min=0, max=1, step=0.01, value=1).classes('w-32')
+        ui.label().bind_text_from(offset, 'value')
             
-    pattern_data.update({'row': row, 'shape': shape, 'num_shapes': num_shapes, 'size': size})
+    pattern_data.update({'row': row, 'shape': shape, 'num_shapes': num_shapes, 'size': size, 'offset': offset})
     patterns_list.append(pattern_data)
 
 def remove_pattern_row(row_element, pattern_data):
@@ -65,8 +67,8 @@ def generate_pdf():
                 can=c,
                 circles=int(circles.value),
                 lines=int(lines.value),
-                col=p['hex']
-
+                col=p['hex'],
+                offset=float(p['offset'].value)
             )
         c.showPage()
         c.save()
