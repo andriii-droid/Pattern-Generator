@@ -162,7 +162,7 @@ with ui.grid(columns='1fr 1fr').classes('w-full max-w-6xl mx-auto my-10 gap-6 p-
 
     # RIGHT COLUMN: Dynamic PDF Viewer Card
     # It starts hidden and reveals itself the first time you click "Generate"
-    with ui.card().classes('p-4 shadow-lg rounded-xl bg-white h-[700px]') as pdf_viewer:
+    with ui.card().classes('p-4 shadow-lg rounded-xl bg-white h-[860px]') as pdf_viewer:
         pdf_viewer.set_visibility(False) 
         ui.label('PDF Preview').classes('text-lg font-bold text-slate-700 mb-2')
         with ui.row():
