@@ -68,7 +68,8 @@ def generate_pdf():
                 circles=int(circles.value),
                 lines=int(lines.value),
                 col=p['hex'],
-                offset=float(p['offset'].value)
+                offset=float(p['offset'].value),
+                sketch=int(sketch.value)
             )
         c.showPage()
         c.save()
@@ -134,6 +135,7 @@ with ui.grid(columns='1fr 1fr').classes('w-full max-w-6xl mx-auto my-10 gap-6 p-
             ui.label('Patterns').classes('text-lg font-semibold text-slate-700')
             circles = ui.switch('Circles', value=True)
             lines = ui.switch('Lines', value=True)
+            sketch = ui.switch('Sketch', value=False)
             ui.button('Add Row', icon='add', on_click=add_pattern_row).props('outline size=sm color=primary')
 
         patterns_container = ui.column().classes('w-full gap-3 mb-6')
