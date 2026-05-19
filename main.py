@@ -3,6 +3,8 @@ import time
 from reportlab.pdfgen import canvas
 from reportlab.lib.pagesizes import A6
 from pathlib import Path
+from Shape import Shape
+from Spline import Spline
 from Pattern import Pattern
 
 
@@ -106,13 +108,13 @@ def generate_pdf():
                        circles=int(circles.value),
                        lines=int(lines.value),
                        sketch=int(sketch.value))
-        page.size = int(radius.value)
-        center_points = page.calc_shape(page.center, num_points=int(num_center_points.value))
-
+        shape = Shape(page, center_radius=int(radius.value))
+        center_points = shape.calc_shape(page.center, num_points=int(num_center_points.value))
+        print(center_points)
         for cp in center_points:
             page.center = cp
             for p in patterns_list:
-                page.generate_shape(
+                shape.generate_shape(
                     num_shapes=int(p['num_shapes'].value),
                     size=int(p['size'].value),
                     shape=int(p['shape'].value),
@@ -120,8 +122,9 @@ def generate_pdf():
                     offset=float(p['offset'].value),
                     line_points=int(p['line_points'].value))
             for s in splines_list:
-                print(s)
-                page.generate_spline()
+                page.generate_spline(
+
+                )
                 
         page.savePDF()
         
