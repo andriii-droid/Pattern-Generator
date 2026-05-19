@@ -1,0 +1,38 @@
+import math
+
+class Point:
+    def __init__(self, x=0.0, y=0.0):
+        # We establish Cartesian as our single internal source of truth
+        self._x = float(x)
+        self._y = float(y)
+
+    # --- Alternative Constructor ---
+    @classmethod
+    def from_polar(cls, angle_degrees, distance):
+        """Creates a Point instance using polar coordinates."""
+        angle_rad = math.radians(angle_degrees)
+        x = math.cos(angle_rad) * distance
+        y = math.sin(angle_rad) * distance
+        return cls(x, y) # Calls __init__ with the calculated x and y
+
+    # --- Getters (Properties) ---
+    @property
+    def cartesian(self):
+        return (round(self._x, 10), round(self._y, 10))
+
+    @property
+    def polar(self):
+        angle = math.degrees(math.atan2(self._y, self._x)) % 360
+        distance = math.hypot(self._x, self._y) # Cleaner way to do (x^2 + y^2)^0.5
+        return (round(angle, 10), round(distance, 10))
+
+if __name__ == '__main__':
+    p = Point(1,1)
+
+    print(p.cartesian)
+    print(p.polar)
+
+    p1 = Point.from_polar(angle_degrees=45, distance=2**0.5)
+
+    print(p1.cartesian)
+    print(p1.polar)
