@@ -90,5 +90,5 @@ class Pattern:
     def draw_lines(self, points, angle, offset):
         print(not offset)
         for count, (p1, p2) in enumerate(zip(points, points[offset+2:]+points[0:offset+2])):
-            if self.lines or (self.sketch and angle == 0 and not (offset)) or (offset and count == 0):
+            if self.lines or(self.sketch and angle == 0 and not (offset)) or (self.sketch and offset and count == 0):
                 self.c.line(*p1, *p2)
