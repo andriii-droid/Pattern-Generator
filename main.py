@@ -98,7 +98,7 @@ def generate_pdf():
                         offset=float(p['offset'].value),
                         line_points=int(p['line_points'].value))
                 else:
-                    pass
+                    page.generate_spline()
                 
         page.savePDF()
         

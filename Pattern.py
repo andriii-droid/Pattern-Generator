@@ -92,3 +92,17 @@ class Pattern:
         for count, (p1, p2) in enumerate(zip(points, points[offset+2:]+points[0:offset+2])):
             if self.lines or(self.sketch and angle == 0 and not (offset)) or (self.sketch and offset and count == 0):
                 self.c.line(*p1, *p2)
+
+    def generate_spline(self):
+
+        path = self.c.beginPath()
+        cx, cy = self.center
+        
+
+        # Calculate start and end points manually
+        startpoint = (cx + 50, cy-50)
+        endpoint = (cx + 50, cy+50)
+        path.moveTo(startpoint[0], startpoint[1])
+        path.curveTo(startpoint[0],startpoint[1], self.center[0], self.center[1], endpoint[0],endpoint[1])
+        self.c.drawPath(path, stroke=1)
+        print(path)
