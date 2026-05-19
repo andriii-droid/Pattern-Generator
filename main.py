@@ -97,8 +97,8 @@ def generate_pdf():
     # Force the PDF to be saved inside our static directory
     pdf_path = static_dir / Path(raw_filename).with_suffix(".pdf")
     
-    if not patterns_list:
-        ui.notify("Please add at least one pattern.", type='warning')
+    if not patterns_list and not splines_list:
+        ui.notify("Please add at least one pattern or spline.", type='warning')
         return
 
     try:
