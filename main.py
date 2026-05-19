@@ -123,11 +123,11 @@ def generate_pdf():
                     line_points=int(p['line_points'].value))
             for s in splines_list:
                 spline.generate_spline(
-                    spline=int(p['spline'].value),
-                    num_points=int(p['num_points'].value),
-                    start_point=(int(p['start_angle'].value), int(p['start_distance'].value)),
-                    control_point=(int(p['control_angle'].value), int(p['control_distance'].value)),
-                    end_point=(int(p['end_angle'].value), int(p['end_distance'].value)))
+                    spline=int(s['spline'].value),
+                    num_points=int(s['num_points'].value),
+                    start_point=(int(s['start_angle'].value), int(s['start_distance'].value)),
+                    control_point=(int(s['control_angle'].value), int(s['control_distance'].value)),
+                    end_point=(int(s['end_angle'].value), int(s['end_distance'].value)))
                 
         page.savePDF()
         
