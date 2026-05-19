@@ -34,11 +34,12 @@ class Pattern:
                 self.c.setStrokeColor(col)
 
             points = self.calc_shape(angle=angle, num_points=shape, center=self.center)
-            if not line_points:
-                self.draw_points(points)
-                self.draw_lines(points, angle)
-            else:
-                pass
+            if line_points:
+                points = self.generate_points_on_shape(points=points, num_points=line_points)
+
+            self.draw_points(points)
+            self.draw_lines(points, angle, line_points)
+
             angle += step   
 
     def savePDF(self):
@@ -66,13 +67,28 @@ class Pattern:
             points.append(self.new_point(points[-1], self.size*math.sin(math.pi/num_points), rotation_angle)) #TODO
             rotation_angle -= 360/num_points
         return points
+    
+    def generate_points_on_shape(self, points, num_points):
+        """
+        Generates a list of (x, y) coordinates evenly spaced between each two points in the given points list
+        """
+        new_points = []
+        for p1, p2 in zip(points, points[1:]+[points[0]]):
+            new_points.append(p1)
+            for i in range(num_points+1)[1:]:
+                t = i / (num_points + 1)
+                x = p1[0] + t * (p2[0] - p1[0])
+                y = p1[1] + t * (p2[1] - p1[1])
+                new_points.append((x,y))
+        return new_points
 
     def draw_points(self, points):
         for p1, p2 in zip(points, points[1:]+[points[0]]):
             if self.circles:
                 self.c.circle(*p1, r=1, stroke=0, fill=1)
 
-    def draw_lines(self, points, angle):
-        for p1, p2 in zip(points, points[1:]+[points[0]]):
-            if self.lines or (self.sketch and angle == 0):
+    def draw_lines(self, points, angle, offset):
+        print(not offset)
+        for count, (p1, p2) in enumerate(zip(points, points[offset+2:]+points[0:offset+2])):
+            if self.lines or (self.sketch and angle == 0 and not (offset)) or (offset and count == 0):
                 self.c.line(*p1, *p2)

@@ -31,8 +31,10 @@ def add_pattern_row():
     }
 
     def handle_type_change(e):
-        if e.value == 'full':
-            line_points.value = 0
+        if e.value == 'line':
+            line_points.value = -1
+        if e.value == 'dotted':
+            line_points.value = 5
 
     with ui.row().classes('items-center w-full bg-slate-50 p-3 rounded-lg shadow-sm') as row:
         shape = ui.select(label='Shape', options=shape_options, value=3).classes('w-28')
@@ -43,8 +45,8 @@ def add_pattern_row():
                                                        pattern_data.update({'hex': e.color})))
         offset = ui.slider(min=0, max=1, step=0.01, value=1).classes('w-32')
         ui.label().bind_text_from(offset, 'value').classes('w-6')
-        line_type = ui.select(label="Linetype", options=['full', 'dotted'], value='full').classes('w-26').on_value_change(handle_type_change)
-        line_points = ui.number(label="Points", value=0, min=0, step=1).classes('w-24') \
+        line_type = ui.select(label="Linetype", options=['line', 'dotted'], value='line').classes('w-26').on_value_change(handle_type_change)
+        line_points = ui.number(label="Points", value=-1, min=-1, step=1).classes('w-24') \
             .bind_visibility_from(line_type, 'value', backward=lambda v: v == 'dotted') 
         ui.button(icon='delete', on_click=lambda: remove_pattern_row(row, pattern_data)).props('flat color=red')
 
