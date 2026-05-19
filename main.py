@@ -67,7 +67,7 @@ def add_spline_row():
                 with ui.row():
                     angle = ui.number(label='Angle', value=0, min=0, max=359, step=1).classes('w-24')
                     dist = ui.number(label='Distance', value=20, min=1, step=1).classes('w-24')
-                    points.append(Point.from_polar(angle_degrees=int(angle.value), distance=int(dist.value)))
+                    points.append((angle, dist))
         with ui.column().classes('grow h-full bg-slate-50 p-3 rounded-lg shadow-sm items-start'):
             spline = ui.switch('Show Spline', value=False)
             num_points = ui.number(label="Points", value=1, min=1, step=1).classes('w-24')
@@ -125,9 +125,9 @@ def generate_pdf():
                 spline.generate_spline(
                     spline=int(s['spline'].value),
                     num_points=int(s['num_points'].value),
-                    start_point=(s['start_point'].value),
-                    control_point=(s['control_point'].value),
-                    end_point=(s['end_point'].value))
+                    start_point=(Point.from_polar(int(s['start_point'][0].value), int(s['start_point'][1].value))),
+                    control_point=(Point.from_polar(int(s['control_point'][0].value), int(s['control_point'][1].value))),
+                    end_point=(Point.from_polar(int(s['end_point'][0].value), int(s['end_point'][1].value))))
                 
         page.savePDF()
         

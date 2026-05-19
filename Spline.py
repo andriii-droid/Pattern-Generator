@@ -3,13 +3,14 @@ import math
 from reportlab.lib.pagesizes import A6
 from reportlab.lib import colors
 from reportlab.pdfgen import canvas
+from Point import Point
 
 class Spline():
     def __init__(self, pattern):
         self.pattern = pattern
 
-    def generate_spline(self, spline=False, num_points=2, start_point=(0,0),
-                        control_point=(0,0),end_point=(0,0)):
+    def generate_spline(self, spline=False, num_points=2, start_point=None,
+                        control_point=None, end_point=None):
         self.spline = spline
         self.num_points = num_points
         self.start_point = start_point
@@ -18,25 +19,17 @@ class Spline():
 
         path = self.pattern.c.beginPath()
         cx, cy = self.pattern.center
-        
 
-        # Calculate start and end points manually
-        startpoint = (cx + 50, cy-50)
-        endpoint = (cx + 50, cy+50)
-        path.moveTo(startpoint[0], startpoint[1])
-        path.curveTo(startpoint[0],startpoint[1], self.pattern.center[0], self.pattern.center[1], endpoint[0],endpoint[1])
+        path.moveTo(*self.start_point.cartesian)
+        path.curveTo(*self.start_point.cartesian, *self.control_point.cartesian, *self.end_point.cartesian)
         self.pattern.c.drawPath(path, stroke=1)
 
-        even_points = self.get_even_points_on_curve(startpoint, 
-                                                         startpoint, 
-                                                         self.pattern.center,
-                                                         endpoint,
-                                                         num_points=10)
+        even_points = self.get_even_points_on_curve(num_points=10)
         self.pattern.draw_points(even_points)
         
     import math
 
-    def get_even_points_on_curve(self, start, ctrl1, ctrl2, end, num_points=10):
+    def get_even_points_on_curve(self, num_points=10):
         """
         Calculates physically evenly spaced points along a Cubic Bézier curve.
         """
@@ -55,7 +48,10 @@ class Spline():
         # Generate a massive pool of points
         for i in range(high_res_steps + 1):
             t = i / high_res_steps
-            pt = bezier_point(t, start, ctrl1, ctrl2, end)
+            pt = bezier_point(t, self.start_point.cartesian, 
+                              self.start_point.cartesian,
+                              self.control_point.cartesian, 
+                              self.end_point.cartesian)
             points_pool.append(pt)
             
             if i > 0:
