@@ -196,10 +196,10 @@ with ui.grid(columns='1fr 1fr').classes('w-full max-w-6xl mx-auto my-10 gap-6 p-
             circles = ui.switch('Points', value=True)
             lines = ui.switch('Lines', value=True)
             sketch = ui.switch('Sketch', value=False)
+        ui.separator().classes('my-2')
         with ui.row().classes('w-full items-left mb-2'):
             ui.button('Add Shape', icon='add', on_click=add_pattern_row).props('outline size=sm color=primary')
             ui.button('Add Spline', icon='add', on_click=add_spline_row).props('outline size=sm color=primary')
-        ui.separator().classes('my-2')
 
 
         patterns_container = ui.column().classes('w-full gap-3 mb-6')
