@@ -65,9 +65,17 @@ def add_spline_row():
     5: 'Pentagon'
     }
 
-    with ui.row().classes('items-center w-full bg-slate-50 p-3 rounded-lg shadow-sm') as row:
-        
-        ui.button(icon='delete', on_click=lambda: remove_pattern_row(row, spline_data)).props('flat color=red')
+    with ui.row().classes('items-center w-full bg-slate-50 p-3 rounded-lg shadow-sm items-start') as row:
+        with ui.column().classes('items-left bg-slate-50 p-3 rounded-lg shadow-sm'):
+            for i in range(3):
+                ui.label(f"Point {i+1}")
+                with ui.row():
+                    ui.number(label='Distance', value=20, min=1, step=1).classes('w-24')
+                    ui.number(label='Angle', value=0, min=0, max=359, step=1).classes('w-24')
+        with ui.column().classes('grow h-full bg-slate-50 p-3 rounded-lg shadow-sm items-start'):
+            spline = ui.switch('Show Spline', value=False)
+            line_points = ui.number(label="Points", value=1, min=1, step=1).classes('w-24')
+            ui.button(icon='delete', on_click=lambda: remove_pattern_row(row, spline_data)).props('flat color=red')
 
             
     # spline_data.update({'row': row, 'shape': shape, 'num_shapes': num_shapes, 'size': size, 'offset': offset, 'line_points': line_points})
@@ -180,18 +188,23 @@ with ui.grid(columns='1fr 1fr').classes('w-full max-w-6xl mx-auto my-10 gap-6 p-
             num_center_points = ui.number(label='Points', value=1, min=1, step=1).classes('w-24')
             radius = ui.slider(min=0, max=100, step=1, value=1).classes('w-32 intermediate-class')
             ui.label().bind_text_from(radius, 'value').classes('w-12 text-right')
+        ui.separator().classes('my-2')
+
         
         with ui.row().classes('w-full justify-between items-center mb-2'):
             ui.label('Patterns').classes('text-lg font-semibold text-slate-700')
             circles = ui.switch('Points', value=True)
             lines = ui.switch('Lines', value=True)
             sketch = ui.switch('Sketch', value=False)
+        with ui.row().classes('w-full items-left mb-2'):
             ui.button('Add Shape', icon='add', on_click=add_pattern_row).props('outline size=sm color=primary')
             ui.button('Add Spline', icon='add', on_click=add_spline_row).props('outline size=sm color=primary')
+        ui.separator().classes('my-2')
+
 
         patterns_container = ui.column().classes('w-full gap-3 mb-6')
         with patterns_container:
-            add_pattern_row() # Initial default row
+            add_spline_row() # Initial default row
             
         ui.button('Generate & View PDF', icon='picture_as_pdf', on_click=generate_pdf).classes('w-full py-2 text-lg').props('color=primary')
 
