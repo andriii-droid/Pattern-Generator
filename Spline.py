@@ -1,8 +1,5 @@
 from Pattern import Pattern 
 import math
-from reportlab.lib.pagesizes import A6
-from reportlab.lib import colors
-from reportlab.pdfgen import canvas
 from Point import Point
 
 class Spline():
@@ -13,12 +10,13 @@ class Spline():
                         control_point=None, end_point=None):
         self.spline = spline
         self.num_points = num_points
-        self.start_point = start_point
-        self.control_point = control_point
-        self.end_point = end_point
+    
+
+        self.start_point = start_point# + self.pattern.center
+        self.control_point = control_point #+ self.pattern.center
+        self.end_point = end_point #+ self.pattern.center
 
         path = self.pattern.c.beginPath()
-        cx, cy = self.pattern.center
 
         path.moveTo(*self.start_point.cartesian)
         path.curveTo(*self.start_point.cartesian, *self.control_point.cartesian, *self.end_point.cartesian)

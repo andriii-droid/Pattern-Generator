@@ -16,7 +16,7 @@ class Pattern:
 
 
         if self.circles:
-            self.c.circle(*self.center, r=3, stroke=0, fill=1)
+            self.c.circle(*self.center.cartesian, r=3, stroke=0, fill=1)
 
     def savePDF(self):
         self.c.showPage()

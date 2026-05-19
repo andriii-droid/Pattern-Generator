@@ -3,6 +3,7 @@ import math
 from reportlab.lib.pagesizes import A6
 from reportlab.lib import colors
 from reportlab.pdfgen import canvas
+from Point import Point
 
 class Shape():
     def __init__(self, pattern, center_radius=0):
@@ -25,7 +26,7 @@ class Shape():
                 self.pattern.c.setLineWidth(.2)
                 self.pattern.c.setStrokeColor(col)
 
-            points = self.calc_shape(angle=angle, num_points=shape, center=self.pattern.center)
+            points = self.calc_shape(angle=angle, num_points=shape, center=self.pattern.center.cartesian)
             if line_points:
                 points = self.generate_points_on_shape(points=points, num_points=line_points)
 

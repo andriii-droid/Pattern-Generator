@@ -52,3 +52,7 @@ if __name__ == '__main__':
 
     print(p1.cartesian)
     print(p1.polar)
+
+    p2 = p + p1
+
+    print(p2.cartesian)
