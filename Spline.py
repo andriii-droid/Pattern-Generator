@@ -8,7 +8,13 @@ class Spline():
     def __init__(self, pattern):
         self.pattern = pattern
 
-    def generate_spline(self):
+    def generate_spline(self, spline=False, num_points=2, start_point=(0,0),
+                        control_point=(0,0),end_point=(0,0)):
+        self.spline = spline
+        self.num_points = num_points
+        self.start_point = start_point
+        self.control_point = control_point
+        self.end_point = end_point
 
         path = self.pattern.c.beginPath()
         cx, cy = self.pattern.center
