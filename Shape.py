@@ -4,6 +4,7 @@ from reportlab.lib.pagesizes import A6
 from reportlab.lib import colors
 from reportlab.pdfgen import canvas
 from Point import Point
+from Error import Error
 
 class Shape():
     def __init__(self, pattern, center_radius=0):
@@ -37,6 +38,10 @@ class Shape():
 
     def calc_shape(self, center, angle=0, num_points=1):
         points = []
+        if num_points == 1:
+            points.append(center)
+            return points
+        
         points.append(self.new_point(center, (self.size/2)*self.offset, 90+angle))
         rotation_angle = -360/num_points/2 + angle
         for _ in range(num_points - 1):
