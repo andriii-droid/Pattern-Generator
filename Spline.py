@@ -32,7 +32,7 @@ class Spline():
         
     def get_even_points_on_curve(self, num_points=10):
         """
-        Calculates physically evenly spaced points along a Cubic Bézier curve.
+        Calculates evenly spaced points along a Cubic Bézier curve.
         """
         # 1. Standard Cubic Bézier mathematical formula
         def bezier_point(t, p0, p1, p2, p3):
