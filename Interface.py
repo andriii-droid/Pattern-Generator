@@ -22,7 +22,10 @@ class Interface():
                 ui.label('PDF Pattern Generator').classes('text-2xl font-bold text-slate-800 mb-2')
                 
                 self.filename_input = ui.input(label='Filename', placeholder='output', suffix='.pdf').classes('w-full mb-4')
-                self.cord = ui.switch('Coordinates', value=False)
+                with ui.row().classes('w-full justify-between items-center mb-2'):
+                    self.cord = ui.switch('Coordinates', value=False)
+                    self.gcode_x = ui.number(label='GCODE X Offset', value=0, min=0, step=0.01).classes('w-24')
+                    self.gcode_y = ui.number(label='GCODE Y Offset', value=0, min=0, step=0.01).classes('w-24')
                 
                 ui.separator().classes('my-2')
                 with ui.row().classes('w-full justify-between items-center mb-2'):
