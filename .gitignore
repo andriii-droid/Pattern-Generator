@@ -2,3 +2,6 @@
 /static
 .pyc
 .gcode
+/gcode
+/__pycache__
+/.venv

@@ -24,8 +24,8 @@ class Interface():
                 self.filename_input = ui.input(label='Filename', placeholder='output', suffix='.pdf').classes('w-full mb-4')
                 with ui.row().classes('w-full justify-between items-center mb-2'):
                     self.cord = ui.switch('Coordinates', value=False)
-                    self.gcode_x = ui.number(label='GCODE X Offset', value=0, min=0, step=0.01).classes('w-24')
-                    self.gcode_y = ui.number(label='GCODE Y Offset', value=0, min=0, step=0.01).classes('w-24')
+                    self.gcode_x = ui.number(label='GCODE X Offset', value=10.5, min=0, step=0.01).classes('w-24')
+                    self.gcode_y = ui.number(label='GCODE Y Offset', value=23.5, min=0, step=0.01).classes('w-24')
                 
                 ui.separator().classes('my-2')
                 with ui.row().classes('w-full justify-between items-center mb-2'):
@@ -49,7 +49,7 @@ class Interface():
 
                 self.patterns_container = ui.column().classes('w-full gap-3 mb-6')
                 with self.patterns_container:
-                    self.add_spline_row() # Initial default row
+                    self.add_pattern_row() # Initial default row
                     
                 ui.button('Generate & View PDF', icon='picture_as_pdf', on_click=f.generate_pdf).classes('w-full py-2 text-lg').props('color=primary')
 
@@ -60,7 +60,7 @@ class Interface():
                 ui.label('PDF Preview').classes('text-lg font-bold text-slate-700 mb-2')
                 with ui.row():
                     ui.button('Save PDF', icon='save', on_click=lambda: f.save_current_pdf(path=self.filename_input.value)).props('flat color=green size=md')
-                    ui.button('Generate GCODE', on_click=f.generate_gcode).props('flat color=blue size=md')
+                    ui.button('Generate GCODE', on_click=lambda: f.generate_gcode(path=self.filename_input.value)).props('flat color=blue size=md')
                 
                 # Native HTML iframe configured to fill the card space completely
                 self.pdf_frame = ui.element('iframe').classes('w-full h-full border-none rounded-lg')
