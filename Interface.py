@@ -1,6 +1,5 @@
 from nicegui import ui, app
 import time
-
 from pathlib import Path
 from Pattern import Pattern
 from Shape import Shape
