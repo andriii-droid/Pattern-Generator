@@ -99,8 +99,9 @@ class File():
             f.write(start)
             for p in self.page.points:
                 f.write(f"G1 X{p.cartesian[0]*conversion_fac} Y{p.cartesian[1]*conversion_fac} F1200;\n")
-                f.write("G1 Z3 F1200")
-                f.write("G1 Z5 F1200")
+                f.write("G1 Z3 F1200\n")
+                f.write("G1 Z5 F1200\n" \
+                "")
             f.write(end)
 
                 
