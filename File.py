@@ -94,10 +94,11 @@ class File():
         end = "G1 Z20 F1200 ; Lift nozzle safely up to 20mm when done\n"
         end += "G1 X0 Y200 F4800 ; Present the bed (pushes bed forward, moves X to 0)\n"
         end += "M84 ; Disable stepper motors\n"
+        conversion_fac = 25.4/72
         with open("myGCode.gcode", "w") as f:
             f.write(start)
             for p in self.page.points:
-                f.write(f"G1 X{p.cartesian[0]} Y{p.cartesian[1]} F1200;\n")
+                f.write(f"G1 X{p.cartesian[0]*conversion_fac} Y{p.cartesian[1]*conversion_fac} F1200;\n")
                 f.write("G1 Z3 F1200")
                 f.write("G1 Z5 F1200")
             f.write(end)
