@@ -5,22 +5,28 @@ from Spline import Spline
 from Point import Point
 from pathlib import Path
 import time
+import os
+import tempfile
+import webbrowser
 
 class File():
     def __init__(self, Interface):
-        self.saved = False
         self.current_pdf_path = None
         self.I = Interface
 
-    def generate_pdf(self):
-        if not self.saved:
-            self.delete_current_pdf()
-            saved = False
+    def generate_pdf(self, path=None):
+        if path is None:
+            with tempfile.NamedTemporaryFile(delete=False, suffix=".pdf") as tmp:
+                pdf_path = Path(tmp.name)
+        else:
+            try:
+                pdf_path = self.I.static_dir / Path(path.strip()).with_suffix(".pdf")
+            except Exception as e:
+                pdf_path = self.I.static_dir / Path("output").with_suffix(".pdf")
+                ui.notify(f"No filename provided", type='warning')
+            ui.notify(f"Saved {pdf_path.name} successfully.", type='positive')
 
-        raw_filename = self.I.filename_input.value.strip() or "output"
-        
-        pdf_path = self.I.static_dir / Path(raw_filename).with_suffix(".pdf")
-        
+                
         if not self.I.patterns_list and not self.I.splines_list:
             ui.notify("Please add at least one pattern or spline.", type='warning')
             return
@@ -53,8 +59,8 @@ class File():
                         end_point=(Point.from_polar(int(s['end_point'][0].value), int(s['end_point'][1].value))))
                     
             page.savePDF()
-            
-            ui.notify(f"Generated {pdf_path.name}!", type='positive')
+            if path is None:
+                ui.notify(f"Generated {pdf_path.name}!", type='positive')
             self.current_pdf_path = pdf_path
             
             # --- Update the PDF Viewer Section ---
@@ -83,12 +89,11 @@ class File():
         else:
             ui.notify("No generated file found to delete.", type='warning')
 
-    def save_current_pdf(self):
-        ui.notify(f"Saved {self.current_pdf_path.name} successfully.", type='positive')
+    def save_current_pdf(self, path):
         self.I.pdf_viewer.set_visibility(False)
         self.I.filename_input.value = ""
 
         self.current_pdf_path = None
-        self.saved = True
+        self.generate_pdf(path=path)
         
 
