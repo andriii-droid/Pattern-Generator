@@ -95,7 +95,7 @@ class File():
         end += "G1 X0 Y200 F4800 ; Present the bed (pushes bed forward, moves X to 0)\n"
         end += "M84 ; Disable stepper motors\n"
         conversion_fac = 25.4/72
-        offset_x = int(self.I.gcode_x.value) + 10
+        offset_x = int(self.I.gcode_x.value) + 10   #Calculate Offset: 10 for homing point relative to card edge, and the input for correction to homing edge
         offset_y = int(self.I.gcode_y.value) + 10
         with open("myGCode.gcode", "w") as f:
             f.write(start)
