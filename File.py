@@ -112,10 +112,9 @@ class File():
         with open(output_path, "w") as f:
             f.write(start)
             for p in self.page.points:
-                f.write(f"G1 X{p.cartesian[0]*conversion_fac + offset_x:.3f} Y{p.cartesian[1]*conversion_fac + offset_y:.3f} F1200;\n")
-                f.write("G1 Z0 F1200\n")
-                f.write("G1 Z15 F1200\n" \
-                "")
+                f.write(f"G1 X{p.cartesian[0]*conversion_fac + offset_x:.3f} Y{p.cartesian[1]*conversion_fac + offset_y:.3f} F4800;\n")
+                f.write("G1 Z0 F4800\n")
+                f.write("G1 Z5 F4800\n")
             f.write(end)
         ui.notify(f"Generated {output_path.name}!", type='positive')
 
