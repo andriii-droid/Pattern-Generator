@@ -56,8 +56,8 @@ class Interface():
                 self.pdf_viewer.set_visibility(False) 
                 ui.label('PDF Preview').classes('text-lg font-bold text-slate-700 mb-2')
                 with ui.row():
-                    ui.button('Delete PDF', icon='delete_forever', on_click=f.delete_current_pdf).props('flat color=red size=md')
                     ui.button('Save PDF', icon='save', on_click=lambda: f.save_current_pdf(path=self.filename_input.value)).props('flat color=green size=md')
+                    ui.button('Generate GCODE', on_click=f.generate_gcode).props('flat color=blue size=md')
                 
                 # Native HTML iframe configured to fill the card space completely
                 self.pdf_frame = ui.element('iframe').classes('w-full h-full border-none rounded-lg')

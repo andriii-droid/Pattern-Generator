@@ -14,6 +14,7 @@ class Pattern:
         self.c = canvas.Canvas(filename, pagesize=A6)
         self.width, self.height = A6
         self.center = Point(self.width / 2 , self.height / 2)
+        self.points = []
 
         self.draw_points([self.center], r=2) #Draw the Center Point
 

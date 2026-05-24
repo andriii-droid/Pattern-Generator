@@ -37,6 +37,7 @@ class Shape():
             #Draw calculated points and lines to canvas
             self.pattern.draw_points(points)
             self.pattern.draw_lines(points, angle, line_points)
+            self.pattern.points.extend(points)
 
             angle += step   
 

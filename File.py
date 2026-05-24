@@ -5,9 +5,7 @@ from Spline import Spline
 from Point import Point
 from pathlib import Path
 import time
-import os
 import tempfile
-import webbrowser
 
 class File():
     def __init__(self, Interface):
@@ -36,16 +34,16 @@ class File():
             return
 
         try:
-            page = Pattern(filename=str(pdf_path), 
+            self.page = Pattern(filename=str(pdf_path), 
                             circles=int(self.I.circles.value),
                             lines=int(self.I.lines.value),
                             sketch=int(self.I.sketch.value),
                             cord=int(self.I.cord.value))
-            shape = Shape(page, center_radius=int(self.I.radius.value))
-            spline = Spline(page)
-            center_points = shape.calc_shape(page.center, num_points=int(self.I.num_center_points.value))
+            shape = Shape(self.page, center_radius=int(self.I.radius.value))
+            spline = Spline(self.page)
+            center_points = shape.calc_shape(self.page.center, num_points=int(self.I.num_center_points.value))
             for cp in center_points:
-                page.center = cp
+                self.page.center = cp
                 for p in self.I.patterns_list:
                     shape.generate_shape(
                         num_shapes=int(p['num_shapes'].value),
@@ -62,7 +60,7 @@ class File():
                         control_point=(Point.from_polar(int(s['control_point'][0].value), int(s['control_point'][1].value))),
                         end_point=(Point.from_polar(int(s['end_point'][0].value), int(s['end_point'][1].value))))
                     
-            page.savePDF()
+            self.page.savePDF()
             if path is None:
                 ui.notify(f"Generated {pdf_path.name}!", type='positive')
             self.current_pdf_path = pdf_path
@@ -77,29 +75,32 @@ class File():
         except Exception as e:
             ui.notify(f"Error: {str(e)}", type='negative')
 
-    def delete_current_pdf(self):
-        if self.current_pdf_path and self.current_pdf_path.exists():
-            try:
-                # 1. Clear iframe source so the browser releases the file lock
-                self.I.pdf_frame.props('src=""')
-                
-                # 2. Delete file from local storage
-                self.current_pdf_path.unlink()
-                ui.notify(f"Deleted {self.current_pdf_path.name} successfully.", type='positive')
-                
-                # 3. Clean up UI state
-                self.current_pdf_path = None
-                self.I.pdf_viewer.set_visibility(False)
-            except Exception as e:
-                ui.notify(f"Could not delete file: {str(e)}", type='negative')
-        else:
-            ui.notify("No generated file found to delete.", type='warning')
-
     def save_current_pdf(self, path):
         self.I.pdf_viewer.set_visibility(False)
         self.I.filename_input.value = ""
 
         self.current_pdf_path = None
         self.generate_pdf(path=path)
-        
+
+    def generate_gcode(self):
+        '''generates a gcode file using the points as coordinates'''
+        start = "M17 ; Enable all stepper motors\n"
+        start += "G90 ; Set to Absolute Positioning\n"
+        start += "M83 ; Set extruder to relative mode\n"
+        start += "G28 ; Home all axes\n"
+        start += "G1 Z10 F1200 ; Lift nozzle to 10mm quickly for safety\n"
+        start += "G1 X20 Y20 F4800 ; Move to a safe starting area away from the edge\n"
+        start += "G1 Z5 F1200 ; Drop down to your target 5mm Z-height\n"
+        end = "G1 Z20 F1200 ; Lift nozzle safely up to 20mm when done\n"
+        end += "G1 X0 Y200 F4800 ; Present the bed (pushes bed forward, moves X to 0)\n"
+        end += "M84 ; Disable stepper motors\n"
+        with open("myGCode.gcode", "w") as f:
+            f.write(start)
+            for p in self.page.points:
+                f.write(f"G1 X{p.cartesian[0]} Y{p.cartesian[1]} F1200;\n")
+                f.write("G1 Z3 F1200")
+                f.write("G1 Z5 F1200")
+            f.write(end)
+
+                
 
