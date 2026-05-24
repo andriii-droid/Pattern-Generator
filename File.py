@@ -83,10 +83,11 @@ class File():
         self.generate_pdf(path=path)
 
     def generate_gcode(self, path=""):
+        '''generates a gcode file using the points as coordinates'''
         offset_x = float(self.I.gcode_x.value) + 5   #Calculate Offset: 5 for homing point relative to card edge, and the input for correction to homing edge
         offset_y = float(self.I.gcode_y.value) + 5
-        '''generates a gcode file using the points as coordinates'''
-        start = "M17 ; Enable all stepper motors\n"
+        start = f"; Time: {time.time()}"
+        start += "M17 ; Enable all stepper motors\n"
         start += "G90 ; Set to Absolute Positioning\n"
         start += "M83 ; Set extruder to relative mode\n"
         start += "G1 Z40 F1200\n"
