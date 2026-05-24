@@ -7,6 +7,7 @@ from Shape import Shape
 from Spline import Spline
 from Pattern import Pattern
 from Point import Point
+from Interface import Interface
 
 # Create a local directory to save PDFs if it doesn't exist
 # NiceGUI needs a static folder to serve local files safely to the browser
@@ -16,77 +17,19 @@ static_dir.mkdir(exist_ok=True)
 # Tell NiceGUI to serve files from the '/static' folder at the URL path '/download'
 app.add_static_files('/download', str(static_dir))
 
-patterns_list = []
-splines_list = []
+
 current_pdf_path = None
 saved = False
+I = Interface()
 
-def add_pattern_row():
-    pattern_data = {'row': None, 'shape': None, 'num_shapes': None, 'size': None, 'hex': '#000000','line_points': None}
 
-    shape_options = {
-    0: 'Spline',
-    2: 'Line',
-    3: 'Triangle',
-    4: 'Square',
-    5: 'Pentagon'
-    }
 
-    def handle_type_change(e):
-        if e.value == 'line':
-            line_points.value = -1
-            num_shapes.value = 20
-        if e.value == 'dotted':
-            line_points.value = 5
-            num_shapes.value = 1
-
-    with ui.row().classes('items-center w-full bg-slate-50 p-3 rounded-lg shadow-sm') as row:
-        shape = ui.select(label='Shape', options=shape_options, value=3).classes('w-28')
-        num_shapes = ui.number(label='Number', value=20, min=1, step=1).classes('w-24')
-        size = ui.number(label='Size', value=200, min=1).classes('w-24')
-        with ui.button(icon='colorize') as button:
-            color = ui.color_picker(on_pick=lambda e: (button.style(f'background-color: {e.color} !important;'), 
-                                                       pattern_data.update({'hex': e.color})))
-        offset = ui.slider(min=0, max=1, step=0.01, value=1).classes('w-32')
-        ui.label().bind_text_from(offset, 'value').classes('w-6')
-        line_type = ui.select(label="Linetype", options=['line', 'dotted'], value='line').classes('w-26').on_value_change(handle_type_change)
-        line_points = ui.number(label="Points", value=-1, min=-1, step=1).classes('w-24') \
-            .bind_visibility_from(line_type, 'value', backward=lambda v: v == 'dotted') 
-        ui.button(icon='delete', on_click=lambda: remove_pattern_row(row, pattern_data)).props('flat color=red')
-
-    pattern_data.update({'row': row, 'shape': shape, 'num_shapes': num_shapes, 'size': size, 'offset': offset, 'line_points': line_points})
-    patterns_list.append(pattern_data)
-            
-def add_spline_row():
-    spline_data = {'row': None, 'spline': None, 'num_points': None, 'start_point': None, 'control_point': None, 'end_point': None}
-    points = []
-
-    with ui.row().classes('items-center w-full bg-slate-50 p-3 rounded-lg shadow-sm items-start') as row:
-        with ui.column().classes('items-left bg-slate-50 p-3 rounded-lg shadow-sm'):
-            for i in range(3):
-                ui.label(f"Point {i+1}")
-                with ui.row():
-                    angle = ui.number(label='Angle', value=(i-1)*45, step=1).classes('w-24')
-                    dist = ui.number(label='Distance', value=100, min=1, step=1).classes('w-24')
-                    points.append((angle, dist))
-        with ui.column().classes('grow h-full bg-slate-50 p-3 rounded-lg shadow-sm items-start'):
-            spline = ui.switch('Show Spline', value=False)
-            num_points = ui.number(label="Points", value=2, min=2, step=1).classes('w-24')
-            ui.button(icon='delete', on_click=lambda: remove_splines_row(row, spline_data)).props('flat color=red')
 
             
-    spline_data.update({'row': row, 'spline': spline, 'num_points': num_points,
-                         'start_point': points[0], 'control_point': points[1], 'end_point': points[2]})
-    splines_list.append(spline_data)
 
 
-def remove_pattern_row(row_element, pattern_data):
-    patterns_container.remove(row_element)
-    patterns_list.remove(pattern_data)
 
-def remove_splines_row(row_element, pattern_data):
-    patterns_container.remove(row_element)
-    splines_list.remove(pattern_data)
+
 
 def generate_pdf():
     global current_pdf_path
@@ -100,7 +43,7 @@ def generate_pdf():
     # Force the PDF to be saved inside our static directory
     pdf_path = static_dir / Path(raw_filename).with_suffix(".pdf")
     
-    if not patterns_list and not splines_list:
+    if not I.patterns_list and not I.splines_list:
         ui.notify("Please add at least one pattern or spline.", type='warning')
         return
 
@@ -115,7 +58,7 @@ def generate_pdf():
         center_points = shape.calc_shape(page.center, num_points=int(num_center_points.value))
         for cp in center_points:
             page.center = cp
-            for p in patterns_list:
+            for p in I.patterns_list:
                 shape.generate_shape(
                     num_shapes=int(p['num_shapes'].value),
                     size=int(p['size'].value),
@@ -123,7 +66,7 @@ def generate_pdf():
                     col=p['hex'],
                     offset=float(p['offset'].value),
                     line_points=int(p['line_points'].value))
-            for s in splines_list:
+            for s in I.splines_list:
                 spline.generate_spline(
                     spline=int(s['spline'].value),
                     num_points=int(s['num_points'].value),
@@ -205,13 +148,13 @@ with ui.grid(columns='1fr 1fr').classes('w-full max-w-6xl mx-auto my-10 gap-6 p-
             sketch = ui.switch('Sketch', value=False)
         ui.separator().classes('my-2')
         with ui.row().classes('w-full items-left mb-2'):
-            ui.button('Add Shape', icon='add', on_click=add_pattern_row).props('outline size=sm color=primary')
-            ui.button('Add Spline', icon='add', on_click=add_spline_row).props('outline size=sm color=primary')
+            ui.button('Add Shape', icon='add', on_click=I.add_pattern_row).props('outline size=sm color=primary')
+            ui.button('Add Spline', icon='add', on_click=I.add_spline_row).props('outline size=sm color=primary')
 
 
         patterns_container = ui.column().classes('w-full gap-3 mb-6')
         with patterns_container:
-            add_spline_row() # Initial default row
+            I.add_spline_row() # Initial default row
             
         ui.button('Generate & View PDF', icon='picture_as_pdf', on_click=generate_pdf).classes('w-full py-2 text-lg').props('color=primary')
 
