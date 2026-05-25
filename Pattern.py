@@ -21,7 +21,7 @@ class Pattern:
 
         #Draw lines on the Edge of PDF
         self.draw_lines([Point(0,0), Point(self.width, 0), Point(self.width, self.height), Point(0, self.height)],
-                         angle=0, offset=-1)
+                         angle=0, offset=-1, help=True)
         if cord:    #Draw coordinate System
             self.c.setLineWidth(.05)
             self.c.setStrokeColor(colors.gray)
@@ -46,7 +46,7 @@ class Pattern:
             if self.circles:
                 self.c.circle(*p1.cartesian, r=r, stroke=0, fill=1)
 
-    def draw_lines(self, points, angle, offset, col='#000000'):
+    def draw_lines(self, points, angle, offset, col='#000000', help=False):
         '''Draws Lines between the given Points
         if offset = -1 the Lines are drawn between zhe consecutive points in the array,
         otherwise offset+1 Points in the array gets skipped'''
@@ -55,6 +55,8 @@ class Pattern:
                 self.c.setLineWidth(.2)
                 self.c.setStrokeColor(col)          
                 self.c.line(*p1.cartesian, *p2.cartesian)
+                if not help:
+                    self.add_length(p1, p2)
             if self.sketch and angle == 0:
                 self.c.setLineWidth(1)
                 self.c.setStrokeColor(colors.red)      
@@ -62,7 +64,7 @@ class Pattern:
                     self.c.line(*p1.cartesian, *p2.cartesian)
                 elif count == 0:
                     self.c.line(*p1.cartesian, *p2.cartesian)
-            self.add_length(p1, p2)
+            
 
     def add_length(self, p1, p2):
         self.length += p1.distance(p2)

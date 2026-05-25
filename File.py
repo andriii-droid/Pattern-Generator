@@ -65,8 +65,8 @@ class File():
                         start_point=(Point.from_polar(int(s['start_point'][0].value), int(s['start_point'][1].value))),
                         control_point=(Point.from_polar(int(s['control_point'][0].value), int(s['control_point'][1].value))),
                         end_point=(Point.from_polar(int(s['end_point'][0].value), int(s['end_point'][1].value))))
-            self.I.len = self.page.length * self.conversion_fac 
-            print(self.page.length * self.conversion_fac)
+                    
+            self.I.len = round(self.page.length * self.conversion_fac /1000*1.1, 2) #multiply by 1.1 to account slack
             self.page.savePDF()
             if path is None:
                 ui.notify(f"Generated {pdf_path.name}!", type='positive')
