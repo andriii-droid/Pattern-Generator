@@ -6,7 +6,7 @@ from File import File
 class Interface():
     '''Creates the UI Components of the application'''
     def __init__(self):
- 
+        '''Creates the basic UI Elements and renders it to the screen'''
         self.patterns_list = []
         self.splines_list = []
         f = File(self)
@@ -69,6 +69,7 @@ class Interface():
         ui.run(title="Pattern Generator & Viewer")
 
     def add_pattern_row(self):
+        '''Adds a pattern row to the UI, where you can define a pattern'''
         pattern_data = {'row': None, 'shape': None, 'num_shapes': None, 'size': None, 'hex': '#000000','line_points': None}
 
         shape_options = {
@@ -105,6 +106,7 @@ class Interface():
         self.patterns_list.append(pattern_data)
 
     def add_spline_row(self):
+        '''Adds a spline row to the UI, where you can define a spline'''
         spline_data = {'row': None, 'spline': None, 'num_points': None, 'start_point': None, 'control_point': None, 'end_point': None}
         points = []
 
@@ -127,9 +129,11 @@ class Interface():
         self.splines_list.append(spline_data)
 
     def remove_pattern_row(self, row_element, pattern_data):
+        '''removes the specified pattern row'''
         self.patterns_container.remove(row_element)
         self.patterns_list.remove(pattern_data)
 
     def remove_splines_row(self, row_element, pattern_data):
+        '''removes the specified spline row'''
         self.patterns_container.remove(row_element)
         self.splines_list.remove(pattern_data)
