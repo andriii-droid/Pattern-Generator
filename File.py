@@ -95,6 +95,8 @@ class File():
         start += "G28 ; Home all axes\n"
         start += "G1 Z20 F1200 ; Lift nozzle to 20mm quickly for safety\n"
         start += f"G1 X{self.I.gcode_x.value} Y{self.I.gcode_y.value} F4800 ; Move over the Homing Point, if set correctly\n"
+        start += "M117 Attention Required! ; Display message on the screen\n"
+        start += "M0 Click to Resume ; Stop print, wait for LCD button press\n"
         end = "G1 Z40 F1200 ; Lift nozzle safely up to 20mm when done\n"
         end += "G1 X0 Y200 F4800 ; Present the bed (pushes bed forward, moves X to 0)\n"
         end += "M84 ; Disable stepper motors\n"
@@ -114,7 +116,7 @@ class File():
             for p in self.page.points:
                 f.write(f"G1 X{p.cartesian[0]*conversion_fac + offset_x:.3f} Y{p.cartesian[1]*conversion_fac + offset_y:.3f} F4800;\n")
                 f.write("G1 Z0 F4800\n")
-                f.write("G1 Z5 F4800\n")
+                f.write("G1 Z15 F4800\n")
             f.write(end)
         ui.notify(f"Generated {output_path.name}!", type='positive')
 
