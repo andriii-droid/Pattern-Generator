@@ -60,8 +60,9 @@ class Interface():
                 ui.label('PDF Preview').classes('text-lg font-bold text-slate-700 mb-2')
                 with ui.row():
                     ui.button('Save PDF', icon='save', on_click=lambda: f.save_current_pdf(path=self.filename_input.value)).props('flat color=green size=md')
-                    ui.button('Generate GCODE', on_click=lambda: f.generate_gcode(path=self.filename_input.value)).props('flat color=blue size=md')
-                
+                    ui.button('Generate GCODE', icon='playlist_add', on_click=lambda: f.generate_gcode(path=self.filename_input.value)).props('flat color=blue size=md')
+                with ui.row():
+                    ui.label(f'Required string length: {45}m')
                 # Native HTML iframe configured to fill the card space completely
                 self.pdf_frame = ui.element('iframe').classes('w-full h-full border-none rounded-lg')
 
