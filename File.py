@@ -8,13 +8,16 @@ import time
 import tempfile
 
 class File():
+    '''Implements Functions to save the Patterns as a file'''
     def __init__(self, Interface):
+        '''Initializes a tmp directory'''
         self.current_pdf_path = None
         self.I = Interface
-        self.TMP_DIR = tempfile.gettempdir()
-        app.add_static_files('/tmp_download', self.TMP_DIR)
+        TMP_DIR = tempfile.gettempdir()
+        app.add_static_files('/tmp_download', TMP_DIR)
 
     def generate_pdf(self, path=None):
+        '''Generates it as a pdf, depending on par "path" to a tmp directory or to the static directory in the project'''
         if path is None:
             with tempfile.NamedTemporaryFile(delete=False, suffix=".pdf") as tmp:
                 pdf_path = Path(tmp.name)
@@ -76,6 +79,7 @@ class File():
             ui.notify(f"Error: {str(e)}", type='negative')
 
     def save_current_pdf(self, path):
+        '''Sets pdf viewer invisible, and calls generate_pdf with path parameter'''
         self.I.pdf_viewer.set_visibility(False)
         self.I.filename_input.value = ""
 
@@ -83,7 +87,7 @@ class File():
         self.generate_pdf(path=path)
 
     def generate_gcode(self, path=""):
-        '''generates a gcode file using the points as coordinates'''
+        '''generates a gcode file using the points of a pattern as coordinates'''
         offset_x = float(self.I.gcode_x.value) + 5   #Calculate Offset: 5 for homing point relative to card edge, and the input for correction to homing edge
         offset_y = float(self.I.gcode_y.value) + 5
         start = f"; Time: {time.time()}"
