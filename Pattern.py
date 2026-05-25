@@ -45,11 +45,20 @@ class Pattern:
             if self.circles:
                 self.c.circle(*p1.cartesian, r=r, stroke=0, fill=1)
 
-    def draw_lines(self, points, angle, offset):
+    def draw_lines(self, points, angle, offset, col='#000000'):
         '''Draws Lines between the given Points
         if offset = -1 the Lines are drawn between zhe consecutive points in the array,
         otherwise offset+1 Points in the array gets skipped'''
         for count, (p1, p2) in enumerate(zip(points, points[offset+2:]+points[0:offset+2])):
-            if self.lines or(self.sketch and angle == 0 and not (offset)) or (self.sketch and offset and count == 0):
+            if self.lines:
                 self.c.setLineWidth(.2)
+                self.c.setStrokeColor(col)          
                 self.c.line(*p1.cartesian, *p2.cartesian)
+            if self.sketch and angle == 0:
+                self.c.setLineWidth(1)
+                self.c.setStrokeColor(colors.red)      
+                if offset == -1:            
+                    self.c.line(*p1.cartesian, *p2.cartesian)
+                elif count == 0:
+                    self.c.line(*p1.cartesian, *p2.cartesian)
+    

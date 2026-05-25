@@ -23,12 +23,8 @@ class Shape():
         angle = 0
         step = 360 / num_shapes
         for _ in range(num_shapes):     #calls calc_shape multiple times
-            if angle == 0 and self.pattern.sketch:
-                self.pattern.c.setLineWidth(1)
-                self.pattern.c.setStrokeColor(colors.red)
-            else:
-                self.pattern.c.setLineWidth(.2)
-                self.pattern.c.setStrokeColor(col)
+            self.pattern.c.setLineWidth(.2)
+            self.pattern.c.setStrokeColor(col)
 
             points = self.calc_shape(angle=angle, num_points=shape, center=self.pattern.center)
             if line_points: #if there should be points genereted on each line, it gets calculated here
@@ -36,7 +32,7 @@ class Shape():
 
             #Draw calculated points and lines to canvas
             self.pattern.draw_points(points)
-            self.pattern.draw_lines(points, angle, line_points)
+            self.pattern.draw_lines(points, angle, line_points, col=col)
             self.pattern.points.extend(points)
 
             angle += step   
