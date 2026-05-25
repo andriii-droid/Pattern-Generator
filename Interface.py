@@ -10,6 +10,7 @@ class Interface():
         self.patterns_list = []
         self.splines_list = []
         f = File(self)
+        self.len = 0
 
         # --- UI Layout ---
         ui.query('body').classes('bg-slate-100')
@@ -62,8 +63,12 @@ class Interface():
                     ui.button('Save PDF', icon='save', on_click=lambda: f.save_current_pdf(path=self.filename_input.value)).props('flat color=green size=md')
                     ui.button('Generate GCODE', icon='playlist_add', on_click=lambda: f.generate_gcode(path=self.filename_input.value)).props('flat color=blue size=md')
                 with ui.row():
-                    ui.label(f'Required string length: {45}m')
-                # Native HTML iframe configured to fill the card space completely
+                    # 1. Create the label with a placeholder or initial text
+                    label = ui.label()
+
+                    # 2. Bind the label's text to your object's variable
+                    # (The lambda function formats the string dynamically)
+                    label.bind_text_from(self, 'len', backward=lambda l: f'Required string length: {l}m')                # Native HTML iframe configured to fill the card space completely
                 self.pdf_frame = ui.element('iframe').classes('w-full h-full border-none rounded-lg')
 
         # Start NiceGUI

@@ -15,6 +15,9 @@ class File():
         self.I = Interface
         TMP_DIR = tempfile.gettempdir()
         app.add_static_files('/tmp_download', TMP_DIR)
+        self.page = None
+        self.conversion_fac = 25.4/72
+
 
     def generate_pdf(self, path=None):
         '''Generates it as a pdf, depending on par "path" to a tmp directory or to the static directory in the project'''
@@ -62,7 +65,8 @@ class File():
                         start_point=(Point.from_polar(int(s['start_point'][0].value), int(s['start_point'][1].value))),
                         control_point=(Point.from_polar(int(s['control_point'][0].value), int(s['control_point'][1].value))),
                         end_point=(Point.from_polar(int(s['end_point'][0].value), int(s['end_point'][1].value))))
-                    
+            self.I.len = self.page.length * self.conversion_fac 
+            print(self.page.length * self.conversion_fac)
             self.page.savePDF()
             if path is None:
                 ui.notify(f"Generated {pdf_path.name}!", type='positive')
@@ -103,7 +107,6 @@ class File():
         end += "G1 X0 Y200 F4800 ; Present the bed (pushes bed forward, moves X to 0)\n"
         end += "M84 ; Disable stepper motors\n"
 
-        conversion_fac = 25.4/72
         static_dir = Path("./gcode")
         static_dir.mkdir(exist_ok=True)
 
@@ -116,11 +119,9 @@ class File():
         with open(output_path, "w") as f:
             f.write(start)
             for p in self.page.points:
-                f.write(f"G1 X{p.cartesian[0]*conversion_fac + offset_x:.3f} Y{p.cartesian[1]*conversion_fac + offset_y:.3f} F4800;\n")
+                f.write(f"G1 X{p.cartesian[0]*self.conversion_fac + offset_x:.3f} Y{p.cartesian[1]*self.conversion_fac + offset_y:.3f} F4800;\n")
                 f.write("G1 Z0 F4800\n")
                 f.write("G1 Z15 F4800\n")
             f.write(end)
         ui.notify(f"Generated {output_path.name}!", type='positive')
-
-                
 

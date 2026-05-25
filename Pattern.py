@@ -15,6 +15,7 @@ class Pattern:
         self.width, self.height = A6
         self.center = Point(self.width / 2 , self.height / 2)
         self.points = []
+        self.length = 0
 
         self.draw_points([self.center], r=2) #Draw the Center Point
 
@@ -61,4 +62,8 @@ class Pattern:
                     self.c.line(*p1.cartesian, *p2.cartesian)
                 elif count == 0:
                     self.c.line(*p1.cartesian, *p2.cartesian)
+            self.add_length(p1, p2)
+
+    def add_length(self, p1, p2):
+        self.length += p1.distance(p2)
     
