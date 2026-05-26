@@ -21,6 +21,7 @@ class File():
 
     def generate_pdf(self, path=None):
         '''Generates it as a pdf, depending on par "path" to a tmp directory or to the static directory in the project'''
+        self.save_gcode_offset_file()
         if path is None:
             with tempfile.NamedTemporaryFile(delete=False, suffix=".pdf") as tmp:
                 pdf_path = Path(tmp.name)
@@ -90,6 +91,7 @@ class File():
 
     def generate_gcode(self, path=""):
         '''generates a gcode file using the points of a pattern as coordinates'''
+        self.save_gcode_offset_file()
         offset_x = float(self.I.gcode_x.value) + 5   #Calculate Offset: 5 for homing point relative to card edge, and the input for correction to homing edge
         offset_y = float(self.I.gcode_y.value) + 5
         start = f"; Time: {time.time()}"
@@ -124,4 +126,17 @@ class File():
                 f.write("G1 Z15 F4800\n")
             f.write(end)
         ui.notify(f"Generated {output_path.name}!", type='positive')
+
+    def save_gcode_offset_file(self):
+        '''Saves the gcode offset to an txt file'''
+        with open("gcode_offset.txt", "w") as f:
+            f.write(f"{self.I.gcode_x.value}\n")
+            f.write(f"{self.I.gcode_y.value}\n")
+
+    def read_gcode_offset_from_file(self):
+        '''Reads the gcode coordinates from the txt file and displays it in the UI'''
+        with open("gcode_offset.txt", "r") as f:
+            x = float(f.readline())
+            y = float(f.readline())
+        return (x, y)
 

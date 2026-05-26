@@ -25,8 +25,8 @@ class Interface():
                 self.filename_input = ui.input(label='Filename', placeholder='output', suffix='.pdf/.gcode').classes('w-full mb-4')
                 with ui.row().classes('w-full justify-between items-center mb-2'):
                     self.cord = ui.switch('Coordinates', value=False)
-                    self.gcode_x = ui.number(label='GCODE X Offset', value=10.5, min=0, step=0.01).classes('w-24')
-                    self.gcode_y = ui.number(label='GCODE Y Offset', value=23.5, min=0, step=0.01).classes('w-24')
+                    self.gcode_x = ui.number(label='GCODE X Offset', value=f.read_gcode_offset_from_file()[0], min=0, step=0.01).classes('w-24')
+                    self.gcode_y = ui.number(label='GCODE Y Offset', value=f.read_gcode_offset_from_file()[1], min=0, step=0.01).classes('w-24')
                 
                 ui.separator().classes('my-2')
                 with ui.row().classes('w-full justify-between items-center mb-2'):
