@@ -1,6 +1,6 @@
 from nicegui import ui
 
-class PatternRow:
+class ShapeRow:
     def __init__(self, on_delete_callback):
         """
         Represents a single pattern row UI element.
