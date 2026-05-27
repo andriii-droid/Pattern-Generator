@@ -56,8 +56,12 @@ class DashboardPage():
                 self.pdf_viewer.set_visibility(False) 
                 ui.label('PDF Preview').classes('text-lg font-bold text-slate-700 mb-2')
                 with ui.row():
-                    ui.button('Save PDF', icon='save', on_click=lambda: self.coordinator.export_to_pdf()).props('flat color=green size=md')
-                    ui.button('Generate GCODE', icon='playlist_add', on_click=lambda: self.coordinator.export_to_gcode()).props('flat color=blue size=md')
+                    ui.button('Save PDF', icon='save',
+                               on_click=lambda: self.coordinator.export_to_pdf(file_config=self.get_file_config())
+                               ).props('flat color=green size=md')
+                    ui.button('Generate GCODE', icon='playlist_add',
+                               on_click=lambda: self.coordinator.export_to_gcode(file_config=self.get_file_config())
+                               ).props('flat color=blue size=md')
                 with ui.row():
                     # 1. Create the label with a placeholder or initial text
                     label = ui.label()
