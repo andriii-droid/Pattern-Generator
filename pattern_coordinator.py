@@ -17,17 +17,20 @@ class PatternCoordinator():
     def _calculate(self, pattern_config: PatternConfig, settings_config: SettingsConfig):
         self.patterns = []
 
+        #create center points
         c = Shape(ShapeConfig(
             shape_type=int(settings_config.num_center_points),
             num_shapes=1,
-            size=float(settings_config.center_point_radius*2), #times 2? TODO
-            hex_color="",
+            size=float(settings_config.center_point_radius*2),
+            hex_color="", #hex is wrong config
             offset=1,
             line_points=0,
             center=Point(0,0) 
             ))
         c.generate()
         [center_points] = c.points
+
+        #for each center point create one pattern
         for cp in center_points:
             for pattern in pattern_config.patterns:
                 pattern.center = cp
