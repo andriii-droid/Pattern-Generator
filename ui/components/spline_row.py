@@ -1,4 +1,6 @@
 from nicegui import ui
+from models.models import SplineConfig
+from point import Point
 
 class SplineRow:
     def __init__(self, on_delete_callback):
@@ -46,19 +48,14 @@ class SplineRow:
         Helper method to extract current UI state cleanly.
         Resolves the NiceGUI input values into a standard dictionary.
         """
-        return {
-            'show_spline': self.show_spline.value,
-            'num_points': self.num_points.value,
-            'start_point': {
-                'angle': self.points_ui[0]['angle_input'].value, 
-                'dist': self.points_ui[0]['dist_input'].value
-            },
-            'control_point': {
-                'angle': self.points_ui[1]['angle_input'].value, 
-                'dist': self.points_ui[1]['dist_input'].value
-            },
-            'end_point': {
-                'angle': self.points_ui[2]['angle_input'].value, 
-                'dist': self.points_ui[2]['dist_input'].value
-            }
-        }
+        return SplineConfig(
+            show_spline=self.show_spline.value,
+            num_points=self.num_points.value,
+            start_point=Point.from_polar(angle_degrees=self.points_ui[0]['angle_input'].value,
+                                         distance=self.points_ui[0]['dist_input'].value),
+            control_point=Point.from_polar(angle_degrees=self.points_ui[1]['angle_input'].value,
+                                         distance=self.points_ui[1]['dist_input'].value),
+            end_point=Point.from_polar(angle_degrees=self.points_ui[2]['angle_input'].value,
+                                         distance=self.points_ui[2]['dist_input'].value)
+            )
+        

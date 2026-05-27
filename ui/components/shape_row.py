@@ -1,4 +1,5 @@
 from nicegui import ui
+from models.models import ShapeConfig
 
 class ShapeRow:
     def __init__(self, on_delete_callback):
@@ -43,11 +44,11 @@ class ShapeRow:
 
     def get_data(self) -> dict:
         """Helper method to export the current UI state into a clean dictionary."""
-        return {
-            'shape': self.shape.value,
-            'num_shapes': self.num_shapes.value,
-            'size': self.size.value,
-            'hex': self.hex_color,
-            'offset': self.offset.value,
-            'line_points': self.line_points.value
-        }
+        return ShapeConfig(
+            shape_type=self.shape.value,
+            num_shapes=self.num_shapes.value,
+            size=self.size.value,
+            hex_color=self.hex_color,
+            offset=self.offset.value,
+            line_points=self.line_points.value
+        )
