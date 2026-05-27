@@ -16,15 +16,30 @@ class PatternCoordinator():
 
     def _calculate(self, pattern_config: PatternConfig, settings_config: SettingsConfig):
         self.patterns = []
-        for pattern in pattern_config.patterns:
-            if isinstance(pattern, ShapeConfig):
-                s = Shape(pattern)
-                s.generate()
-                self.patterns.append(s)
-            elif isinstance(pattern, SplineConfig):
-                s = Spline(pattern)
-                s.generate()
-                self.patterns.append(s)
+
+        c = Shape(ShapeConfig(
+            shape_type=int(settings_config.num_center_points),
+            num_shapes=1,
+            size=float(settings_config.center_point_radius*2), #times 2? TODO
+            hex_color="",
+            offset=1,
+            line_points=0,
+            center=Point(0,0) 
+            ))
+        c.generate()
+        [center_points] = c.points
+        for cp in center_points:
+            for pattern in pattern_config.patterns:
+                pattern.center = cp
+                if isinstance(pattern, ShapeConfig):
+                    s = Shape(pattern)
+                    s.generate()
+                    self.patterns.append(s)
+                elif isinstance(pattern, SplineConfig):
+                    s = Spline(pattern)
+                    s.generate()
+                    self.patterns.append(s)
+                
 
     def _render_to_ui(self, drawing_config: DrawingConfig, pattern_config: PatternConfig):
         print(self.patterns)

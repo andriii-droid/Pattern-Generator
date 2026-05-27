@@ -15,7 +15,7 @@ class Shape():
         step = 360 / self.config.num_shapes
         for _ in range(self.config.num_shapes):     #calls calc_shape multiple times
             points_tmp = self._calculate(angle=angle, num_points=self.config.shape_type, center=self.config.center)
-            if self.config.line_points != 0: #if there should be points genereted on each line, it gets calculated here
+            if self.config.line_points: #if there should be points genereted on each line, it gets calculated here
                 points_tmp = self._generate_points_on_shape(points=points_tmp, num_points=self.config.line_points)
             self._points.append(points_tmp)
 
