@@ -1,6 +1,6 @@
 from nicegui import ui, app
-from ui.components.ShapeRow import ShapeRow
-from ui.components.SplineRow import SplineRow
+from ui.components.shape_row import ShapeRow
+from ui.components.spline_row import SplineRow
 
 
 class ShapeManagerPage:

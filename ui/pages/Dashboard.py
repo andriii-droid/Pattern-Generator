@@ -1,14 +1,11 @@
 from nicegui import ui, app
-from ui.components.ShapeManager import ShapeManagerPage
-from File import File
-
+from ui.components.shape_manager import ShapeManagerPage
+from pattern_coordinator import PatternCoordinator
 
 class DashboardPage():
     def __init__(self):
         self.shape_manager = ShapeManagerPage()
-
-        self.f = File(self)
-        self.len = 0
+        self.coordinator = PatternCoordinator()
 
     def build(self):
         ui.query('body').classes('bg-slate-100')
@@ -23,8 +20,8 @@ class DashboardPage():
                 self.filename_input = ui.input(label='Filename', placeholder='output', suffix='.pdf/.gcode').classes('w-full mb-4')
                 with ui.row().classes('w-full justify-between items-center mb-2'):
                     self.cord = ui.switch('Coordinates', value=False)
-                    self.gcode_x = ui.number(label='GCODE X Offset', value=self.f.read_gcode_offset_from_file()[0], min=0, step=0.01).classes('w-24')
-                    self.gcode_y = ui.number(label='GCODE Y Offset', value=self.f.read_gcode_offset_from_file()[1], min=0, step=0.01).classes('w-24')
+                    self.gcode_x = ui.number(label='GCODE X Offset', value=self.coordinator.gcode_offset_x, min=0, step=0.01).classes('w-24')
+                    self.gcode_y = ui.number(label='GCODE Y Offset', value=self.coordinator.gcode_offset_y, min=0, step=0.01).classes('w-24')
                 
                 ui.separator().classes('my-2')
                 with ui.row().classes('w-full justify-between items-center mb-2'):
@@ -44,7 +41,7 @@ class DashboardPage():
                 with ui.row().classes('w-full items-left mb-2'):
                     self.shape_manager.build()
                     
-                ui.button('Generate & View PDF', icon='picture_as_pdf', on_click=self.f.generate_pdf).classes('w-full py-2 text-lg').props('color=primary')
+                ui.button('Generate Pattern', icon='picture_as_pdf', on_click=self.coordinator.render_to_ui).classes('w-full py-2 text-lg').props('color=primary')
 
             # RIGHT COLUMN: Dynamic PDF Viewer Card
             # It starts hidden and reveals itself the first time you click "Generate"
@@ -52,13 +49,13 @@ class DashboardPage():
                 self.pdf_viewer.set_visibility(False) 
                 ui.label('PDF Preview').classes('text-lg font-bold text-slate-700 mb-2')
                 with ui.row():
-                    ui.button('Save PDF', icon='save', on_click=lambda: f.save_current_pdf(path=self.filename_input.value)).props('flat color=green size=md')
-                    ui.button('Generate GCODE', icon='playlist_add', on_click=lambda: self.f.generate_gcode(path=self.filename_input.value)).props('flat color=blue size=md')
+                    ui.button('Save PDF', icon='save', on_click=lambda: self.coordinator.export_to_pdf()).props('flat color=green size=md')
+                    ui.button('Generate GCODE', icon='playlist_add', on_click=lambda: self.coordinator.export_to_gcode()).props('flat color=blue size=md')
                 with ui.row():
                     # 1. Create the label with a placeholder or initial text
                     label = ui.label()
 
                     # 2. Bind the label's text to your object's variable
                     # (The lambda function formats the string dynamically)
-                    label.bind_text_from(self, 'len', backward=lambda l: f'Required string length: {l}m')                # Native HTML iframe configured to fill the card space completely
+                    label.bind_text_from(self.coordinator, 'string_length', backward=lambda l: f'Required string length: {l}m')            
                 self.pdf_frame = ui.element('iframe').classes('w-full h-full border-none rounded-lg')
