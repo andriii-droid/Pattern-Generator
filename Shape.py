@@ -1,54 +1,37 @@
-from Pattern import Pattern 
 import math
-from reportlab.lib.pagesizes import A6
-from reportlab.lib import colors
-from reportlab.pdfgen import canvas
-from Point import Point
-from Error import Error
+from point import Point
+from models.models import ShapeConfig
+
 
 class Shape():
-    '''creates one or a multiple of geometric shape'''
-    def __init__(self, pattern, center_radius=0):
-        '''creates a shape object, and links to parent pattern object'''
-        self.pattern = pattern
-        self.size = center_radius
-        self.offset = 1
+    '''implement functions to generate shapes'''
+    def __init__(self, config: ShapeConfig):
+        self.config = config
+        self._points: list[Point] = []
 
-    def generate_shape(self, shape="rect", num_shapes=1,  col='#000000',  size=100, offset=1, line_points=0):
-        '''calls the calc_shape function with specified number of corners, a specified number of times with an angle offset'''
-        self.col = col
-        self.size = size
-        self.offset = offset
-        self.pattern.c.setFillColor(col)
-        points_list = []
+    def generate(self):
+        '''calls the _calculate function with specified number of corners, a specified number of times with an angle offset'''  
         angle = 0
-        step = 360 / num_shapes
-        for _ in range(num_shapes):     #calls calc_shape multiple times
-            self.pattern.c.setLineWidth(.2)
-            self.pattern.c.setStrokeColor(col)
-
-            points = self.calc_shape(angle=angle, num_points=shape, center=self.pattern.center)
-            if line_points: #if there should be points genereted on each line, it gets calculated here
-                points = self.generate_points_on_shape(points=points, num_points=line_points)
-            points_list.extend(points)
-            #Draw calculated points and lines to canvas
-            self.pattern.draw_points(points)
-            self.pattern.draw_lines(points, angle, line_points, col=col)
+        step = 360 / self.config.num_shapes
+        for _ in range(self.config.num_shapes):     #calls calc_shape multiple times
+            points_tmp = self._calculate(angle=angle, num_points=self.config.shape_type, center=Point(0,0))
+            if self.config.line_points != 0: #if there should be points genereted on each line, it gets calculated here
+                points_tmp = self.generate_points_on_shape(points=points_tmp, num_points=self.config.line_points)
+            self._points.append(points_tmp)
 
             angle += step   
-        self.pattern.points.append(points_list)
 
-    def calc_shape(self, center, angle=0, num_points=1):
+    def _calculate(self, center, angle=0, num_points=1):
         '''calculates shape points around a center point. the number of points can be specified'''
         points = []
         if num_points == 1:
             points.append(center)
             return points
         
-        points.append(self.new_point(center, (self.size/2)*self.offset, 90+angle))
+        points.append(self.new_point(center, (self.config.size/2)*self.config.offset, 90+angle))
         rotation_angle = -360/num_points/2 + angle
         for _ in range(num_points - 1):
-            points.append(self.new_point(points[-1], self.size*math.sin(math.pi/num_points), rotation_angle)) #TODO
+            points.append(self.new_point(points[-1], self.config.size*math.sin(math.pi/num_points), rotation_angle)) #TODO
             rotation_angle -= 360/num_points
         return points
     
@@ -81,3 +64,7 @@ class Shape():
         y2 = y1 + dy
         
         return Point(x2, y2)
+    
+    @property
+    def points(self):
+        return self._points

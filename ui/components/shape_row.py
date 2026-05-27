@@ -45,10 +45,10 @@ class ShapeRow:
     def get_config(self):
         """Helper method to export the current UI state as shape config object"""
         return ShapeConfig(
-            shape_type=self.shape.value,
-            num_shapes=self.num_shapes.value,
+            shape_type=int(self.shape.value),
+            num_shapes=int(self.num_shapes.value),
             size=self.size.value,
             hex_color=self.hex_color,
             offset=self.offset.value,
-            line_points=self.line_points.value
+            line_points=int(self.line_points.value)
         )

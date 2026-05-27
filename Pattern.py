@@ -1,7 +1,7 @@
 from reportlab.lib.pagesizes import A6
 from reportlab.lib import colors
 from reportlab.pdfgen import canvas
-from Point import Point
+from point import Point
 
 
 class Pattern:

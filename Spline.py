@@ -1,5 +1,5 @@
 import math
-from Point import Point
+from point import Point
 
 class Spline():
     '''calculates a spline and can draw points on that spline'''

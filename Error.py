@@ -1,4 +1,4 @@
-from Point import Point
+from point import Point
 
 class Error():
     '''Implements various Functions to sarch and Find errors in the Pattern calculations'''

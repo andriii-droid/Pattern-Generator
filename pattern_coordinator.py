@@ -1,20 +1,30 @@
-from models.models import PatternConfig, DrawingConfig, FileConfig, SettingsConfig
+from models.models import PatternConfig, DrawingConfig, FileConfig, SettingsConfig, ShapeConfig, SplineConfig
 from point import Point
+from shape import Shape
+from spline import Spline
 
 class PatternCoordinator():
     '''exposes functions to the dashboard manipulate patterns '''
     def __init__(self):
-        #initialize pattern classes
-        #and file classes etc
+        self.patterns: list[Shape | Spline] = []
         pass
 
     def calculate_and_render(self, pattern_config: PatternConfig, drawing_config: DrawingConfig, settings_config: SettingsConfig):
-        pass
+        '''calculates and then draws the patterns to the ui'''
+        self._calculate(pattern_config=pattern_config, settings_config=settings_config)
+        self._render_to_ui(drawing_config=drawing_config, pattern_config=pattern_config)
 
-    def _calculate(self, config: PatternConfig, settings_config: SettingsConfig):
-        pass
+    def _calculate(self, pattern_config: PatternConfig, settings_config: SettingsConfig):
+        self.patterns = []
+        for pattern in pattern_config.patterns:
+            if isinstance(pattern, ShapeConfig):
+                s = Shape(pattern)
+                s.generate()
+                self.patterns.append(s)
+            elif isinstance(pattern, SplineConfig):
+                pass #todo
 
-    def _render_to_ui(self, drawing_config: DrawingConfig):
+    def _render_to_ui(self, drawing_config: DrawingConfig, pattern_config: PatternConfig):
         pass
 
     def export_to_pdf(self, file_config: FileConfig):
