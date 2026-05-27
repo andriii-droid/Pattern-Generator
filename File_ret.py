@@ -1,5 +1,5 @@
 from nicegui import ui, app
-from Pattern import Pattern
+from Pattern_ret import Pattern
 from Shape import Shape
 from Spline import Spline
 from Point import Point

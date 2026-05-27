@@ -2,12 +2,13 @@ from models.models import PatternConfig, DrawingConfig, FileConfig, SettingsConf
 from point import Point
 from shape import Shape
 from spline import Spline
+from gcode import GCODE
 
 class PatternCoordinator():
     '''exposes functions to the dashboard manipulate patterns '''
     def __init__(self):
         self.patterns: list[Shape | Spline] = []
-        pass
+        self.gcode = GCODE()
 
     def calculate_and_render(self, pattern_config: PatternConfig, 
                              drawing_config: DrawingConfig, 
@@ -64,11 +65,11 @@ class PatternCoordinator():
 
     @property
     def gcode_offset_x(self):
-        return 0
+        return self.gcode.read_gcode_offset_from_file()[0]
 
     @property
     def gcode_offset_y(self):
-        return 0
+        return self.gcode.read_gcode_offset_from_file()[1]
     
     @property
     def string_length(self):
