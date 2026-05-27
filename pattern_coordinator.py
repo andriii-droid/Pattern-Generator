@@ -74,3 +74,16 @@ class PatternCoordinator():
     @property
     def string_length(self):
         return 0
+    
+    @property
+    def canvas_content(self):
+        return '''
+                    <line x1="50" y1="50" x2="250" y2="50" stroke="red" stroke-width="4" />
+
+                    <path d="M 50,200 C 100,100 200,300 300,200" fill="transparent" stroke="blue" stroke-width="4" />
+
+                    <circle cx="50" cy="200" r="6" fill="black" />
+                    <circle cx="100" cy="100" r="6" fill="green" />
+                    <circle cx="200" cy="300" r="6" fill="green" />
+                    <circle cx="300" cy="200" r="6" fill="black" />
+                '''
