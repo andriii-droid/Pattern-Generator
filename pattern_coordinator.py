@@ -9,12 +9,16 @@ class PatternCoordinator():
         self.patterns: list[Shape | Spline] = []
         pass
 
-    def calculate_and_render(self, pattern_config: PatternConfig, drawing_config: DrawingConfig, settings_config: SettingsConfig):
+    def calculate_and_render(self, pattern_config: PatternConfig, 
+                             drawing_config: DrawingConfig, 
+                             settings_config: SettingsConfig):
         '''calculates and then draws the patterns to the ui'''
         self._calculate(pattern_config=pattern_config, settings_config=settings_config)
         self._render_to_ui(drawing_config=drawing_config, pattern_config=pattern_config)
 
-    def _calculate(self, pattern_config: PatternConfig, settings_config: SettingsConfig):
+    def _calculate(self, pattern_config: PatternConfig, 
+                   settings_config: SettingsConfig):
+        '''calculates the specified patterns and stores the patterns'''
         self.patterns = []
 
         #create center points
@@ -44,7 +48,9 @@ class PatternCoordinator():
                     self.patterns.append(s)
                 
 
-    def _render_to_ui(self, drawing_config: DrawingConfig, pattern_config: PatternConfig):
+    def _render_to_ui(self, drawing_config: DrawingConfig, 
+                      pattern_config: PatternConfig):
+        '''draws points and lines to the ui'''
         print(self.patterns)
 
     def export_to_pdf(self, file_config: FileConfig):

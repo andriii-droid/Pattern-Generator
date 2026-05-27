@@ -4,7 +4,7 @@ from models.models import ShapeConfig
 
 
 class Shape():
-    '''implement functions to generate shapes'''
+    '''generetes N-Ecks'''
     def __init__(self, config: ShapeConfig):
         self.config = config
         self._points: list[Point] = []

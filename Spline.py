@@ -4,14 +4,13 @@ from models.models import SplineConfig
 
 
 class Spline():
-    '''calculates a spline and can draw points on that spline'''
+    '''calculates a spline and equally seperated points on that line'''
     def __init__(self, config: SplineConfig):
-        '''creates a spline object and links parent pattern'''
         self.config = config
         self._points: list[Point] = []
 
     def generate(self):
-        '''generates spline and points, given the parameters they get get drawn'''
+        '''generates pooints along a bezier curve'''
 
         #calculates the startpoint in relation to the centerpoint
         self.start_point = self.config.start_point + self.config.center
