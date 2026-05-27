@@ -44,10 +44,7 @@ class SplineRow:
                 ui.button(icon='delete', on_click=lambda: self.on_delete(self)).props('flat color=red class=mt-auto')
 
     def get_data(self) -> dict:
-        """
-        Helper method to extract current UI state cleanly.
-        Resolves the NiceGUI input values into a standard dictionary.
-        """
+        """Helper method to extract current UI state into spline config object"""
         return SplineConfig(
             show_spline=self.show_spline.value,
             num_points=self.num_points.value,

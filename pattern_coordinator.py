@@ -2,6 +2,7 @@ from models.models import PatternConfig
 from point import Point
 
 class PatternCoordinator():
+    '''exposes functions to the dashboard manipulate patterns '''
     def __init__(self):
         #initialize pattern classes
         #and file classes etc

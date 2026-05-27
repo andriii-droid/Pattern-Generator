@@ -43,7 +43,7 @@ class ShapeRow:
             ui.button(icon='delete', on_click=lambda: self.on_delete(self)).props('flat color=red')
 
     def get_data(self) -> dict:
-        """Helper method to export the current UI state into a clean dictionary."""
+        """Helper method to export the current UI state as shape config object"""
         return ShapeConfig(
             shape_type=self.shape.value,
             num_shapes=self.num_shapes.value,

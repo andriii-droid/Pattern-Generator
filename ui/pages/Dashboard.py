@@ -3,11 +3,13 @@ from ui.components.pattern_manager import PatternManagerPage
 from pattern_coordinator import PatternCoordinator
 
 class DashboardPage():
+    '''handles the dashboard'''
     def __init__(self):
         self.pattern_page = PatternManagerPage()
         self.coordinator = PatternCoordinator()
 
     def build(self):
+        '''builds the dashboard'''
         ui.query('body').classes('bg-slate-100')
 
         # Main layout split into a 2-column grid (Left: Controls, Right: PDF Viewer)
