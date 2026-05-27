@@ -45,5 +45,4 @@ class PatternManagerPage:
             pattern_config.patterns.append(shape.get_data())
         for spline in self.spline_list:
             pattern_config.patterns.append(spline.get_data())
-        print(pattern_config)
         return pattern_config
