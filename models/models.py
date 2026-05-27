@@ -42,3 +42,7 @@ class SplineConfig:
     control_point: Point
     end_point: Point
 
+@dataclass
+class PatternConfig:
+    """Data contract for patterns."""
+    patterns: list[SplineConfig | ShapeConfig]

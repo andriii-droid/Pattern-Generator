@@ -1,13 +1,19 @@
-
+from models.models import PatternConfig
+from point import Point
 
 class PatternCoordinator():
     def __init__(self):
+        #initialize pattern classes
+        #and file classes etc
         pass
 
-    def calculate(self):
+    def calculate_and_render(self, config: PatternConfig):
         pass
 
-    def render_to_ui(self):
+    def _calculate(self, config: PatternConfig):
+        pass
+
+    def _render_to_ui(self):
         pass
 
     def export_to_pdf(self):

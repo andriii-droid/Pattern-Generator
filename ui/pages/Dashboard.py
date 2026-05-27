@@ -1,10 +1,10 @@
 from nicegui import ui, app
-from ui.components.shape_manager import ShapeManagerPage
+from ui.components.pattern_manager import PatternManagerPage
 from pattern_coordinator import PatternCoordinator
 
 class DashboardPage():
     def __init__(self):
-        self.shape_manager = ShapeManagerPage()
+        self.pattern_page = PatternManagerPage()
         self.coordinator = PatternCoordinator()
 
     def build(self):
@@ -39,9 +39,10 @@ class DashboardPage():
                     self.sketch = ui.switch('Sketch', value=False)
                 ui.separator().classes('my-2')
                 with ui.row().classes('w-full items-left mb-2'):
-                    self.shape_manager.build()
+                    self.pattern_page.build()
                     
-                ui.button('Generate Pattern', icon='picture_as_pdf', on_click=self.coordinator.render_to_ui).classes('w-full py-2 text-lg').props('color=primary')
+                ui.button('Generate Pattern', icon='picture_as_pdf', 
+                          on_click=lambda: self.coordinator.calculate_and_render(self.pattern_page.get_data())).classes('w-full py-2 text-lg').props('color=primary')
 
             # RIGHT COLUMN: Dynamic PDF Viewer Card
             # It starts hidden and reveals itself the first time you click "Generate"

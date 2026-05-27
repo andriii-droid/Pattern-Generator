@@ -1,9 +1,10 @@
 from nicegui import ui, app
 from ui.components.shape_row import ShapeRow
 from ui.components.spline_row import SplineRow
+from models.models import PatternConfig, SplineConfig, ShapeConfig
 
 
-class ShapeManagerPage:
+class PatternManagerPage:
     def __init__(self):
         # Store instances of PatternRow objects rather than dictionaries
         self.shape_list: list[ShapeRow] = []
@@ -37,8 +38,12 @@ class ShapeManagerPage:
         elif isinstance(row_instance, SplineRow):
             self.spline_list.remove(row_instance)
 
-    def process_all_shapes(self): # TODO
+    def get_data(self): # TODO
         """Example: Grab data from all rows when a 'Submit' button is clicked."""
-        for row in self.patterns_list:
-            data = row.get_data()
-            print(f"Processing shape {data['shape']} with color {data['hex']}")
+        pattern_config = PatternConfig([])
+        for shape in self.shape_list:
+            pattern_config.patterns.append(shape.get_data())
+        for spline in self.spline_list:
+            pattern_config.patterns.append(spline.get_data())
+        print(pattern_config)
+        return pattern_config
