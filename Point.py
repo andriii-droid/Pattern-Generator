@@ -36,6 +36,12 @@ class Point:
             return NotImplemented
         return ((self._x - other._x)**2 + (self._y - other._y)**2)**0.5
     
+    def __str__(self):
+        return f"Point: {(round(self._x,2), round(self._y, 2))}"
+    
+    def __repr__(self):
+        return f"{(round(self._x,2), round(self._y, 2))}"
+    
     # --- Getters (Properties) ---
     @property
     def cartesian(self):
@@ -66,3 +72,5 @@ if __name__ == '__main__':
     p2 = p + p1
 
     print(p2.cartesian)
+
+    print(p2)
