@@ -37,7 +37,7 @@ class ShapeManagerPage:
         elif isinstance(row_instance, SplineRow):
             self.spline_list.remove(row_instance)
 
-    def process_all_patterns(self): # TODO
+    def process_all_shapes(self): # TODO
         """Example: Grab data from all rows when a 'Submit' button is clicked."""
         for row in self.patterns_list:
             data = row.get_data()
