@@ -58,7 +58,7 @@ class PatternCoordinator():
         self._canvas_content = ''''''
         if drawing_config.draw_points: #Draws Points if configured
             for pat in self.patterns:
-                self._canvas_content += self.draw.draw_points(pat.points)
+                self._canvas_content += self.draw.draw_points(pat)
 
         if drawing_config.draw_lines: #Draws Points if configured
             for pat in self.patterns:

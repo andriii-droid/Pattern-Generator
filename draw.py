@@ -1,6 +1,8 @@
 from models.models import PatternConfig, DrawingConfig, ShapeConfig, SplineConfig
 from point import Point
 from shape import Shape
+from spline import Spline
+
 
 
 class Draw():
@@ -13,9 +15,9 @@ class Draw():
     def set_canvas_dim(self, dim):
         self._scale_factor = dim[0] / self._canvas_width_in_mm
 
-    def draw_points(self, points: list[Point]):
+    def draw_points(self, pat: Shape | Spline):
         content = ""
-        for p in points:
+        for p in pat.points:
             x = p.x + self._center_point.x
             y = p.y + self._center_point.y
             content += f'''<circle cx="{x*self._scale_factor}" cy="{y*self._scale_factor}" r="1" fill="black" />'''
