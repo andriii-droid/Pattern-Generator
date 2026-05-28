@@ -54,6 +54,15 @@ class Point:
         angle = math.degrees(math.atan2(self._y, self._x)) % 360
         distance = math.hypot(self._x, self._y) # Cleaner way to do (x^2 + y^2)^0.5
         return (round(angle, 10), round(distance, 10))
+    
+    @property
+    def x(self):
+        return self._x
+    
+    @property
+    def y(self):
+        return self._y
+
 
     
 
