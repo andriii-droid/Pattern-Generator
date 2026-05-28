@@ -87,5 +87,5 @@ class PatternCoordinator():
         return self._canvas_content
 
     def canvas_dimensions(self, dim):
-        self._canvas_width = dim['width']
-        self._canvas_height = dim['height']
+        self._canvas_dim = (dim['width'], dim['height'])
+        self.draw.set_canvas_dim(self._canvas_dim)
