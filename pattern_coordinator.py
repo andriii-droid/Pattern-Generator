@@ -58,7 +58,6 @@ class PatternCoordinator():
         self._canvas_content = ''''''
 
         for pat in self.patterns:
-            print(pat.points)
             self._canvas_content += self.draw.draw_points(pat.points)
 
     def export_to_pdf(self, file_config: FileConfig):

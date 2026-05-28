@@ -8,7 +8,6 @@ class Shape():
     def __init__(self, config: ShapeConfig):
         self.config = config
         self._points: list[Point] = []
-        print(self._points)
 
     def generate(self):
         '''calls the _calculate function with specified number of corners, a specified number of times with an angle offset'''  
