@@ -73,7 +73,7 @@ class DashboardPage():
                 ii = ui.interactive_image(
                     blank_bg, 
                     cross=False).classes('h-full w-auto max-h-[700px] object-contain shadow-md rounded-lg bg-white')
-                ii.on('loaded', lambda e: ui.notify(f'loaded {e.args}'))
+                ii.on('loaded', lambda e: self.coordinator.canvas_dimensions(e.args))
                 ii.bind_content_from(self.coordinator, 'canvas_content')
 
     def get_drawing_config(self):

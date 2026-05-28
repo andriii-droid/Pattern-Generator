@@ -85,3 +85,7 @@ class PatternCoordinator():
     @property
     def canvas_content(self):
         return self._canvas_content
+
+    def canvas_dimensions(self, dim):
+        self._canvas_width = dim['width']
+        self._canvas_height = dim['height']
