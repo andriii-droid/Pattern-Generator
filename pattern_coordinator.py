@@ -18,7 +18,7 @@ class PatternCoordinator():
                              settings_config: SettingsConfig):
         '''calculates and then draws the patterns to the ui'''
         self._calculate(pattern_config=pattern_config, settings_config=settings_config)
-        self._render_to_ui(drawing_config=drawing_config, pattern_config=pattern_config)
+        self._render_to_ui(drawing_config=drawing_config)
 
     def _calculate(self, pattern_config: PatternConfig, 
                    settings_config: SettingsConfig):
@@ -52,8 +52,7 @@ class PatternCoordinator():
                     self.patterns.append(s)
                 
 
-    def _render_to_ui(self, drawing_config: DrawingConfig, 
-                      pattern_config: PatternConfig):
+    def _render_to_ui(self, drawing_config: DrawingConfig):
         '''draws points and lines to the ui'''
         self._canvas_content = ''''''
         if drawing_config.draw_points: #Draws Points if configured
@@ -61,8 +60,14 @@ class PatternCoordinator():
                 self._canvas_content += self.draw.draw_points(pat)
 
         if drawing_config.draw_lines: #Draws Points if configured
-            for pat in self.patterns:
-                self._canvas_content += self.draw.draw_shape_lines(pat, pat.config.shape_type)
+            if isinstance(pat, Spline):
+                pass
+            elif isinstance(pat, Shape):
+                if pat.config.line_points == -1:
+                    for pat in self.patterns:
+                        self._canvas_content += self.draw.draw_shape_lines(pat, pat.config.shape_type)
+                    else:
+                        pass
 
     def export_to_pdf(self, file_config: FileConfig):
         pass
