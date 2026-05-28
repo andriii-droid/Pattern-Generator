@@ -47,7 +47,9 @@ class DashboardPage():
                     
                 # Updated Action: Generates data AND triggers the UI refresh
                 ui.button('Generate Pattern', icon='picture_as_pdf', 
-                        on_click=lambda: self.handle_generation()
+                        on_click=lambda: self.coordinator.calculate_and_render(pattern_config=self.pattern_page.get_config(),
+                                                                               drawing_config=self.get_drawing_config(),
+                                                                               settings_config=self.get_settings_config())
                         ).classes('w-full py-2 text-lg').props('color=primary')
 
             # RIGHT COLUMN: Preview Card
@@ -64,14 +66,13 @@ class DashboardPage():
                                 on_click=lambda: self.coordinator.export_to_gcode(file_config=self.get_file_config())
                                 ).props('flat color=blue size=md')                
 
-                # Base background setup for A6 Paper Aspect Ratio
                 raw_svg = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 105 148" width="100%"></svg>'
                 blank_bg = f'data:image/svg+xml;utf8,{urllib.parse.quote(raw_svg)}'
 
-                # The interactive image is contained cleanly, taking up optimal height without stretching out of ratio
                 with ui.element('div').classes('w-full flex-1 flex items-center justify-center bg-slate-50 rounded-xl p-4 border border-dashed border-slate-200 overflow-hidden'):
                     self.preview_canvas = ui.interactive_image(blank_bg, cross=False).classes('h-full w-auto max-h-[700px] object-contain shadow-md rounded-lg bg-white')
-                    self.preview_canvas.set_content(self.coordinator.canvas_content)
+                    
+                    self.preview_canvas.bind_content_from(self.coordinator, 'canvas_content')
 
     def get_drawing_config(self):
         '''collects drawing config data'''
