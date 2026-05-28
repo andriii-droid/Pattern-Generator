@@ -36,7 +36,7 @@ class PatternCoordinator():
             center=Point(0,0) 
             ))
         c.generate()
-        [center_points] = c.points
+        center_points = c.points
 
         #for each center point create one pattern
         for cp in center_points:
@@ -55,7 +55,11 @@ class PatternCoordinator():
     def _render_to_ui(self, drawing_config: DrawingConfig, 
                       pattern_config: PatternConfig):
         '''draws points and lines to the ui'''
-        self._canvas_content = self.draw.draw_points([Point(0,0)])
+        self._canvas_content = ''''''
+
+        for pat in self.patterns:
+            print(pat.points)
+            self._canvas_content += self.draw.draw_points(pat.points)
 
     def export_to_pdf(self, file_config: FileConfig):
         pass

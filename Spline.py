@@ -18,7 +18,7 @@ class Spline():
         self.end_point = self.config.end_point + self.config.center
 
         #calculates and draws the points on the spline
-        self._points.append(self._get_even_points_on_curve(num_points=self.config.num_points))
+        self._points.extend(self._get_even_points_on_curve(num_points=self.config.num_points))
         
     def _get_even_points_on_curve(self, num_points=10):
         """
@@ -83,3 +83,7 @@ class Spline():
             even_points.append(Point(even_x, even_y))
 
         return even_points
+    
+    @property
+    def points(self):
+        return self._points

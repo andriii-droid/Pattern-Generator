@@ -8,6 +8,7 @@ class Shape():
     def __init__(self, config: ShapeConfig):
         self.config = config
         self._points: list[Point] = []
+        print(self._points)
 
     def generate(self):
         '''calls the _calculate function with specified number of corners, a specified number of times with an angle offset'''  
@@ -17,7 +18,7 @@ class Shape():
             points_tmp = self._calculate(angle=angle, num_points=self.config.shape_type, center=self.config.center)
             if self.config.line_points: #if there should be points genereted on each line, it gets calculated here
                 points_tmp = self._generate_points_on_shape(points=points_tmp, num_points=self.config.line_points)
-            self._points.append(points_tmp)
+            self._points.extend(points_tmp)
 
             angle += step   
 

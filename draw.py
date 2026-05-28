@@ -9,5 +9,5 @@ class Draw():
     def draw_points(self, points: list[Point]):
         content = ""
         for p in points:
-            content += f'''<circle cx="{0}" cy="{0}" r="1" fill="black" />'''
+            content += f'''<circle cx="{p.x}" cy="{p.y}" r="1" fill="black" />'''
         return content
