@@ -3,12 +3,14 @@ from point import Point
 from shape import Shape
 from spline import Spline
 from gcode import GCODE
+from draw import Draw
 
 class PatternCoordinator():
     '''exposes functions to the dashboard manipulate patterns '''
     def __init__(self):
         self.patterns: list[Shape | Spline] = []
         self.gcode = GCODE()
+        self.draw = Draw()
         self._canvas_content = ''''''
 
     def calculate_and_render(self, pattern_config: PatternConfig, 
@@ -53,17 +55,7 @@ class PatternCoordinator():
     def _render_to_ui(self, drawing_config: DrawingConfig, 
                       pattern_config: PatternConfig):
         '''draws points and lines to the ui'''
-        self._canvas_content = '''
-                    <line x1="50" y1="50" x2="250" y2="50" stroke="red" stroke-width="4" />
-
-                    <path d="M 50,200 C 100,100 200,300 300,200" fill="transparent" stroke="blue" stroke-width="4" />
-
-                    <circle cx="50" cy="200" r="6" fill="black" />
-                    <circle cx="100" cy="100" r="6" fill="green" />
-                    <circle cx="200" cy="300" r="6" fill="green" />
-                    <circle cx="300" cy="200" r="6" fill="black" />
-                '''
-        print(self._canvas_content)
+        self._canvas_content = self.draw.draw_points([Point(0,0)])
 
     def export_to_pdf(self, file_config: FileConfig):
         pass
