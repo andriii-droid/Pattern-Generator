@@ -72,6 +72,6 @@ class Shape():
     @property
     def sketch_points(self):
         if self.config.line_points:
-            return []
+            return [self._points[0]] + [self._points[self.config.line_points+2]]
         else:
             return self._points[0:self.config.shape_type]
