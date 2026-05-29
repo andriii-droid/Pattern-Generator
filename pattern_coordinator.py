@@ -29,8 +29,8 @@ class PatternCoordinator():
         c = Shape(ShapeConfig(
             shape_type=int(settings_config.num_center_points),
             num_shapes=1,
-            size=float(settings_config.center_point_radius*2),
-            hex_color="", #hex is wrong config
+            size=float(settings_config.center_point_radius),
+            hex_color="", 
             offset=1,
             line_points=0,
             center=Point(0,0) 
