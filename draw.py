@@ -45,7 +45,7 @@ class Draw():
             self.draw_shape_lines(pat, sketch=True)
         elif isinstance(pat, Shape) and pat.config.line_points:
             self.draw_shape_lines(pat,  sketch=True)
-        return self._canvas_content #with property TODO?
+        return self._canvas_content
 
     
     def draw_shape_lines(self, shape: Shape, sketch=False):
