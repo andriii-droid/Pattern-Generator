@@ -83,7 +83,6 @@ class PatternCoordinator():
 
     @property
     def gcode_offset_x(self):
-        print(self._gcode_offset)
         return self._gcode_offset[0]
     
     @property
