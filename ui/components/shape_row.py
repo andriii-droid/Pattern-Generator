@@ -14,7 +14,7 @@ class ShapeRow:
 
         def handle_type_change(e):
             if e.value == 'line':
-                self.line_points.value = -1
+                self.line_points.value = 0
                 self.num_shapes.value = 20
             elif e.value == 'dotted':
                 self.line_points.value = 5
@@ -37,7 +37,7 @@ class ShapeRow:
             
             self.line_type = ui.select(label="Linetype", options=['line', 'dotted'], value='line').classes('w-26').on_value_change(handle_type_change)
             
-            self.line_points = ui.number(label="Points", value=-1, min=-1, step=1).classes('w-24') \
+            self.line_points = ui.number(label="Points", value=0, min=-1, step=1).classes('w-24') \
                 .bind_visibility_from(self.line_type, 'value', backward=lambda v: v == 'dotted') 
             
             # When deleted, trigger the parent callback passing 'self' (the whole row object)
