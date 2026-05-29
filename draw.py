@@ -3,8 +3,6 @@ from point import Point
 from shape import Shape
 from spline import Spline
 
-
-
 class Draw():
     def __init__(self):
         self._canvas_width_in_mm = 105
@@ -27,7 +25,7 @@ class Draw():
         content = ""
         point_lists = [shape.points[i:i + shape.config.shape_type] for i in range(0, len(shape.points), shape.config.shape_type)]
         for point_shape in point_lists:
-            for count, (p1, p2) in enumerate(zip(point_shape, point_shape[1:]+[point_shape[0]])):
+            for (p1, p2) in zip(point_shape, point_shape[1:]+[point_shape[0]]):
                 p1 = (p1 + self._center_point) * self._scale_factor
                 p2 = (p2 + self._center_point)  * self._scale_factor
                 content += f'''<line x1="{p1.x}" y1="{p1.y}" 
@@ -36,7 +34,7 @@ class Draw():
     
     def draw_lines_between_line_points(self, shape: Shape):
         content = ""
-        for count, (p1, p2) in enumerate(zip(shape.points, shape.points[shape.config.line_points+2:]+shape.points[0:shape.config.line_points+2])):
+        for (p1, p2) in zip(shape.points, shape.points[shape.config.line_points+2:]+shape.points[0:shape.config.line_points+2]):
             p1 = (p1 + self._center_point) * self._scale_factor
             p2 = (p2 + self._center_point)  * self._scale_factor
             content += f'''<line x1="{p1.x}" y1="{p1.y}" 
