@@ -64,10 +64,9 @@ class PatternCoordinator():
                 pass        #TODO
             elif isinstance(pat, Shape):
                 if pat.config.line_points == -1:
-                    for pat in self.patterns:
-                        self._canvas_content += self.draw.draw_shape_lines(pat, pat.config.shape_type)
-                    else:
-                        pass
+                    self._canvas_content += self.draw.draw_shape_lines(pat)
+                else:
+                    self._canvas_content += self.draw.draw_lines_between_line_points(pat)
 
     def export_to_pdf(self, file_config: FileConfig):
         pass
