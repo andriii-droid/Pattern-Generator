@@ -30,6 +30,14 @@ class Point:
         # Vector subtraction: subtract other components from self
         return Point(x=self._x - other._x, y=self._y - other._y)
     
+    def __mul__(self, other):
+        '''implements point multiplication with an int or float'''
+        if isinstance(other, int | float):
+            return Point(x=self._x * other, y=self._y * other)
+        else:
+            return NotImplemented
+
+    
     def distance(self, other):
         '''calculates distance between two point objects'''
         if not isinstance(other, Point):
