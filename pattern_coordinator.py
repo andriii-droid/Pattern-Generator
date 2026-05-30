@@ -12,7 +12,6 @@ class PatternCoordinator():
         self.gcode = GCODE(self)
         self.draw = Draw()
         self._canvas_content = ''''''
-        self._gcode_offset_x = (0,0)
 
     def calculate_and_render(self, pattern_config: PatternConfig, 
                              drawing_config: DrawingConfig, 
@@ -75,19 +74,19 @@ class PatternCoordinator():
 
     @property
     def gcode_offset(self):
-        return self._gcode_offset
+        return self.gcode.read_gcode_offset_from_file()
     
     @gcode_offset.setter
     def gcode_offset(self, value):
-        self._gcode_offset = value
+        self.gcode.save_gcode_offset_file(value)
 
     @property
     def gcode_offset_x(self):
-        return self._gcode_offset[0]
+        return self.gcode.read_gcode_offset_from_file()[0]
     
     @property
     def gcode_offset_y(self):
-        return self._gcode_offset[1]
+        return self.gcode.read_gcode_offset_from_file()[1]
     
     @property
     def string_length(self):

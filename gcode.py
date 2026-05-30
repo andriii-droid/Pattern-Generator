@@ -5,11 +5,9 @@ import time
 class GCODE():
     def __init__(self, coordinator):
         self.coordinator = coordinator
-        self.read_gcode_offset_from_file()
 
     def generate_gcode(self, path=""):
         '''generates a gcode file using the points of a pattern as coordinates'''
-        self.save_gcode_offset_file()
 
         # offset_x = float(self.coordinator.gcode_offset_x) + 5   #Calculate Offset: 5 for homing point relative to card edge, and the input for correction to homing edge
         # offset_y = float(self.coordinator.gcode_offset_y) + 5
@@ -46,12 +44,11 @@ class GCODE():
         #         f.write("G1 Z15 F4800\n")
         #     f.write(end)
 
-    def save_gcode_offset_file(self):
+    def save_gcode_offset_file(self, value):
         '''Saves the gcode offset to an txt file'''
-        print(self.coordinator.gcode_offset_x)
         with open("gcode_offset.txt", "w") as f:
-            f.write(f"{self.coordinator.gcode_offset_x}\n")
-            f.write(f"{self.coordinator.gcode_offset_y}\n")
+            f.write(f"{value[0]}\n")
+            f.write(f"{value[1]}\n")
 
     def read_gcode_offset_from_file(self):
         '''Reads the gcode coordinates from the txt file and displays it in the UI'''
@@ -61,4 +58,4 @@ class GCODE():
                 y = float(f.readline())
             except:
                 x, y = (0,0)
-        self.coordinator.gcode_offset = (x, y)
+        return (x, y)
