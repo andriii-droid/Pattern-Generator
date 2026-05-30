@@ -4,6 +4,9 @@ from shape import Shape
 from spline import Spline
 from gcode import GCODE
 from draw import Draw
+from pdf import PDF
+from nicegui import ui, events
+
 
 class PatternCoordinator():
     '''exposes functions to the dashboard manipulate patterns '''
@@ -11,6 +14,7 @@ class PatternCoordinator():
         self.patterns: list[Shape | Spline] = []
         self.gcode = GCODE(self)
         self.draw = Draw()
+        self.pdf = PDF()
         self._canvas_content = ''''''
 
     def calculate_and_render(self, pattern_config: PatternConfig, 
@@ -64,7 +68,13 @@ class PatternCoordinator():
 
 
     def export_to_pdf(self, file_config: FileConfig):
-        pass
+        ui.notify('Downloading assets and rendering PDF...')
+    
+        # Generate the underlying bytes using ReportLab pipeline
+        pdf_bytes = self.pdf.generate_pdf(self.canvas_content)
+        
+        # Trigger an immediate download popup inside user's web browser
+        ui.download(pdf_bytes, filename="nicegui_annotation_export.pdf")
 
     def export_to_gcode(self, file_config: FileConfig):
         self.gcode.generate_gcode(self.patterns, path=file_config.filename)
