@@ -70,13 +70,11 @@ class PatternCoordinator():
 
 
     def export_to_pdf(self, file_config: FileConfig):
-        ui.notify('Downloading assets and rendering PDF...')
-    
-        # Generate the underlying bytes using ReportLab pipeline
-        pdf_bytes = self.pdf.generate_pdf(self.canvas_content)
-        
-        # Trigger an immediate download popup inside user's web browser
-        ui.download(pdf_bytes, filename="nicegui_annotation_export.pdf")
+        if file_config.filename == "":
+            ui.notify("Provide a Filename!", type='warning')
+        else:
+            pdf_bytes = self.pdf.generate_pdf(self.canvas_content)
+            ui.download(pdf_bytes, filename=file_config.filename+".pdf")
 
     def export_to_gcode(self, file_config: FileConfig):
         self.gcode.generate_gcode(self.patterns, path=file_config.filename)
