@@ -31,7 +31,7 @@ class OverlayCanvas(Flowable):
 
 
 class PDF:
-    """Implements functions to save your specific NiceGUI stitch pattern directly to an A6 PDF."""
+    """Implements functions to save pattern directly to an A6 PDF."""
     
     def __init__(self):
         self.display_width = A6[0]
@@ -66,24 +66,13 @@ class PDF:
             img_data.seek(0)
             
             rl_img = RLImage(filename=img_data, width=self.display_width, height=self.display_height)
-            
-            # FIX FOR INVISIBLE VECTORS: 
-            # Parse and swap attributes directly inside the string since svglib ignores <style>
-            processed_svg = svg_content
-            processed_svg = re.sub(r'stroke-width="[^"]*"', 'stroke-width="1.2"', processed_svg)
-            processed_svg = re.sub(r'r="[^"]*"', 'r="2.5"', processed_svg)
-            
-            if 'stroke-width' not in processed_svg:
-                processed_svg = processed_svg.replace('<line', '<line stroke-width="1.2"')
-            if 'r="' not in processed_svg:
-                processed_svg = processed_svg.replace('<circle', '<circle r="2.5"')
 
             # Combine everything inside a clean root namespace container without CSS blocks
             full_svg = f'''<svg xmlns="http://www.w3.org/2000/svg" 
                                 width="{self.display_width}" 
                                 height="{self.display_height}" 
                                 viewBox="0 0 {canvas_view_w} {canvas_view_h}">
-                {processed_svg}
+                {svg_content}
             </svg>'''
             
             # Stream compiled payload through svglib parser
