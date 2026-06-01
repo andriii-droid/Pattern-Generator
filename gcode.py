@@ -7,8 +7,9 @@ class GCODE():
     def __init__(self, coordinator):
         self.coordinator = coordinator
 
-    def generate_gcode(self, patterns: list[Shape | Spline], path="",):
+    def generate_gcode(self, patterns: list[Shape | Spline]):
         '''generates a gcode file using the points of a pattern as coordinates'''
+        content = ""
 
         offset_x = float(self.coordinator.gcode_offset_x) + 5   #Calculate Offset: 5 for homing point relative to card edge, and the input for correction to homing edge
         offset_y = float(self.coordinator.gcode_offset_y) + 5
@@ -27,24 +28,15 @@ class GCODE():
         end += "G1 X0 Y200 F4800 ; Present the bed (pushes bed forward, moves X to 0)\n"
         end += "M84 ; Disable stepper motors\n"
 
-        static_dir = Path("./gcode")
-        static_dir.mkdir(exist_ok=True)
-
-        if path == "":
-            path = "output.gcode"
-
-        file_name = Path(path.strip()).with_suffix(".gcode").name
-        output_path = static_dir / file_name
-
-        with open(output_path, "w") as f:
-            f.write(start)
+        content = start
             
-            for pat in patterns:
-                for p in pat.points:
-                    f.write(f"G1 X{p.cartesian[0] + offset_x:.3f} Y{p.cartesian[1] + offset_y:.3f} F4800;\n")
-                    f.write("G1 Z0 F4800\n")
-                    f.write("G1 Z15 F4800\n")
-            f.write(end)
+        for pat in patterns:
+            for p in pat.points:
+                content += f"G1 X{p.cartesian[0] + offset_x:.3f} Y{p.cartesian[1] + offset_y:.3f} F4800;\n"
+                content += "G1 Z0 F4800\n" 
+                content += "G1 Z15 F4800\n"
+        content += end
+        return content
 
     def save_gcode_offset_file(self, value):
         '''Saves the gcode offset to an txt file'''

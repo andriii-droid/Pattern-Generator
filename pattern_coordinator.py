@@ -77,7 +77,10 @@ class PatternCoordinator():
             ui.download(pdf_bytes, filename=file_config.filename+".pdf")
 
     def export_to_gcode(self, file_config: FileConfig):
-        self.gcode.generate_gcode(self.patterns, path=file_config.filename)
+        if file_config.filename == "":
+            ui.notify("Provide a Filename!", type='warning')
+        else:
+            ui.download.content(self.gcode.generate_gcode(self.patterns), file_config.filename+".gcode")
 
     def optimize(self):
         pass
