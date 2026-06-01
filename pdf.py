@@ -1,23 +1,32 @@
 import io
 import re
-from PIL import Image as PILImage
+from reportlab.platypus import BaseDocTemplate, PageTemplate, Frame, Paragraph, Flowable
 from reportlab.lib.pagesizes import A6
-from reportlab.platypus import BaseDocTemplate, PageTemplate, Frame, Paragraph, KeepTogether
 from reportlab.lib.styles import getSampleStyleSheet
-from reportlab.platypus.flowables import Image as RLImage
 from reportlab.graphics import renderPDF
 from svglib.svglib import svg2rlg
+from PIL import Image as PILImage
+from reportlab.platypus import Image as RLImage
 
-class OverlayCanvas(KeepTogether):
+class OverlayCanvas(Flowable):
+    """Safely layers a Flowable Image and a Flowable Drawing using proper canvas methods."""
     def __init__(self, bg_img, fg_drawing):
-        super().__init__([bg_img])
+        super().__init__()
         self.bg_img = bg_img
         self.fg_drawing = fg_drawing
+        # Use the drawing's dimensions to tell ReportLab how much space this component takes
+        self.width = fg_drawing.width
+        self.height = fg_drawing.height
+        
+    def wrap(self, availWidth, availHeight):
+        # Tells the ReportLab story layout engine the exact space required
+        return self.width, self.height
         
     def draw(self):
-        # Draw pure white background surface
-        self.bg_img.draw()
-        # Layer vector lines and coordinate points over the space
+        # 1. Draw the underlying background image safely onto the layout canvas
+        self.bg_img.drawOn(self.canv, 0, 0)
+        
+        # 2. Layer vector lines and coordinate points over the space
         renderPDF.draw(self.fg_drawing, self.canv, 0, 0)
 
 
@@ -25,14 +34,12 @@ class PDF:
     """Implements functions to save your specific NiceGUI stitch pattern directly to an A6 PDF."""
     
     def __init__(self):
-        # Precise A6 point size constraints for ReportLab layout placement
         self.display_width = A6[0]
         self.display_height = A6[1] - 0.1
 
     def generate_pdf(self, svg_content):
         pdf_buffer = io.BytesIO()
         
-        # Initialize the native zero-padding document structure
         doc = BaseDocTemplate(pdf_buffer, pagesize=A6)
         borderless_frame = Frame(
             0, 0, A6[0], A6[1],
@@ -47,13 +54,10 @@ class PDF:
         story = []
             
         try:
-            # 1. Setup exact bounds based on your coordinate string workspace
-            # Your coordinates naturally range up to ~265 in X and ~326 in Y.
-            # A 300 x 425 boundary box maps your pattern perfectly to the A6 page aspect ratio.
             canvas_view_w = 300
             canvas_view_h = 425
 
-            # 2. Build the underlying background asset block using integers for Pillow
+            # Build the underlying background asset
             pillow_width = int(self.display_width)
             pillow_height = int(self.display_height)
             bg_image = PILImage.new("RGB", (pillow_width, pillow_height), "white")
@@ -63,30 +67,26 @@ class PDF:
             
             rl_img = RLImage(filename=img_data, width=self.display_width, height=self.display_height)
             
-            # 3. FIX FOR INVISIBLE VECTORS: 
-            # We inject a CSS style block directly inside the compiler stream.
-            # This boosts line weights from 0.2 to a crisp 1.2 points so they print perfectly.
-            style_overrides = """
-            <style>
-                line {
-                    stroke-width: 1.2px !important;
-                }
-                circle {
-                    r: 2.5px !important;
-                }
-            </style>
-            """
+            # FIX FOR INVISIBLE VECTORS: 
+            # Parse and swap attributes directly inside the string since svglib ignores <style>
+            processed_svg = svg_content
+            processed_svg = re.sub(r'stroke-width="[^"]*"', 'stroke-width="1.2"', processed_svg)
+            processed_svg = re.sub(r'r="[^"]*"', 'r="2.5"', processed_svg)
+            
+            if 'stroke-width' not in processed_svg:
+                processed_svg = processed_svg.replace('<line', '<line stroke-width="1.2"')
+            if 'r="' not in processed_svg:
+                processed_svg = processed_svg.replace('<circle', '<circle r="2.5"')
 
-            # Combine everything inside a clean root namespace container
+            # Combine everything inside a clean root namespace container without CSS blocks
             full_svg = f'''<svg xmlns="http://www.w3.org/2000/svg" 
                                 width="{self.display_width}" 
                                 height="{self.display_height}" 
                                 viewBox="0 0 {canvas_view_w} {canvas_view_h}">
-                {style_overrides}
-                {svg_content}
+                {processed_svg}
             </svg>'''
             
-            # 4. Stream compiled payload through svglib parser
+            # Stream compiled payload through svglib parser
             svg_file = io.StringIO(full_svg)
             drawing = svg2rlg(svg_file)
             
