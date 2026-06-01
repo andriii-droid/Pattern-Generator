@@ -6,6 +6,7 @@ class SettingsConfig:
     '''Data contract for global pattern settings'''
     num_center_points: int
     center_point_radius: float
+    keep_center: bool
 
 @dataclass
 class FileConfig:

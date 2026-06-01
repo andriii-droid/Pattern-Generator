@@ -33,6 +33,7 @@ class DashboardPage():
                     self.num_center_points = ui.number(label='Points', value=1, min=1, step=1).classes('w-24')
                     self.radius = ui.slider(min=0, max=100, step=1, value=0).classes('w-32 intermediate-class')
                     ui.label().bind_text_from(self.radius, 'value').classes('w-12 text-right')
+                    self.keep_center = ui.switch('Keep Center', value=True)
                 ui.separator().classes('my-2')
 
                 with ui.row().classes('w-full justify-between items-center mb-2'):
@@ -97,5 +98,6 @@ class DashboardPage():
         '''collects setting config data'''
         return SettingsConfig(
             num_center_points=int(self.num_center_points.value),
-            center_point_radius=float(self.radius.value)
+            center_point_radius=float(self.radius.value),
+            keep_center=bool(self.keep_center.value)
         )

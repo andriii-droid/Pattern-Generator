@@ -41,6 +41,8 @@ class PatternCoordinator():
             ))
         c.generate()
         center_points = c.points
+        if settings_config.keep_center and len(center_points) != 1:
+            center_points.append(Point(0,0))
 
         #for each center point create one pattern
         for cp in center_points:
