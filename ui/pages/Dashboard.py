@@ -1,5 +1,6 @@
 from nicegui import ui, events
 from ui.components.pattern_manager import PatternManagerPage
+from ui.components.line_manager import LineManagerPage
 from pattern_coordinator import PatternCoordinator
 from models.models import SettingsConfig, FileConfig, DrawingConfig
 import urllib.parse
@@ -8,7 +9,9 @@ class DashboardPage():
     '''handles the dashboard'''
     def __init__(self):
         self.pattern_page = PatternManagerPage()
+        self.line_page = LineManagerPage()
         self.coordinator = PatternCoordinator()
+
 
     def build(self):
         '''builds the dashboard'''
@@ -45,6 +48,11 @@ class DashboardPage():
                 
                 with ui.row().classes('w-full items-left mb-2'):
                     self.pattern_page.build()
+                ui.separator().classes('my-2')
+
+                with ui.row().classes('w-full justify-between items-center p-4'):                    
+                    ui.label('Lines').classes('text-lg font-semibold text-slate-700')
+                    self.line_page.build()
                     
                 # Updated Action: Generates data AND triggers the UI refresh
                 ui.button('Generate Pattern', icon='picture_as_pdf', 
