@@ -49,6 +49,7 @@ class Draw():
 
     
     def draw_shape_lines(self, shape: Shape, sketch=False):
+        '''draws the lines between edges of generated shapes'''
         if sketch:
             col = "#ff0000"
             stroke_width = 0.8
@@ -67,6 +68,7 @@ class Draw():
                 x2="{p2.x}" y2="{p2.y}" fill="none" stroke="{col}" stroke-width="{stroke_width}" />'''
     
     def draw_lines_between_line_points(self, shape: Shape, sketch=False):
+        '''draws lines between linepoints'''
         if sketch:
             col = "#ff0000"
             stroke_width = 0.8
