@@ -72,17 +72,19 @@ class Draw():
         if sketch:
             col = "#ff0000"
             stroke_width = 0.8
-            points = shape.sketch_points
+            points_list = shape.sketch_points
         else:
             col = shape.config.hex_color
             stroke_width = 0.2
-            points = shape.points
-
-        for (p1, p2) in zip(points, points[shape.config.line_points+2:]+points[0:shape.config.line_points+2]):
-            p1 = (p1 + self._center_point) * self._scale_factor
-            p2 = (p2 + self._center_point)  * self._scale_factor
-            self._canvas_content += f'''<line x1="{p1.x}" y1="{p1.y}" 
-            x2="{p2.x}" y2="{p2.y}" fill="none" stroke="{col}" stroke-width="{stroke_width}" />'''
+            points_list = shape.points
+        
+        shape_points_list = self._split_list(points_list, shape.config.num_shapes)
+        for points in shape_points_list:
+            for (p1, p2) in zip(points, points[shape.config.line_points+2:]+points[0:shape.config.line_points+2]):
+                p1 = (p1 + self._center_point) * self._scale_factor
+                p2 = (p2 + self._center_point)  * self._scale_factor
+                self._canvas_content += f'''<line x1="{p1.x}" y1="{p1.y}" 
+                x2="{p2.x}" y2="{p2.y}" fill="none" stroke="{col}" stroke-width="{stroke_width}" />'''
 
     def draw_cords(self):  
         '''draws the coordinatesystem onto the canvas'''
@@ -92,3 +94,12 @@ class Draw():
         content += f'''<line x1="{0}" y1="{p.y}" x2="{p.x*2}" y2="{p.y}" fill="none" stroke="#000000" stroke-width=".1" />'''
         content += f'''<line x1="{p.x}" y1="{0}" x2="{p.x}" y2="{p.y*2}" fill="none" stroke="#000000" stroke-width=".1" />'''
         return content
+    
+    def _split_list(self, lst, num):
+        '''split a list evenly into num lists'''
+        k, m = divmod(len(lst), num)
+        return [lst[i*k + min(i, m):(i+1)*k + min(i+1, m)] for i in range(num)]
+
+if __name__ == '__main__':
+    draw = Draw()
+    print(draw._split_list([1,1,1,1], 1))
