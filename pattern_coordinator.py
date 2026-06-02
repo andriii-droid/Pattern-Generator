@@ -111,7 +111,16 @@ class PatternCoordinator():
     @property
     def canvas_content(self):
         return self._canvas_content
-
+    
+    @property
+    def string_length(self):
+        '''Returns a string containing the adjusted length in meters'''
+        value = round((self.draw.string_length / 1000)*1.1, 2)
+        if value:
+            return f"Required string length: {value}m"
+        else:
+            return None
+    
     def canvas_dimensions(self, dim):
         self._canvas_dim = (dim['width'], dim['height'])
         self.draw.set_canvas_dim(self._canvas_dim)

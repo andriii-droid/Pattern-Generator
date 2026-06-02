@@ -10,6 +10,7 @@ class Draw():
         self._center_point = Point(self._canvas_width_in_mm / 2, self._canvas_height_in_mm / 2)
         self._scale_factor = 1
         self._canvas_content = ''''''
+        self._string_length = 0
 
     def set_canvas_dim(self, dim):
         self._scale_factor = dim[0] / self._canvas_width_in_mm
@@ -25,6 +26,7 @@ class Draw():
     def draw_lines(self, drawing_config: DrawingConfig, pat: Shape | Spline):
         '''calls correct line drawing functions'''
         self._canvas_content = ''''''
+        self._string_length = 0
 
         #Draw Lines
         if not drawing_config.draw_lines:
@@ -62,6 +64,7 @@ class Draw():
         point_lists = [points[i:i + shape.config.shape_type] for i in range(0, len(points), shape.config.shape_type)]
         for point_shape in point_lists:
             for (p1, p2) in zip(point_shape, point_shape[1:]+[point_shape[0]]):
+                self._string_length += p1.distance(p2)
                 p1 = (p1 + self._center_point) * self._scale_factor
                 p2 = (p2 + self._center_point)  * self._scale_factor
                 self._canvas_content += f'''<line x1="{p1.x}" y1="{p1.y}" 
@@ -81,6 +84,7 @@ class Draw():
         shape_points_list = self._split_list(points_list, shape.config.num_shapes) #needs to be used, when multiple Num_shapes is greater then 1 with linepoints is defined
         for points in shape_points_list:
             for (p1, p2) in zip(points, points[shape.config.line_points+2:]+points[0:shape.config.line_points+2]):
+                self._string_length += p1.distance(p2)
                 p1 = (p1 + self._center_point) * self._scale_factor
                 p2 = (p2 + self._center_point)  * self._scale_factor
                 self._canvas_content += f'''<line x1="{p1.x}" y1="{p1.y}" 
@@ -99,6 +103,11 @@ class Draw():
         '''split a list evenly into num lists'''
         k, m = divmod(len(lst), num)
         return [lst[i*k + min(i, m):(i+1)*k + min(i+1, m)] for i in range(num)]
+    
+    @property
+    def string_length(self):
+        '''returns string length in mm'''
+        return self._string_length
 
 if __name__ == '__main__':
     draw = Draw()

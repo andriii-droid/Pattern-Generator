@@ -65,7 +65,10 @@ class DashboardPage():
                                 ).props('flat color=green size=md')
                         ui.button('Save GCODE', icon='playlist_add',
                                 on_click=lambda: self.coordinator.export_to_gcode(file_config=self.get_file_config())
-                                ).props('flat color=blue size=md')                
+                                ).props('flat color=blue size=md')      
+                with ui.row().classes('w-full justify-between items-center mb-4'):
+                        string_len = ui.label('String').classes('text-slate-800')   
+                        string_len.bind_text_from(self.coordinator, 'string_length')    
 
                 raw_svg = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 105 148" width="100%"></svg>'
                 blank_bg = f'data:image/svg+xml;utf8,{urllib.parse.quote(raw_svg)}'
