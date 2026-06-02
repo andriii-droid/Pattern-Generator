@@ -68,6 +68,9 @@ class PatternCoordinator():
         for pat in self.patterns:
             self._canvas_content += self.draw.draw_lines(drawing_config, pat)
 
+        if drawing_config.draw_coordinates:
+            self._canvas_content += self.draw.draw_cords()
+
 
     def export_to_pdf(self, file_config: FileConfig):
         if file_config.filename == "":

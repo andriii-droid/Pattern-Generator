@@ -81,3 +81,12 @@ class Draw():
             p2 = (p2 + self._center_point)  * self._scale_factor
             self._canvas_content += f'''<line x1="{p1.x}" y1="{p1.y}" 
             x2="{p2.x}" y2="{p2.y}" fill="none" stroke="{col}" stroke-width="{stroke_width}" />'''
+
+    def draw_cords(self):  
+        '''draws the coordinatesystem onto the canvas'''
+        p = (Point(0,0) + self._center_point) * self._scale_factor
+        content = f'''<circle cx="{p.x}" cy="{p.y}" r="{40 * self._scale_factor}" fill="none" stroke="#000000" stroke-width=".1" />'''
+        content += f'''<circle cx="{p.x}" cy="{p.y}" r="{15 * self._scale_factor}" fill="none" stroke="#000000" stroke-width=".1" />'''
+        content += f'''<line x1="{0}" y1="{p.y}" x2="{p.x*2}" y2="{p.y}" fill="none" stroke="#000000" stroke-width=".1" />'''
+        content += f'''<line x1="{p.x}" y1="{0}" x2="{p.x}" y2="{p.y*2}" fill="none" stroke="#000000" stroke-width=".1" />'''
+        return content
