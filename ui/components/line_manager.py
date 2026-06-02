@@ -1,4 +1,5 @@
 from nicegui import ui
+from ui.components.line_selector import LineSelector
 
 
 class LineManagerPage():
@@ -8,8 +9,8 @@ class LineManagerPage():
     def build(self):
         ui.button(icon='add', on_click=self.add_line_selector).props('round color=blue size=md').classes('i')
 
-        self.container = ui.row().classes('w-full gap-2')
+        self.container = ui.column().classes('w-full gap-2')
 
     def add_line_selector(self):
         with self.container:
-            ui.label('label')
+            line_sel = LineSelector()
