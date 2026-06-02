@@ -78,7 +78,7 @@ class Draw():
             stroke_width = 0.2
             points_list = shape.points
         
-        shape_points_list = self._split_list(points_list, shape.config.num_shapes)
+        shape_points_list = self._split_list(points_list, shape.config.num_shapes) #needs to be used, when multiple Num_shapes is greater then 1 with linepoints is defined
         for points in shape_points_list:
             for (p1, p2) in zip(points, points[shape.config.line_points+2:]+points[0:shape.config.line_points+2]):
                 p1 = (p1 + self._center_point) * self._scale_factor
