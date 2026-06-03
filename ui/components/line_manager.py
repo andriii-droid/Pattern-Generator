@@ -13,7 +13,7 @@ class LineManagerPage():
 
     def add_line_selector(self):
         with self.container:
-            line_sel = LineSelector()
+            line_sel = LineSelector(self.delete_line_selector_row)
         self.selector_list.append(line_sel)
         self.update_active_patterns()
         
@@ -27,5 +27,9 @@ class LineManagerPage():
             sel.label_input.options = options
             sel.label_input.update()
 
+    def delete_line_selector_row(self, selector_instance):
+        self.container.remove(selector_instance.chips)
+        self.selector_list.remove(selector_instance)
+        
 
 

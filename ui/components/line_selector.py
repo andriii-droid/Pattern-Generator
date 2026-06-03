@@ -1,10 +1,12 @@
 from nicegui import ui
 
 class LineSelector():
-    def __init__(self):
+    def __init__(self, on_delete_callback):
         self.chips_list = []
+        self.on_delete = on_delete_callback
 
         with ui.row().classes('items-center') as self.chips:
+            ui.button(icon='delete', on_click=lambda: self.on_delete(self)).props('flat color=red')
             self.label_input = ui.select(with_input=True,options=[]).on('keydown.enter', self.add_line_chip).classes('w-50')
             with self.label_input.add_slot('append'):
                 ui.button(icon='add', on_click=self.add_line_chip).props('round dense flat')
