@@ -34,6 +34,7 @@ class ShapeConfig:
     offset: float
     line_points: int
     center: Point
+    id: int
 
 @dataclass
 class SplineConfig:
@@ -44,6 +45,7 @@ class SplineConfig:
     control_point: Point
     end_point: Point
     center: Point
+    id: int
 
 @dataclass
 class PatternConfig:

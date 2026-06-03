@@ -37,7 +37,8 @@ class PatternCoordinator():
             hex_color="", 
             offset=1,
             line_points=0,
-            center=Point(0,0) 
+            center=Point(0,0),
+            id=-1
             ))
         c.generate()
         center_points = c.points
