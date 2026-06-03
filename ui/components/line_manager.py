@@ -20,9 +20,11 @@ class LineManagerPage():
 
     def update_active_patterns(self):
         '''update the line selector with available patterns'''
-        print(self.active_ids)
         for sel in self.selector_list:
-            sel.label_input.options = self.active_ids
+            options = []
+            for id, str in self.active_ids.items():
+                options.append(f"{str} {id}")
+            sel.label_input.options = options
             sel.label_input.update()
 
 
