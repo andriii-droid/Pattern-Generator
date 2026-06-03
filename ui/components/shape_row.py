@@ -23,28 +23,28 @@ class ShapeRow:
 
         # Use standard 'self.' attributes so other classes can easily read their values
         with ui.column().classes('items-left w-full bg-slate-50 p-3 rounded-lg shadow-sm') as self.row:
-            ui.label(f"Shape {self.id}").classes('font-semibold text-xs text-slate-500 mt-1')
-            with ui.row().classes('items-center w-full'):
-                self.shape = ui.select(label='Shape', options=shape_options, value=3).classes('w-28')
-                self.num_shapes = ui.number(label='Number', value=20, min=1, step=1).classes('w-24')
-                self.size = ui.number(label='Size', value=80, min=1).classes('w-24')
-                
-                # Simple color hex state stored on the class instance
-                self.hex_color = '#000000'
-                with ui.button(icon='colorize') as button:
-                    ui.color_picker(on_pick=lambda e: (button.style(f'background-color: {e.color} !important;'), 
-                                                    setattr(self, 'hex_color', e.color)))
-                
-                self.offset = ui.slider(min=0, max=1, step=0.01, value=1).classes('w-32')
-                ui.label().bind_text_from(self.offset, 'value').classes('w-6')
-                
-                self.line_type = ui.select(label="Linetype", options=['line', 'dotted'], value='line').classes('w-26').on_value_change(handle_type_change)
-                
-                self.line_points = ui.number(label="Points", value=0, min=-1, step=1).classes('w-24') \
-                    .bind_visibility_from(self.line_type, 'value', backward=lambda v: v == 'dotted') 
-                
-                # When deleted, trigger the parent callback passing 'self' (the whole row object)
-                ui.button(icon='delete', on_click=lambda: self.on_delete(self)).props('flat color=red')
+            with ui.expansion(f"Shape {self.id}", value=True).classes('font-semibold text-s text-slate-500 mt-1 w-full'):
+                with ui.row().classes('items-center w-full'):
+                    self.shape = ui.select(label='Shape', options=shape_options, value=3).classes('w-28')
+                    self.num_shapes = ui.number(label='Number', value=20, min=1, step=1).classes('w-24')
+                    self.size = ui.number(label='Size', value=80, min=1).classes('w-24')
+                    
+                    # Simple color hex state stored on the class instance
+                    self.hex_color = '#000000'
+                    with ui.button(icon='colorize') as button:
+                        ui.color_picker(on_pick=lambda e: (button.style(f'background-color: {e.color} !important;'), 
+                                                        setattr(self, 'hex_color', e.color)))
+                    
+                    self.offset = ui.slider(min=0, max=1, step=0.01, value=1).classes('w-32')
+                    ui.label().bind_text_from(self.offset, 'value').classes('w-6')
+                    
+                    self.line_type = ui.select(label="Linetype", options=['line', 'dotted'], value='line').classes('w-26').on_value_change(handle_type_change)
+                    
+                    self.line_points = ui.number(label="Points", value=0, min=-1, step=1).classes('w-24') \
+                        .bind_visibility_from(self.line_type, 'value', backward=lambda v: v == 'dotted') 
+                    
+                    # When deleted, trigger the parent callback passing 'self' (the whole row object)
+                    ui.button(icon='delete', on_click=lambda: self.on_delete(self)).props('flat color=red')
 
     def get_config(self):
         """Helper method to export the current UI state as shape config object"""

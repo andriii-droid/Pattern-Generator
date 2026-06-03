@@ -15,35 +15,35 @@ class SplineRow:
         self.points_ui = []
 
         with ui.column().classes('items-left w-full bg-slate-50 p-3 rounded-lg shadow-sm') as self.row:
-            ui.label(f"Spline {self.id}").classes('font-semibold text-xs text-slate-500 mt-1')
-            with ui.row().classes('items-center w-full'):
-                
-                # Left Column: Coordinates for the 3 points
-                with ui.column().classes('items-left bg-slate-50 p-3 rounded-lg shadow-sm'):
-                    point_labels = ["Start Point", "Control Point", "End Point"]
+            with ui.expansion(f"Spline {self.id}", value=True).classes('font-semibold text-s text-slate-500 mt-1 w-full'):
+                with ui.row().classes('items-center w-full'):
                     
-                    for i in range(3):
-                        ui.label(point_labels[i]).classes('font-semibold text-xs text-slate-500 mt-1')
-                        with ui.row().classes('gap-2'):
-                            # Generate unique default angles based on your original logic
-                            default_angle = (i - 1) * 45
-                            
-                            angle_input = ui.number(label='Angle', value=default_angle, step=1).classes('w-24')
-                            dist_input = ui.number(label='Distance', value=40, min=1, step=1).classes('w-24')
-                            
-                            # Store references to the active UI elements as a dictionary pair
-                            self.points_ui.append({
-                                'angle_input': angle_input,
-                                'dist_input': dist_input
-                            })
-                
-                # Right Column: Spline settings & controls
-                with ui.column().classes('grow h-full bg-slate-50 p-3 rounded-lg shadow-sm items-start gap-4'):
-                    self.show_spline = ui.switch('Show Spline', value=False)
-                    self.num_points = ui.number(label="Points", value=2, min=2, step=1).classes('w-24')
+                    # Left Column: Coordinates for the 3 points
+                    with ui.column().classes('items-left bg-slate-50 p-3 rounded-lg shadow-sm'):
+                        point_labels = ["Start Point", "Control Point", "End Point"]
+                        
+                        for i in range(3):
+                            ui.label(point_labels[i]).classes('font-semibold text-xs text-slate-500 mt-1')
+                            with ui.row().classes('gap-2'):
+                                # Generate unique default angles based on your original logic
+                                default_angle = (i - 1) * 45
+                                
+                                angle_input = ui.number(label='Angle', value=default_angle, step=1).classes('w-24')
+                                dist_input = ui.number(label='Distance', value=40, min=1, step=1).classes('w-24')
+                                
+                                # Store references to the active UI elements as a dictionary pair
+                                self.points_ui.append({
+                                    'angle_input': angle_input,
+                                    'dist_input': dist_input
+                                })
                     
-                    # Delete button triggers the parent callback, passing this entire instance
-                    ui.button(icon='delete', on_click=lambda: self.on_delete(self)).props('flat color=red class=mt-auto')
+                    # Right Column: Spline settings & controls
+                    with ui.column().classes('grow h-full bg-slate-50 p-3 rounded-lg shadow-sm items-start gap-4'):
+                        self.show_spline = ui.switch('Show Spline', value=False)
+                        self.num_points = ui.number(label="Points", value=2, min=2, step=1).classes('w-24')
+                        
+                        # Delete button triggers the parent callback, passing this entire instance
+                        ui.button(icon='delete', on_click=lambda: self.on_delete(self)).props('flat color=red class=mt-auto')
 
     def get_config(self):
         """Helper method to extract current UI state into spline config object"""
