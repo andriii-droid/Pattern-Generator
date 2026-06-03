@@ -10,6 +10,7 @@ class PatternManagerPage:
         # Store instances of PatternRow objects rather than dictionaries
         self.shape_list: list[ShapeRow] = []
         self.spline_list: list[SplineRow] = []
+        self.pattern_id = 1
 
     def build(self):
         '''build the rows'''
@@ -23,14 +24,16 @@ class PatternManagerPage:
         '''add shape row'''
         with self.container:
             # Create a new row, and pass our delete method as the callback
-            new_row = ShapeRow(on_delete_callback=self.remove_row)
+            new_row = ShapeRow(on_delete_callback=self.remove_row, id=self.pattern_id)
+            self.pattern_id += 1
             self.shape_list.append(new_row)
 
     def add_spline_row(self):
         '''Add a spline row'''
         with self.container:
             # Create a new row, and pass our delete method as the callback
-            new_row = SplineRow(on_delete_callback=self.remove_row)
+            new_row = SplineRow(on_delete_callback=self.remove_row, id=self.pattern_id)
+            self.pattern_id += 1
             self.spline_list.append(new_row)
 
     def remove_row(self, row_instance):
