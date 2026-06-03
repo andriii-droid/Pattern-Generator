@@ -8,8 +8,8 @@ import urllib.parse
 class DashboardPage():
     '''handles the dashboard'''
     def __init__(self):
-        self.pattern_page = PatternManagerPage()
-        self.line_page = LineManagerPage()
+        self.pattern_page = PatternManagerPage(self.update_ui)
+        self.line_page = LineManagerPage(self.pattern_page.id.active_ids)
         self.coordinator = PatternCoordinator()
 
 
@@ -112,3 +112,6 @@ class DashboardPage():
             center_point_radius=float(self.radius.value),
             keep_center=bool(self.keep_center.value)
         )
+    
+    def update_ui(self):
+        self.line_page.update_active_patterns()

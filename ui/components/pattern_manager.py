@@ -7,11 +7,12 @@ from helpers.id import ID
 
 class PatternManagerPage:
     '''handles shape and spline rows'''
-    def __init__(self):
+    def __init__(self, update_callback):
         # Store instances of PatternRow objects rather than dictionaries
         self.shape_list: list[ShapeRow] = []
         self.spline_list: list[SplineRow] = []
         self.id = ID()
+        self.update_callback = update_callback
 
     def build(self):
         '''build the rows'''
@@ -26,20 +27,22 @@ class PatternManagerPage:
         with self.container:
             # Create a new row, and pass our delete method as the callback
             new_row = ShapeRow(on_delete_callback=self.remove_row, id=self.id.new_id)
-            self.shape_list.append(new_row)
-            #call update_active_patterns from linemanager
+        self.shape_list.append(new_row)
+        self.update_callback()
 
     def add_spline_row(self):
         '''Add a spline row'''
         with self.container:
             # Create a new row, and pass our delete method as the callback
             new_row = SplineRow(on_delete_callback=self.remove_row, id=self.id.new_id)
-            self.spline_list.append(new_row)
+        self.spline_list.append(new_row)
+        self.update_callback()
 
     def remove_row(self, row_instance):
         """Removes the specified row instance"""
         self.container.remove(row_instance.row)
         self.id.return_id(row_instance.id)
+        self.update_callback()
         if isinstance(row_instance, ShapeRow):
             self.shape_list.remove(row_instance)
         elif isinstance(row_instance, SplineRow):
