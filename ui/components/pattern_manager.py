@@ -2,6 +2,7 @@ from nicegui import ui, app
 from ui.components.shape_row import ShapeRow
 from ui.components.spline_row import SplineRow
 from models.models import PatternConfig
+from helpers.id import ID
 
 
 class PatternManagerPage:
@@ -10,7 +11,7 @@ class PatternManagerPage:
         # Store instances of PatternRow objects rather than dictionaries
         self.shape_list: list[ShapeRow] = []
         self.spline_list: list[SplineRow] = []
-        self.pattern_id = 1
+        self.id = ID()
 
     def build(self):
         '''build the rows'''
@@ -24,8 +25,7 @@ class PatternManagerPage:
         '''add shape row'''
         with self.container:
             # Create a new row, and pass our delete method as the callback
-            new_row = ShapeRow(on_delete_callback=self.remove_row, id=self.pattern_id)
-            self.pattern_id += 1
+            new_row = ShapeRow(on_delete_callback=self.remove_row, id=self.id.new_id)
             self.shape_list.append(new_row)
             #call update_active_patterns from linemanager
 
@@ -33,15 +33,13 @@ class PatternManagerPage:
         '''Add a spline row'''
         with self.container:
             # Create a new row, and pass our delete method as the callback
-            new_row = SplineRow(on_delete_callback=self.remove_row, id=self.pattern_id)
-            self.pattern_id += 1
+            new_row = SplineRow(on_delete_callback=self.remove_row, id=self.id.new_id)
             self.spline_list.append(new_row)
 
     def remove_row(self, row_instance):
         """Removes the specified row instance"""
-        # 1. Remove the HTML elements from the browser screen
         self.container.remove(row_instance.row)
-        # 2. Remove the row object from our tracking list
+        self.id.return_id(row_instance.id)
         if isinstance(row_instance, ShapeRow):
             self.shape_list.remove(row_instance)
         elif isinstance(row_instance, SplineRow):
