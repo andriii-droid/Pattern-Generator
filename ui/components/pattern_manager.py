@@ -27,6 +27,7 @@ class PatternManagerPage:
             new_row = ShapeRow(on_delete_callback=self.remove_row, id=self.pattern_id)
             self.pattern_id += 1
             self.shape_list.append(new_row)
+            #call update_active_patterns from linemanager
 
     def add_spline_row(self):
         '''Add a spline row'''

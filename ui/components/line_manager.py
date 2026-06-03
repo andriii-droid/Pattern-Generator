@@ -14,3 +14,8 @@ class LineManagerPage():
     def add_line_selector(self):
         with self.container:
             line_sel = LineSelector()
+
+    def update_active_patterns(self, active_ids):
+        '''update the line selector with available patterns'''
+        pass
+
