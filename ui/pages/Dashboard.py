@@ -9,6 +9,7 @@ class DashboardPage():
     '''handles the dashboard'''
     def __init__(self):
         self.pattern_page = PatternManagerPage(self.update_ui)
+        print(self.pattern_page.id.active_ids)
         self.line_page = LineManagerPage(self.pattern_page.id.active_ids)
         self.coordinator = PatternCoordinator()
 

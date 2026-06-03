@@ -26,7 +26,7 @@ class PatternManagerPage:
         '''add shape row'''
         with self.container:
             # Create a new row, and pass our delete method as the callback
-            new_row = ShapeRow(on_delete_callback=self.remove_row, id=self.id.new_id)
+            new_row = ShapeRow(on_delete_callback=self.remove_row, id=self.id.new_shape_id)
         self.shape_list.append(new_row)
         self.update_callback()
 
@@ -34,7 +34,7 @@ class PatternManagerPage:
         '''Add a spline row'''
         with self.container:
             # Create a new row, and pass our delete method as the callback
-            new_row = SplineRow(on_delete_callback=self.remove_row, id=self.id.new_id)
+            new_row = SplineRow(on_delete_callback=self.remove_row, id=self.id.new_spline_id)
         self.spline_list.append(new_row)
         self.update_callback()
 
@@ -48,7 +48,7 @@ class PatternManagerPage:
         elif isinstance(row_instance, SplineRow):
             self.spline_list.remove(row_instance)
 
-    def get_config(self): # TODO
+    def get_config(self):
         '''Collect all the data from the splines and shapes and return it as an PatternConfig'''
         pattern_config = PatternConfig([])
         for shape in self.shape_list:
