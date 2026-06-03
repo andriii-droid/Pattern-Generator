@@ -8,7 +8,8 @@ class LineManagerPage():
         self.active_ids = active_ids
 
     def build(self):
-        ui.button(icon='add', on_click=self.add_line_selector).props('round color=blue size=md').classes('i')
+        ui.button('add line',icon='add', on_click=self.add_line_selector).props('outline size=sm color=primary')
+        ui.button('remove all', icon='delete', on_click=self.delete_all_line_selectors).props('outline size=sm color=red')
         self.container = ui.column().classes('w-full gap-2')
 
     def add_line_selector(self):
@@ -30,6 +31,11 @@ class LineManagerPage():
     def delete_line_selector_row(self, selector_instance):
         self.container.remove(selector_instance.chips)
         self.selector_list.remove(selector_instance)
+
+    def delete_all_line_selectors(self):
+        sel_list = self.selector_list.copy()
+        for sel in sel_list:
+            self.delete_line_selector_row(sel)
         
 
 

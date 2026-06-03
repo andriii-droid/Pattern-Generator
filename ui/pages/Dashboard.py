@@ -50,8 +50,10 @@ class DashboardPage():
                     self.pattern_page.build()
                 ui.separator().classes('my-2')
 
-                with ui.row().classes('w-full justify-between items-center p-4'):                    
+                with ui.row().classes('w-full justify-between items-center mb-2'):
                     ui.label('Lines').classes('text-lg font-semibold text-slate-700')
+                ui.separator().classes('my-2')
+                with ui.row().classes('w-full items-left mb-2'):
                     self.line_page.build()
                     
                 # Updated Action: Generates data AND triggers the UI refresh

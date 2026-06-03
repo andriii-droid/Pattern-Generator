@@ -7,7 +7,7 @@ class LineSelector():
 
         with ui.row().classes('items-center') as self.chips:
             ui.button(icon='delete', on_click=lambda: self.on_delete(self)).props('flat color=red')
-            self.label_input = ui.select(with_input=True,options=[]).on('keydown.enter', self.add_line_chip).classes('w-50')
+            self.label_input = ui.select(with_input=True,options=[]).on('keydown.enter', self.add_line_chip).classes('w-30')
             with self.label_input.add_slot('append'):
                 ui.button(icon='add', on_click=self.add_line_chip).props('round dense flat')
 
