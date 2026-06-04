@@ -74,11 +74,20 @@ class PatternCoordinator():
         if drawing_config.draw_points: #Draws Points if configured
             for pat in self.patterns:
                 self._canvas_content += self.draw.draw_points(pat)
-        #TODO draw the lines for custom line configurations
 
         for pat in self.patterns:
             if not (pat.config.id in [item for sublist in line_config.pat_id for item in sublist]): #Draw the patterns that have no custom line config normally
                 self._canvas_content += self.draw.draw_lines(drawing_config, pat)
+        
+        line_combinations = []
+        for id_pair in line_config.pat_id:
+            for pat in self.patterns:
+                if pat.config.id == id_pair[0]:
+                    xpat = pat
+                elif pat.config.id == id_pair[1]:
+                    ypat = pat
+            line_combinations.append((xpat, ypat))
+        print(line_combinations)
 
         if drawing_config.draw_coordinates:
             self._canvas_content += self.draw.draw_cords()
