@@ -138,11 +138,13 @@ class PatternCoordinator():
         self.draw.set_canvas_dim(self._canvas_dim)
 
     def _check_line_config(self, list):
-        list = [item for sublist in list for item in sublist]
-        if len(list) % 2 == 1: #TODO update this to catch all cases!
+        num_sel = len(list)
+        new_list = [item for sublist in list for item in sublist]
+        if len(new_list) != 2 * num_sel:
             raise ValueError("Always two patterns for line config needed")
-        for item in list:
-            if item in list[1:]:
+        seen = set()
+        for item in new_list:
+            if item in seen:
                 raise ValueError(f"Pattern {item} is defined more than once!")
             else:
-                list.remove(item)
+                seen.add(item)
