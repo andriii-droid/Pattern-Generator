@@ -90,6 +90,27 @@ class Draw():
                 self._canvas_content += f'''<line x1="{p1.x}" y1="{p1.y}" 
                 x2="{p2.x}" y2="{p2.y}" fill="none" stroke="{col}" stroke-width="{stroke_width}" />'''
 
+    def draw_lines_between_patterns(self, xpat: Shape | Spline, ypat: Shape | Spline, sketch=False):
+        content = ""
+        if sketch:
+            col = "#ff0000"
+            stroke_width = 0.8
+            xpat_points = xpat.sketch_points
+            ypat_points = ypat.sketch_points
+        else:
+            # col = xpat.config.hex_color TODO
+            col = "#000000"
+            stroke_width = 0.2
+            xpat_points = xpat.points
+            ypat_points = ypat.points
+
+        for (p1, p2) in zip(xpat_points, ypat_points[::-1]):
+            p1 = (p1 + self._center_point) * self._scale_factor
+            p2 = (p2 + self._center_point)  * self._scale_factor
+            content += f'''<line x1="{p1.x}" y1="{p1.y}" 
+            x2="{p2.x}" y2="{p2.y}" fill="none" stroke="{col}" stroke-width="{stroke_width}" />'''  
+        return content  
+            
     def draw_cords(self):  
         '''draws the coordinatesystem onto the canvas'''
         p = (Point(0,0) + self._center_point) * self._scale_factor

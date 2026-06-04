@@ -86,8 +86,13 @@ class PatternCoordinator():
                     xpat = pat
                 elif pat.config.id == id_pair[1]:
                     ypat = pat
+            if len(xpat.points) != len(ypat.points):
+                self._canvas_content = ""
+                raise ValueError("The patterns must have the same number of points!")
             line_combinations.append((xpat, ypat))
-        print(line_combinations)
+
+        for line_com in line_combinations:
+            self._canvas_content += self.draw.draw_lines_between_patterns(*line_com)
 
         if drawing_config.draw_coordinates:
             self._canvas_content += self.draw.draw_cords()
