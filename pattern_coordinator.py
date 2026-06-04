@@ -23,8 +23,7 @@ class PatternCoordinator():
                              line_config: LineConfig):
         '''calculates and then draws the patterns to the ui'''
         self._calculate(pattern_config=pattern_config, settings_config=settings_config)
-        self._render_to_ui(drawing_config=drawing_config)
-        print(line_config)
+        self._render_to_ui(drawing_config=drawing_config, line_config=line_config)
 
     def _calculate(self, pattern_config: PatternConfig, 
                    settings_config: SettingsConfig):
@@ -61,15 +60,17 @@ class PatternCoordinator():
                     self.patterns.append(s)
                 
 
-    def _render_to_ui(self, drawing_config: DrawingConfig):
+    def _render_to_ui(self, drawing_config: DrawingConfig, line_config: LineConfig):
         '''draws points and lines to the ui'''
         self._canvas_content = ''''''
         if drawing_config.draw_points: #Draws Points if configured
             for pat in self.patterns:
                 self._canvas_content += self.draw.draw_points(pat)
+        #TODO draw the lines for custom line configurations
 
         for pat in self.patterns:
-            self._canvas_content += self.draw.draw_lines(drawing_config, pat)
+            if not (pat.config.id in [item for sublist in line_config.pat_id for item in sublist]): #Draw the patterns that have no custom line config normally
+                self._canvas_content += self.draw.draw_lines(drawing_config, pat)
 
         if drawing_config.draw_coordinates:
             self._canvas_content += self.draw.draw_cords()
