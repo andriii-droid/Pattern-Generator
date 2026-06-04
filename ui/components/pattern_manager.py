@@ -18,6 +18,7 @@ class PatternManagerPage:
         '''build the rows'''
         ui.button('Add Shape', icon='add', on_click=self.add_shape_row).props('outline size=sm color=primary')
         ui.button('Add Spline', icon='add', on_click=self.add_spline_row).props('outline size=sm color=primary')
+        ui.button('Remove All', icon='delete', on_click=self.remove_all_rows).props('outline size=sm color=red')
 
         self.container = ui.column().classes('w-full gap-2')
         self.add_shape_row()
@@ -48,6 +49,11 @@ class PatternManagerPage:
         elif isinstance(row_instance, SplineRow):
             self.spline_list.remove(row_instance)
 
+    def remove_all_rows(self):
+        row_list = self.shape_list.copy() + self.spline_list.copy()
+        for row in row_list:
+            self.remove_row(row)
+        
     def get_config(self):
         '''Collect all the data from the splines and shapes and return it as an PatternConfig'''
         pattern_config = PatternConfig([])
