@@ -51,3 +51,8 @@ class SplineConfig:
 class PatternConfig:
     """Data contract for patterns."""
     patterns: list[SplineConfig | ShapeConfig]
+
+@dataclass
+class LineConfig:
+    """Datacontract for Lines between patterns"""
+    pat_id: list[list[int]]

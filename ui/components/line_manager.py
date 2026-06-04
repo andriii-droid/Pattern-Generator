@@ -1,6 +1,6 @@
 from nicegui import ui
 from ui.components.line_selector import LineSelector
-
+from models.models import LineConfig
 
 class LineManagerPage():
     def __init__(self, active_ids):
@@ -22,9 +22,9 @@ class LineManagerPage():
     def update_active_patterns(self):
         '''update the line selector with available patterns'''
         for sel in self.selector_list:
-            options = []
+            options = {}
             for id, str in self.active_ids.items():
-                options.append(f"{str} {id}")
+                options[id] = (f"{str} {id}")
             sel.label_input.options = options
             sel.label_input.update()
 
@@ -37,5 +37,13 @@ class LineManagerPage():
         for sel in sel_list:
             self.delete_line_selector_row(sel)
         
+    def get_config(self):
+        '''return the data as LineConfig'''
+        config = LineConfig(pat_id=[])
+        for sel in self.selector_list:
+            config.pat_id.append(sel.get_config())
+        return config
+        
+
 
 

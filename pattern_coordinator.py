@@ -1,4 +1,4 @@
-from models.models import PatternConfig, DrawingConfig, FileConfig, SettingsConfig, ShapeConfig, SplineConfig
+from models.models import PatternConfig, DrawingConfig, FileConfig, SettingsConfig, ShapeConfig, SplineConfig, LineConfig
 from point import Point
 from shape import Shape
 from spline import Spline
@@ -19,10 +19,12 @@ class PatternCoordinator():
 
     def calculate_and_render(self, pattern_config: PatternConfig, 
                              drawing_config: DrawingConfig, 
-                             settings_config: SettingsConfig):
+                             settings_config: SettingsConfig,
+                             line_config: LineConfig):
         '''calculates and then draws the patterns to the ui'''
         self._calculate(pattern_config=pattern_config, settings_config=settings_config)
         self._render_to_ui(drawing_config=drawing_config)
+        print(line_config)
 
     def _calculate(self, pattern_config: PatternConfig, 
                    settings_config: SettingsConfig):

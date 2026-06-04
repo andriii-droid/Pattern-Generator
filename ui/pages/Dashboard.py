@@ -60,7 +60,8 @@ class DashboardPage():
                 ui.button('Generate Pattern', icon='picture_as_pdf', 
                         on_click=lambda: self.coordinator.calculate_and_render(pattern_config=self.pattern_page.get_config(),
                                                                                drawing_config=self.get_drawing_config(),
-                                                                               settings_config=self.get_settings_config())
+                                                                               settings_config=self.get_settings_config(),
+                                                                               line_config=self.line_page.get_config())
                         ).classes('w-full py-2 text-lg').props('color=primary')
 
                         # RIGHT COLUMN: Preview Card
