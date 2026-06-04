@@ -26,13 +26,12 @@ class PatternCoordinator():
             if not len(pattern_config.patterns):
                 raise ValueError("Define at least one pattern")
             
-            if  len(line_config.pat_id) != 2:
-                raise ValueError("Always two patterns for line config needed")
+            self._check_line_config(line_config.pat_id)
+
+            self._calculate(pattern_config=pattern_config, settings_config=settings_config)
+            self._render_to_ui(drawing_config=drawing_config, line_config=line_config)
         except Exception as e:
             ui.notify(e, type="negative")
-        
-        self._calculate(pattern_config=pattern_config, settings_config=settings_config)
-        self._render_to_ui(drawing_config=drawing_config, line_config=line_config)
 
     def _calculate(self, pattern_config: PatternConfig, 
                    settings_config: SettingsConfig):
@@ -137,3 +136,13 @@ class PatternCoordinator():
     def canvas_dimensions(self, dim):
         self._canvas_dim = (dim['width'], dim['height'])
         self.draw.set_canvas_dim(self._canvas_dim)
+
+    def _check_line_config(self, list):
+        list = [item for sublist in list for item in sublist]
+        if len(list) % 2 == 1: #TODO update this to catch all cases!
+            raise ValueError("Always two patterns for line config needed")
+        for item in list:
+            if item in list[1:]:
+                raise ValueError(f"Pattern {item} is defined more than once!")
+            else:
+                list.remove(item)
