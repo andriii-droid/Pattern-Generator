@@ -18,12 +18,12 @@ class LineSelector():
             ui.notify('Choose a pattern from the dropdown', type='warning')
         elif self.label_input.value.startswith("Spline"):
             with self.chips:
-                chip = ui.chip(self.label_input.value, icon='label', color='green', removable=True)
+                chip = ui.chip(self.label_input.value, icon='label', color='green', removable=True).props('outline')
                 chip.on('remove', lambda: self.handle_chip_removal(chip))
                 self.chips_list.append(chip)   
         else:
             with self.chips:
-                chip = ui.chip(self.label_input.value, icon='label', color='blue', removable=True)
+                chip = ui.chip(self.label_input.value, icon='label', color='blue', removable=True).props('outline')
                 chip.on('remove', lambda: self.handle_chip_removal(chip))
                 self.chips_list.append(chip)        
         self.label_input.value = ''
