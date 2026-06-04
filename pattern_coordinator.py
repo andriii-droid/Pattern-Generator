@@ -21,7 +21,16 @@ class PatternCoordinator():
                              drawing_config: DrawingConfig, 
                              settings_config: SettingsConfig,
                              line_config: LineConfig):
-        '''calculates and then draws the patterns to the ui'''
+        '''checks input values and calculates and then draws the patterns to the ui'''
+        try:
+            if not len(pattern_config.patterns):
+                raise ValueError("Define at least one pattern")
+            
+            if  len(line_config.pat_id) != 2:
+                raise ValueError("Always two patterns for line config needed")
+        except Exception as e:
+            ui.notify(e, type="negative")
+        
         self._calculate(pattern_config=pattern_config, settings_config=settings_config)
         self._render_to_ui(drawing_config=drawing_config, line_config=line_config)
 
