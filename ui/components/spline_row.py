@@ -15,7 +15,7 @@ class SplineRow:
         self.points_ui = []
 
         with ui.column().classes('items-left w-full bg-slate-50 p-3 rounded-lg shadow-sm') as self.row:
-            with ui.expansion(f"Spline {self.id}", value=True).classes('font-semibold text-s text-slate-500 mt-1 w-full'):
+            with ui.expansion(f"Spline {self.id}", value=True).classes('font-semibold text-s text-slate-500 mt-1 w-full') as self.expand:
                 with ui.row().classes('items-center w-full'):
                     
                     # Left Column: Coordinates for the 3 points

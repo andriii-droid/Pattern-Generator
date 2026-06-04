@@ -13,11 +13,13 @@ class PatternManagerPage:
         self.spline_list: list[SplineRow] = []
         self.id = ID()
         self.update_callback = update_callback
+        self.collapsed = False
 
     def build(self):
         '''build the rows'''
         ui.button('Add Shape', icon='add', on_click=self.add_shape_row).props('outline size=sm color=primary')
         ui.button('Add Spline', icon='add', on_click=self.add_spline_row).props('outline size=sm color=primary')
+        self.expand = ui.button('Collapse', on_click=self.expand_collapse_rows).props('outline size=sm color=primary')
         ui.button('Remove All', icon='delete', on_click=self.remove_all_rows).props('outline size=sm color=red')
 
         self.container = ui.column().classes('w-full gap-2')
@@ -62,3 +64,14 @@ class PatternManagerPage:
         for spline in self.spline_list:
             pattern_config.patterns.append(spline.get_config())
         return pattern_config
+    
+
+    def expand_collapse_rows(self):
+        row_list = self.shape_list + self.spline_list
+        for row in row_list:
+            row.expand.value = self.collapsed
+        if self.collapsed:
+            self.expand.set_text("collapse")
+        else: 
+            self.expand.set_text("expand")
+        self.collapsed = not self.collapsed

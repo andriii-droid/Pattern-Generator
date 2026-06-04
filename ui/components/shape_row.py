@@ -23,7 +23,7 @@ class ShapeRow:
 
         # Use standard 'self.' attributes so other classes can easily read their values
         with ui.column().classes('items-left w-full bg-slate-50 p-3 rounded-lg shadow-sm') as self.row:
-            with ui.expansion(f"Shape {self.id}", value=True).classes('font-semibold text-s text-slate-500 mt-1 w-full'):
+            with ui.expansion(f"Shape {self.id}", value=True).classes('font-semibold text-s text-slate-500 mt-1 w-full') as self.expand:
                 with ui.row().classes('items-center w-full'):
                     self.shape = ui.select(label='Shape', options=shape_options, value=3).classes('w-28')
                     self.num_shapes = ui.number(label='Number', value=20, min=1, step=1).classes('w-24')
