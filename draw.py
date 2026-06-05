@@ -89,12 +89,12 @@ class Draw():
                 self._canvas_content += f'''<line x1="{p1.x}" y1="{p1.y}" 
                 x2="{p2.x}" y2="{p2.y}" fill="none" stroke="{col}" stroke-width="{stroke_width}" />'''
 
-    def draw_lines_between_patterns(self, xpat: Shape | Spline, ypat: Shape | Spline):
+    def draw_lines_between_patterns(self, xpat: Shape | Spline, ypat: Shape | Spline, config):
         self._canvas_content = ''''''
         if isinstance(xpat, Spline) and isinstance(ypat, Spline):
             self.draw_lines_between_splines(xpat, ypat)
         elif isinstance(xpat, Shape) and isinstance(ypat, Shape):
-            self.draw_lines_between_shapes(xpat, ypat)
+            self.draw_lines_between_shapes(xpat, ypat, config)
 
         return self._canvas_content  
     
@@ -117,7 +117,7 @@ class Draw():
             self._canvas_content += f'''<line x1="{p1.x}" y1="{p1.y}" 
             x2="{p2.x}" y2="{p2.y}" fill="none" stroke="{col}" stroke-width="{stroke_width}" />'''  
 
-    def draw_lines_between_shapes(self, xshape: Shape, yshape: Shape, sketch=False):
+    def draw_lines_between_shapes(self, xshape: Shape, yshape: Shape, config, sketch=False):
         if sketch:
             col = "#ff0000"
             stroke_width = 0.8
@@ -129,15 +129,14 @@ class Draw():
             stroke_width = 0.2
             xpat_points = xshape.points_along_circle
             ypat_points = yshape.points_along_circle
-            offset = 5
 
-        for (p1, p2) in zip(xpat_points, ypat_points[offset:]+ypat_points[:offset]):
+        for (p1, p2) in zip(xpat_points, ypat_points[config.offset:]+ypat_points[:config.offset]):
             p1 = (p1 + self._center_point) * self._scale_factor
             p2 = (p2 + self._center_point)  * self._scale_factor
             self._canvas_content += f'''<line x1="{p1.x}" y1="{p1.y}" 
             x2="{p2.x}" y2="{p2.y}" fill="none" stroke="{col}" stroke-width="{stroke_width}" />'''  
 
-        for (p1, p2) in zip(xpat_points, ypat_points[-offset:]+ypat_points[:-offset]):
+        for (p1, p2) in zip(xpat_points, ypat_points[-config.offset:]+ypat_points[:-config.offset]):
             p1 = (p1 + self._center_point) * self._scale_factor
             p2 = (p2 + self._center_point)  * self._scale_factor
             self._canvas_content += f'''<line x1="{p1.x}" y1="{p1.y}" 

@@ -1,4 +1,6 @@
 from nicegui import ui
+from models.models import LineConfig
+
 
 class LineSelector():
     def __init__(self, on_delete_callback):
@@ -7,7 +9,8 @@ class LineSelector():
 
         with ui.row().classes('items-center') as self.chips:
             ui.button(icon='delete', on_click=lambda: self.on_delete(self)).props('flat color=red')
-            self.label_input = ui.select(with_input=True,options=[]).on('keydown.enter', self.add_line_chip).classes('w-30')
+            self.label_input = ui.select(with_input=True,options=[]).on('keydown.enter', self.add_line_chip).classes('w-50')
+            self.offset = ui.number(label='Offset', value=1, min=0, step=1).classes('w-24')
             with self.label_input.add_slot('append'):
                 ui.button(icon='add', on_click=self.add_line_chip).props('round dense flat')
 
@@ -36,7 +39,9 @@ class LineSelector():
 
     def get_config(self):
         """Helper method to extract current UI state """
-        return [int(chip.text[-1]) for chip in self.chips_list]
+        return LineConfig(
+            pat_id=[int(chip.text[-1]) for chip in self.chips_list],
+            offset=int(self.offset.value))
             
             
         
