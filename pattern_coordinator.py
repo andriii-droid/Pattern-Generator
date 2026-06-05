@@ -29,9 +29,10 @@ class PatternCoordinator():
             self._check_line_config(line_config.pat_id)
 
             self._calculate(pattern_config=pattern_config, settings_config=settings_config)
-            self._render_to_ui(drawing_config=drawing_config, line_config=line_config)
         except Exception as e:
             ui.notify(e, type="negative")
+        self._render_to_ui(drawing_config=drawing_config, line_config=line_config)
+
 
     def _calculate(self, pattern_config: PatternConfig, 
                    settings_config: SettingsConfig):

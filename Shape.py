@@ -75,3 +75,12 @@ class Shape():
             return [self._points[0]] + [self._points[self.config.line_points+2]]
         else:
             return self._points[0:self.config.shape_type]
+        
+    @property
+    def points_along_circle(self):
+        sorted_points = sorted(
+            self._points, 
+            key=lambda p: math.atan2(p.y, p.x)
+        )
+        
+        return sorted_points

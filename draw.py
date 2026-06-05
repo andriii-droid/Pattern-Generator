@@ -93,6 +93,8 @@ class Draw():
         self._canvas_content = ''''''
         if isinstance(xpat, Spline) and isinstance(ypat, Spline):
             self.draw_lines_between_splines(xpat, ypat)
+        elif isinstance(xpat, Shape) and isinstance(ypat, Shape):
+            self.draw_lines_between_shapes(xpat, ypat)
 
         return self._canvas_content  
     
@@ -110,6 +112,32 @@ class Draw():
             ypat_points = yspline.points
 
         for (p1, p2) in zip(xpat_points, ypat_points[::-1]):
+            p1 = (p1 + self._center_point) * self._scale_factor
+            p2 = (p2 + self._center_point)  * self._scale_factor
+            self._canvas_content += f'''<line x1="{p1.x}" y1="{p1.y}" 
+            x2="{p2.x}" y2="{p2.y}" fill="none" stroke="{col}" stroke-width="{stroke_width}" />'''  
+
+    def draw_lines_between_shapes(self, xshape: Shape, yshape: Shape, sketch=False):
+        if sketch:
+            col = "#ff0000"
+            stroke_width = 0.8
+            xpat_points = xshape.sketch_points #TODO
+            ypat_points = yshape.sketch_points
+        else:
+            # col = xpat.config.hex_color TODO
+            col = "#000000"
+            stroke_width = 0.2
+            xpat_points = xshape.points_along_circle
+            ypat_points = yshape.points_along_circle
+            offset = 5
+
+        for (p1, p2) in zip(xpat_points, ypat_points[offset:]+ypat_points[:offset]):
+            p1 = (p1 + self._center_point) * self._scale_factor
+            p2 = (p2 + self._center_point)  * self._scale_factor
+            self._canvas_content += f'''<line x1="{p1.x}" y1="{p1.y}" 
+            x2="{p2.x}" y2="{p2.y}" fill="none" stroke="{col}" stroke-width="{stroke_width}" />'''  
+
+        for (p1, p2) in zip(xpat_points, ypat_points[-offset:]+ypat_points[:-offset]):
             p1 = (p1 + self._center_point) * self._scale_factor
             p2 = (p2 + self._center_point)  * self._scale_factor
             self._canvas_content += f'''<line x1="{p1.x}" y1="{p1.y}" 
