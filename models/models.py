@@ -14,6 +14,12 @@ class FileConfig:
     filename: str
     gcode_offset_x: float
     gcode_offset_y: float
+    
+@dataclass
+class LineConfig:
+    """Datacontract for Lines between patterns"""
+    pat_id: list[int]
+    offset: int
 
 @dataclass
 class DrawingConfig:
@@ -22,6 +28,7 @@ class DrawingConfig:
     draw_lines: bool
     draw_sketch: bool
     draw_coordinates: bool
+    line_configs: list[LineConfig]
 
 
 @dataclass
@@ -52,7 +59,3 @@ class PatternConfig:
     """Data contract for patterns."""
     patterns: list[SplineConfig | ShapeConfig]
 
-@dataclass
-class LineConfig:
-    """Datacontract for Lines between patterns"""
-    pat_id: list[list[int]]

@@ -39,10 +39,11 @@ class LineManagerPage():
         
     def get_config(self):
         '''return the data as LineConfig'''
-        config = LineConfig(pat_id=[])
+        config_list = []
         for sel in self.selector_list:
-            config.pat_id.append(sel.get_config())
-        return config
+            config_list.append(LineConfig(pat_id=sel.get_config(),
+                       offset=0))#TODO
+        return config_list
         
 
 

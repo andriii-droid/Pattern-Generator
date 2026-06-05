@@ -60,8 +60,7 @@ class DashboardPage():
                 ui.button('Generate Pattern', icon='picture_as_pdf', 
                         on_click=lambda: self.coordinator.calculate_and_render(pattern_config=self.pattern_page.get_config(),
                                                                                drawing_config=self.get_drawing_config(),
-                                                                               settings_config=self.get_settings_config(),
-                                                                               line_config=self.line_page.get_config())
+                                                                               settings_config=self.get_settings_config())
                         ).classes('w-full py-2 text-lg').props('color=primary')
 
                         # RIGHT COLUMN: Preview Card
@@ -97,7 +96,8 @@ class DashboardPage():
             draw_points=bool(self.points.value),
             draw_lines=bool(self.lines.value),
             draw_sketch=bool(self.sketch.value),
-            draw_coordinates=bool(self.cord.value)
+            draw_coordinates=bool(self.cord.value),
+            line_configs=self.line_page.get_config()
         )
 
     def get_file_config(self):

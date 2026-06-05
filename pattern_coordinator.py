@@ -20,18 +20,19 @@ class PatternCoordinator():
     def calculate_and_render(self, pattern_config: PatternConfig, 
                              drawing_config: DrawingConfig, 
                              settings_config: SettingsConfig,
-                             line_config: LineConfig):
+                             ):
         '''checks input values and calculates and then draws the patterns to the ui'''
         try:
             if not len(pattern_config.patterns):
                 raise ValueError("Define at least one pattern")
             
-            self._check_line_config(line_config.pat_id)
+            self._check_line_config(drawing_config.line_configs)
 
             self._calculate(pattern_config=pattern_config, settings_config=settings_config)
-            self._render_to_ui(drawing_config=drawing_config, line_config=line_config)
         except Exception as e:
             ui.notify(e, type="negative")
+        self._render_to_ui(drawing_config=drawing_config)
+
 
 
     def _calculate(self, pattern_config: PatternConfig, 
@@ -69,7 +70,7 @@ class PatternCoordinator():
                     self.patterns.append(s)
                 
 
-    def _render_to_ui(self, drawing_config: DrawingConfig, line_config: LineConfig):
+    def _render_to_ui(self, drawing_config: DrawingConfig):
         '''draws points and lines to the ui'''
         self._canvas_content = ''''''
         self.draw._string_length = 0
@@ -78,15 +79,15 @@ class PatternCoordinator():
                 self._canvas_content += self.draw.draw_points(pat)
 
         for pat in self.patterns:
-            if not (pat.config.id in [item for sublist in line_config.pat_id for item in sublist]): #Draw the patterns that have no custom line config normally
+            if not pat.config.id in [pat_id for config in drawing_config.line_configs for pat_id in config.pat_id]:
                 self._canvas_content += self.draw.draw_lines(drawing_config, pat)
         
         line_combinations = []
-        for id_pair in line_config.pat_id:
+        for id_pair in drawing_config.line_configs:
             for pat in self.patterns:
-                if pat.config.id == id_pair[0]:
+                if pat.config.id == id_pair.pat_id[0]:
                     xpat = pat
-                elif pat.config.id == id_pair[1]:
+                elif pat.config.id == id_pair.pat_id[1]:
                     ypat = pat
             if len(xpat.points) != len(ypat.points):
                 self._canvas_content = ""
@@ -133,10 +134,6 @@ class PatternCoordinator():
         return self.gcode.read_gcode_offset_from_file()[1]
     
     @property
-    def string_length(self):
-        return 0
-    
-    @property
     def canvas_content(self):
         return self._canvas_content
     
@@ -153,13 +150,12 @@ class PatternCoordinator():
         self._canvas_dim = (dim['width'], dim['height'])
         self.draw.set_canvas_dim(self._canvas_dim)
 
-    def _check_line_config(self, list):
-        num_sel = len(list)
-        new_list = [item for sublist in list for item in sublist]
-        if len(new_list) != 2 * num_sel:
+    def _check_line_config(self, config_list: list[LineConfig]):
+        id_list = [pat_id for config in config_list for pat_id in config.pat_id]
+        if len(id_list) != 2 * len(config_list):
             raise ValueError("Always two patterns for line config needed")
         seen = set()
-        for item in new_list:
+        for item in id_list:
             if item in seen:
                 raise ValueError(f"Pattern {item} is defined more than once!")
             else:
