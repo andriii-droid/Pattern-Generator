@@ -71,6 +71,7 @@ class PatternCoordinator():
     def _render_to_ui(self, drawing_config: DrawingConfig, line_config: LineConfig):
         '''draws points and lines to the ui'''
         self._canvas_content = ''''''
+        self.draw._string_length = 0
         if drawing_config.draw_points: #Draws Points if configured
             for pat in self.patterns:
                 self._canvas_content += self.draw.draw_points(pat)

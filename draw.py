@@ -26,7 +26,6 @@ class Draw():
     def draw_lines(self, drawing_config: DrawingConfig, pat: Shape | Spline):
         '''calls correct line drawing functions'''
         self._canvas_content = ''''''
-        self._string_length = 0
 
         #Draw Lines
         if not drawing_config.draw_lines:
@@ -90,26 +89,31 @@ class Draw():
                 self._canvas_content += f'''<line x1="{p1.x}" y1="{p1.y}" 
                 x2="{p2.x}" y2="{p2.y}" fill="none" stroke="{col}" stroke-width="{stroke_width}" />'''
 
-    def draw_lines_between_patterns(self, xpat: Shape | Spline, ypat: Shape | Spline, sketch=False):
-        content = ""
+    def draw_lines_between_patterns(self, xpat: Shape | Spline, ypat: Shape | Spline):
+        self._canvas_content = ''''''
+        if isinstance(xpat, Spline) and isinstance(ypat, Spline):
+            self.draw_lines_between_splines(xpat, ypat)
+
+        return self._canvas_content  
+    
+    def draw_lines_between_splines(self, xspline: Spline, yspline: Spline, sketch=False):
         if sketch:
             col = "#ff0000"
             stroke_width = 0.8
-            xpat_points = xpat.sketch_points
-            ypat_points = ypat.sketch_points
+            xpat_points = xspline.sketch_points
+            ypat_points = yspline.sketch_points
         else:
             # col = xpat.config.hex_color TODO
             col = "#000000"
             stroke_width = 0.2
-            xpat_points = xpat.points
-            ypat_points = ypat.points
+            xpat_points = xspline.points
+            ypat_points = yspline.points
 
         for (p1, p2) in zip(xpat_points, ypat_points[::-1]):
             p1 = (p1 + self._center_point) * self._scale_factor
             p2 = (p2 + self._center_point)  * self._scale_factor
-            content += f'''<line x1="{p1.x}" y1="{p1.y}" 
+            self._canvas_content += f'''<line x1="{p1.x}" y1="{p1.y}" 
             x2="{p2.x}" y2="{p2.y}" fill="none" stroke="{col}" stroke-width="{stroke_width}" />'''  
-        return content  
             
     def draw_cords(self):  
         '''draws the coordinatesystem onto the canvas'''
