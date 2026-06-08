@@ -4,6 +4,7 @@ from ui.components.line_manager import LineManagerPage
 from pattern_coordinator import PatternCoordinator
 from models.models import FileConfig, DrawingConfig, CenterConfig
 from point import Point
+from center_point import CenterPoint
 import urllib.parse
 
 class DashboardPage():
@@ -12,7 +13,7 @@ class DashboardPage():
         self.pattern_page = PatternManagerPage(self.update_ui)
         self.line_page = LineManagerPage(self.pattern_page.id.active_ids)
         self.coordinator = PatternCoordinator()
-
+        self.center = CenterPoint()
 
     def build(self):
         '''builds the dashboard'''
@@ -86,8 +87,8 @@ class DashboardPage():
                 self.ii = ui.interactive_image(
                     blank_bg, 
                     cross=False,
-                    on_mouse=self.handle_center).classes('h-full w-auto max-h-[700px] object-contain shadow-md rounded-lg bg-white')
-                self.ii.on('loaded', lambda e: self.coordinator.canvas_dimensions(e.args))
+                    on_mouse=lambda e: self.handle_center((e.image_x, e.image_y))).classes('h-full w-auto max-h-[700px] object-contain shadow-md rounded-lg bg-white')
+                self.ii.on('loaded', lambda e: self.coordinator.set_canvas_dimensions(e.args))
                 self.ii.bind_content_from(self.coordinator, 'canvas_content')
 
     def get_drawing_config(self):
@@ -111,7 +112,7 @@ class DashboardPage():
     def get_center_config(self):
         '''collects setting config data'''
         return CenterConfig(
-            center_points=[Point(0,0)] #collect centerpoints and pass them along
+            center_points=self.center.center_points #collect centerpoints and pass them along
         )
     
     def update_ui(self):
@@ -124,8 +125,14 @@ class DashboardPage():
         else:
             self.ii.props(remove='cross')
 
-    def handle_center(self):
+    def handle_center(self, args):
         '''generates centerpoints according to the mouse location'''
         if not self.define_center.value:
             return
-        ui.notify('mouse') #TODO generate Points
+        
+        point = Point(args[0] - self.coordinator.canvas_dimensions[0]/2,
+                      args[1] - self.coordinator.canvas_dimensions[1]/2)        
+
+        self.center.calculate_center_points(num_points=int(self.num_center_points.value), canvas_point=point)
+
+

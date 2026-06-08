@@ -1,4 +1,4 @@
-from models.models import PatternConfig, DrawingConfig, FileConfig, ShapeConfig, SplineConfig, LineConfig, CenterConfig
+from models.models import PatternConfig, DrawingConfig, FileConfig, CenterConfig, ShapeConfig, SplineConfig, LineConfig, CenterConfig
 from point import Point
 from shape import Shape
 from spline import Spline
@@ -121,6 +121,10 @@ class PatternCoordinator():
         return self._canvas_content
     
     @property
+    def canvas_dimensions(self):
+        return self._canvas_dim
+    
+    @property
     def string_length(self):
         '''Returns a string containing the adjusted length in meters'''
         value = round((self.draw.string_length / 1000)*1.1, 2)
@@ -129,7 +133,7 @@ class PatternCoordinator():
         else:
             return None
     
-    def canvas_dimensions(self, dim):
+    def set_canvas_dimensions(self, dim):
         self._canvas_dim = (dim['width'], dim['height'])
         self.draw.set_canvas_dim(self._canvas_dim)
 
