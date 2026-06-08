@@ -111,19 +111,21 @@ class DashboardPage():
     def get_center_config(self):
         '''collects setting config data'''
         return CenterConfig(
-            center_points=[Point(0,0)]
+            center_points=[Point(0,0)] #collect centerpoints and pass them along
         )
     
     def update_ui(self):
         self.line_page.update_active_patterns()
 
     def define_center(self):
+        '''enables the crossair'''
         if self.define_center.value:
             self.ii.props('cross="black"')
         else:
             self.ii.props(remove='cross')
 
     def handle_center(self):
+        '''generates centerpoints according to the mouse location'''
         if not self.define_center.value:
             return
-        ui.notify('mouse')
+        ui.notify('mouse') #TODO generate Points
