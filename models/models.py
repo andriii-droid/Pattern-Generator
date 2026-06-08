@@ -2,11 +2,9 @@ from dataclasses import dataclass
 from point import Point
 
 @dataclass
-class SettingsConfig:
-    '''Data contract for global pattern settings'''
-    num_center_points: int
-    center_point_radius: float
-    keep_center: bool
+class CenterConfig:
+    '''Data contract for centerpoints'''
+    center_points: list[Point]
 
 @dataclass
 class FileConfig:

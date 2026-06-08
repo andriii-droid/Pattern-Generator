@@ -2,7 +2,8 @@ from nicegui import ui, events
 from ui.components.pattern_manager import PatternManagerPage
 from ui.components.line_manager import LineManagerPage
 from pattern_coordinator import PatternCoordinator
-from models.models import SettingsConfig, FileConfig, DrawingConfig
+from models.models import FileConfig, DrawingConfig, CenterConfig
+from point import Point
 import urllib.parse
 
 class DashboardPage():
@@ -33,10 +34,7 @@ class DashboardPage():
                 ui.separator().classes('my-2')
                 with ui.row().classes('w-full justify-between items-center mb-2'):
                     ui.label('Center').classes('text-lg font-semibold text-slate-700')
-                    # self.num_center_points = ui.number(label='Points', value=1, min=1, step=1).classes('w-24')
-                    # self.radius = ui.slider(min=0, max=100, step=1, value=0).classes('w-32 intermediate-class')
-                    # ui.label().bind_text_from(self.radius, 'value').classes('w-12 text-right')
-                    # self.keep_center = ui.switch('Keep Center', value=True)
+                    self.num_center_points = ui.number(label='Points', value=1, min=1, step=1).classes('w-24')
                     self.define_center = ui.switch('Define Center', value=False, on_change=self.define_center)
                 ui.separator().classes('my-2')
 
@@ -61,7 +59,7 @@ class DashboardPage():
                 ui.button('Generate Pattern', icon='picture_as_pdf', 
                         on_click=lambda: self.coordinator.calculate_and_render(pattern_config=self.pattern_page.get_config(),
                                                                                drawing_config=self.get_drawing_config(),
-                                                                               settings_config=self.get_settings_config())
+                                                                               center_config=self.get_center_config())
                         ).classes('w-full py-2 text-lg').props('color=primary')
 
                         # RIGHT COLUMN: Preview Card
@@ -110,12 +108,10 @@ class DashboardPage():
             gcode_offset_y=float(self.gcode_y.value)
         )
     
-    def get_settings_config(self):
+    def get_center_config(self):
         '''collects setting config data'''
-        return SettingsConfig(
-            num_center_points=int(self.num_center_points.value),
-            center_point_radius=float(self.radius.value),
-            keep_center=bool(self.keep_center.value)
+        return CenterConfig(
+            center_points=[Point(0,0)]
         )
     
     def update_ui(self):
