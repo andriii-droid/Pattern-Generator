@@ -33,10 +33,11 @@ class DashboardPage():
                 ui.separator().classes('my-2')
                 with ui.row().classes('w-full justify-between items-center mb-2'):
                     ui.label('Center').classes('text-lg font-semibold text-slate-700')
-                    self.num_center_points = ui.number(label='Points', value=1, min=1, step=1).classes('w-24')
-                    self.radius = ui.slider(min=0, max=100, step=1, value=0).classes('w-32 intermediate-class')
-                    ui.label().bind_text_from(self.radius, 'value').classes('w-12 text-right')
-                    self.keep_center = ui.switch('Keep Center', value=True)
+                    # self.num_center_points = ui.number(label='Points', value=1, min=1, step=1).classes('w-24')
+                    # self.radius = ui.slider(min=0, max=100, step=1, value=0).classes('w-32 intermediate-class')
+                    # ui.label().bind_text_from(self.radius, 'value').classes('w-12 text-right')
+                    # self.keep_center = ui.switch('Keep Center', value=True)
+                    self.define_center = ui.switch('Define Center', value=False, on_change=self.define_center)
                 ui.separator().classes('my-2')
 
                 with ui.row().classes('w-full justify-between items-center mb-2'):
@@ -84,11 +85,11 @@ class DashboardPage():
                 blank_bg = f'data:image/svg+xml;utf8,{urllib.parse.quote(raw_svg)}'
                     
                 # 2. Assign the click function directly to on_mouse
-                ii = ui.interactive_image(
+                self.ii = ui.interactive_image(
                     blank_bg, 
                     cross=False).classes('h-full w-auto max-h-[700px] object-contain shadow-md rounded-lg bg-white')
-                ii.on('loaded', lambda e: self.coordinator.canvas_dimensions(e.args))
-                ii.bind_content_from(self.coordinator, 'canvas_content')
+                self.ii.on('loaded', lambda e: self.coordinator.canvas_dimensions(e.args))
+                self.ii.bind_content_from(self.coordinator, 'canvas_content')
 
     def get_drawing_config(self):
         '''collects drawing config data'''
@@ -118,3 +119,9 @@ class DashboardPage():
     
     def update_ui(self):
         self.line_page.update_active_patterns()
+
+    def define_center(self):
+        if self.define_center.value:
+            self.ii.props('cross="black"')
+        else:
+            self.ii.props(remove='cross')
