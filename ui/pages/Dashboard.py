@@ -87,7 +87,8 @@ class DashboardPage():
                 # 2. Assign the click function directly to on_mouse
                 self.ii = ui.interactive_image(
                     blank_bg, 
-                    cross=False).classes('h-full w-auto max-h-[700px] object-contain shadow-md rounded-lg bg-white')
+                    cross=False,
+                    on_mouse=self.handle_center).classes('h-full w-auto max-h-[700px] object-contain shadow-md rounded-lg bg-white')
                 self.ii.on('loaded', lambda e: self.coordinator.canvas_dimensions(e.args))
                 self.ii.bind_content_from(self.coordinator, 'canvas_content')
 
@@ -125,3 +126,8 @@ class DashboardPage():
             self.ii.props('cross="black"')
         else:
             self.ii.props(remove='cross')
+
+    def handle_center(self):
+        if not self.define_center.value:
+            return
+        ui.notify('mouse')
