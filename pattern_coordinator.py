@@ -17,7 +17,7 @@ class PatternCoordinator():
         self.gcode = GCODE(self)
         self.draw = Draw()
         self.pdf = PDF()
-        self.center = CenterPoint()
+        self.center = CenterPoint(self)
         self.define_center = False
 
         self._canvas_content = ''''''
