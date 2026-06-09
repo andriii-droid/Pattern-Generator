@@ -4,7 +4,6 @@ from ui.components.line_manager import LineManagerPage
 from pattern_coordinator import PatternCoordinator
 from models.models import FileConfig, DrawingConfig, CenterConfig
 from point import Point
-from center_point import CenterPoint
 import urllib.parse
 
 class DashboardPage():
@@ -13,7 +12,6 @@ class DashboardPage():
         self.pattern_page = PatternManagerPage(self.update_ui)
         self.line_page = LineManagerPage(self.pattern_page.id.active_ids)
         self.coordinator = PatternCoordinator()
-        self.center = CenterPoint()
 
     def build(self):
         '''builds the dashboard'''
@@ -87,9 +85,9 @@ class DashboardPage():
                 self.ii = ui.interactive_image(
                     blank_bg, 
                     cross=False,
-                    on_mouse=lambda e: self.handle_center((e.image_x, e.image_y))).classes('h-full w-auto max-h-[700px] object-contain shadow-md rounded-lg bg-white')
+                    on_mouse=lambda e: self.coordinator.handle_center((e.image_x, e.image_y), self.num_center_points.value)).classes('h-full w-auto max-h-[700px] object-contain shadow-md rounded-lg bg-white')
                 self.ii.on('loaded', lambda e: self.coordinator.set_canvas_dimensions(e.args))
-                self.ii.bind_content_from(self.coordinator, 'canvas_content')
+                self.ii.bind_content_from(self.coordinator.center, '_canvas_content')
 
     def get_drawing_config(self):
         '''collects drawing config data'''
@@ -112,7 +110,7 @@ class DashboardPage():
     def get_center_config(self):
         '''collects setting config data'''
         return CenterConfig(
-            center_points=self.center.center_points #collect centerpoints and pass them along
+            center_points=self.coordinator.center.center_points #collect centerpoints and pass them along
         )
     
     def update_ui(self):
@@ -122,17 +120,9 @@ class DashboardPage():
         '''enables the crossair'''
         if self.define_center.value:
             self.ii.props('cross="black"')
+            self.coordinator.define_center = True
         else:
             self.ii.props(remove='cross')
-
-    def handle_center(self, args):
-        '''generates centerpoints according to the mouse location'''
-        if not self.define_center.value:
-            return
-        
-        point = Point(args[0] - self.coordinator.canvas_dimensions[0]/2,
-                      args[1] - self.coordinator.canvas_dimensions[1]/2)        
-
-        self.center.calculate_center_points(num_points=int(self.num_center_points.value), canvas_point=point)
+            self.coordinator.define_center = False
 
 

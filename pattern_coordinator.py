@@ -5,7 +5,9 @@ from spline import Spline
 from gcode import GCODE
 from draw import Draw
 from pdf import PDF
-from nicegui import ui, events
+from nicegui import ui
+from center_point import CenterPoint
+
 
 
 class PatternCoordinator():
@@ -15,6 +17,9 @@ class PatternCoordinator():
         self.gcode = GCODE(self)
         self.draw = Draw()
         self.pdf = PDF()
+        self.center = CenterPoint()
+        self.define_center = False
+
         self._canvas_content = ''''''
 
     def calculate_and_render(self, pattern_config: PatternConfig, 
@@ -96,6 +101,16 @@ class PatternCoordinator():
             ui.notify("Provide a Filename!", type='warning')
         else:
             ui.download.content(self.gcode.generate_gcode(self.patterns), file_config.filename+".gcode")
+
+    def handle_center(self, args, num_points):
+        '''generates centerpoints according to the mouse location'''
+        if not self.define_center:
+            return
+        
+        point = Point(args[0] - self.canvas_dimensions[0]/2,
+                      args[1] - self.canvas_dimensions[1]/2)        
+
+        self.center.calculate_center_points(num_points=int(num_points), canvas_point=point)
 
     def optimize(self):
         pass

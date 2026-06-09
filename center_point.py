@@ -14,10 +14,20 @@ class CenterPoint():
             id = None,
             shape_type=None
         ))
+        self._canvas_content = ''''''
 
     def calculate_center_points(self, num_points, canvas_point: Point):
-        self.shape.config.size = canvas_point.polar[1]
+        self.shape.config.size = 0#canvas_point.polar[1]
         self.center_points = self.shape._calculate(center=Point(0,0),
                                                     angle=canvas_point.polar[0],
                                                     num_points=num_points)
-        print(self.center_points)
+        
+        print(canvas_point)
+        self._canvas_content = self.draw_points([canvas_point])
+        print(self._canvas_content)
+
+    def draw_points(self, points: list[Point]):
+        content = ""
+        for p in points:
+            content += f'''<circle cx="{p.x}" cy="{p.y}" r="1" fill="black" />'''
+        return content
