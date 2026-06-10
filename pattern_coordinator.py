@@ -19,7 +19,6 @@ class PatternCoordinator():
         self.pdf = PDF()
         self.center = CenterPoint(self)
         self.define_center = False
-
         self._canvas_content = ''''''
 
     def calculate_and_render(self, pattern_config: PatternConfig, 
