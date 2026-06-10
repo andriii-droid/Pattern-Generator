@@ -7,7 +7,7 @@ class Draw():
     def __init__(self):
         self._canvas_width_in_mm = 105
         self._canvas_height_in_mm = 148
-        self._center_point = Point(self._canvas_width_in_mm / 2, self._canvas_height_in_mm / 2)
+        self._control_point = Point(self._canvas_width_in_mm / 2, self._canvas_height_in_mm / 2)
         self._scale_factor = 1
         self._canvas_content = ''''''
         self._string_length = 0
@@ -18,8 +18,8 @@ class Draw():
     def draw_points(self, pat: Shape | Spline):
         content = ""
         for p in pat.points:
-            x = (p.x + self._center_point.x) * self._scale_factor
-            y = (p.y + self._center_point.y) * self._scale_factor
+            x = (p.x + self._control_point.x) * self._scale_factor
+            y = (p.y + self._control_point.y) * self._scale_factor
             content += f'''<circle cx="{x}" cy="{y}" r="1" fill="black" />'''
         return content
     
@@ -64,8 +64,8 @@ class Draw():
         for point_shape in point_lists:
             for (p1, p2) in zip(point_shape, point_shape[1:]+[point_shape[0]]):
                 self._string_length += p1.distance(p2)
-                p1 = (p1 + self._center_point) * self._scale_factor
-                p2 = (p2 + self._center_point)  * self._scale_factor
+                p1 = (p1 + self._control_point) * self._scale_factor
+                p2 = (p2 + self._control_point)  * self._scale_factor
                 self._canvas_content += f'''<line x1="{p1.x}" y1="{p1.y}" 
                 x2="{p2.x}" y2="{p2.y}" fill="none" stroke="{col}" stroke-width="{stroke_width}" />'''
     

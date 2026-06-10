@@ -154,6 +154,7 @@ class PatternCoordinator():
     def set_canvas_dimensions(self, dim):
         self._canvas_dim = (dim['width'], dim['height'])
         self.draw.set_canvas_dim(self._canvas_dim)
+        self.center.set_canvas_dim(self._canvas_dim)
 
     def _check_line_config(self, config_list: list[LineConfig]):
         id_list = [pat_id for config in config_list for pat_id in config.pat_id]

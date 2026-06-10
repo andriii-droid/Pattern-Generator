@@ -5,6 +5,10 @@ class CenterPoint():
         self._canvas_content = ''''''
         self.coordinator = coordinator
         self._center_points = []
+        self._canvas_width_in_mm = 105
+        self._canvas_height_in_mm = 148
+        self._scale_factor = 1
+
 
     def calculate_center_points(self, num_points, canvas_point: Point):
         self._center_points = self.calc_shape(canvas_point, num_points)
@@ -27,9 +31,12 @@ class CenterPoint():
             content += f'''<circle cx="{x}" cy="{y}" r="1" fill="black" />'''
         return content
     
+    def set_canvas_dim(self, dim):
+        self._scale_factor = dim[0] / self._canvas_width_in_mm
+    
     @property
     def center_points(self):
         if len(self._center_points) == 0:
             self._center_points.append(Point(0,0))
         print(self._center_points)
-        return self._center_points
+        return [point / self._scale_factor for point in self._center_points]

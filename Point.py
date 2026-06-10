@@ -36,7 +36,12 @@ class Point:
             return Point(x=self._x * other, y=self._y * other)
         else:
             return NotImplemented
-
+        
+    def __truediv__(self, other):
+        if isinstance(other, int | float):
+            return Point(x=self._x / other, y=self._y / other)
+        else:
+            return NotImplemented
     
     def distance(self, other):
         '''calculates distance between two point objects'''
