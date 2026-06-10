@@ -110,7 +110,7 @@ class DashboardPage():
     def get_center_config(self):
         '''collects setting config data'''
         return CenterConfig(
-            center_points=self.coordinator.center.center_points #collect centerpoints and pass them along
+            center_points=self.coordinator.center.center_points
         )
     
     def update_ui(self):
