@@ -1,33 +1,25 @@
-from shape import Shape
-from models.models import ShapeConfig
 from point import Point
 
 class CenterPoint():
     def __init__(self, coordinator):
-        self.shape = Shape(ShapeConfig(
-            num_shapes=1,
-            size=100,
-            hex_color="#000000",
-            offset=1,
-            line_points=0,
-            center=Point(0,0),
-            id = None,
-            shape_type=None
-        ))
         self._canvas_content = ''''''
         self.coordinator = coordinator
+        self.center_points = []
 
     def calculate_center_points(self, num_points, canvas_point: Point):
-        print(canvas_point)
-        self.shape.config.size = canvas_point.polar[1]
-        self.center_points = self.shape._calculate(center=Point(0,0),   #Todo function does not map first point to the canvas point like i wanted
-                                                    angle=canvas_point.polar[0],
-                                                    num_points=num_points)
+        self.center_points = self.calc_shape(canvas_point, num_points)
         
-        print(self.center_points)
         self._canvas_content = self.draw_points(self.center_points)
-        print(self._canvas_content)
 
+    def calc_shape(self, startpoint: Point, num_points):
+        points = []
+        points.append(startpoint)
+        dist = startpoint.polar[1]
+        angle_start = startpoint.polar[0]
+        for angle in range(0, 360, int(360 / num_points)):
+            points.append(Point.from_polar(distance=dist, angle_degrees=angle + angle_start))
+        return points
+        
     def draw_points(self, points: list[Point]):
         content = ""
         for p in points:
