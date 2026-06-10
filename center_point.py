@@ -13,7 +13,6 @@ class CenterPoint():
 
     def calc_shape(self, startpoint: Point, num_points):
         points = []
-        points.append(startpoint)
         dist = startpoint.polar[1]
         angle_start = startpoint.polar[0]
         for angle in range(0, 360, int(360 / num_points)):
@@ -32,5 +31,5 @@ class CenterPoint():
     def center_points(self):
         if len(self._center_points) == 0:
             self._center_points.append(Point(0,0))
-
+        print(self._center_points)
         return self._center_points
