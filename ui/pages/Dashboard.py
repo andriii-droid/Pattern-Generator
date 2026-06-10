@@ -87,7 +87,7 @@ class DashboardPage():
                     cross=False,
                     on_mouse=lambda e: self.coordinator.handle_center((e.image_x, e.image_y), self.num_center_points.value)).classes('h-full w-auto max-h-[700px] object-contain shadow-md rounded-lg bg-white')
                 self.ii.on('loaded', lambda e: self.coordinator.set_canvas_dimensions(e.args))
-                self.ii.bind_content_from(self.coordinator.center, '_canvas_content')
+                self.ii.bind_content_from(self.coordinator, 'canvas_content')
 
     def get_drawing_config(self):
         '''collects drawing config data'''

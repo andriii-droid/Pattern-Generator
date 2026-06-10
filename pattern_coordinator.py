@@ -133,7 +133,10 @@ class PatternCoordinator():
     
     @property
     def canvas_content(self):
-        return self._canvas_content
+        if self.define_center:
+            return self._canvas_content + self.center._canvas_content
+        else:
+            return self._canvas_content
     
     @property
     def canvas_dimensions(self):
