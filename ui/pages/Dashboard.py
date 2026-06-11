@@ -33,7 +33,7 @@ class DashboardPage():
                 ui.separator().classes('my-2')
                 with ui.row().classes('w-full justify-between items-center mb-2'):
                     ui.label('Center').classes('text-lg font-semibold text-slate-700')
-                    self.num_center_points = ui.number(label='Points', value=1, min=1, step=1).classes('w-24')
+                    self.num_center_points = ui.number(label='Points', value=1, min=0, step=1).classes('w-24')
                     self.define_center = ui.switch('Define Center', value=False, on_change=self.define_center)
                 ui.separator().classes('my-2')
 

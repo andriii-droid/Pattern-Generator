@@ -18,8 +18,9 @@ class CenterPoint():
         points = []
         dist = startpoint.polar[1]
         angle_start = startpoint.polar[0]
-        for angle in range(0, 360, int(360 / num_points)):
-            points.append(Point.from_polar(distance=dist, angle_degrees=angle + angle_start))
+        if num_points:
+            for angle in range(0, 360, int(360 / num_points)):
+                points.append(Point.from_polar(distance=dist, angle_degrees=angle + angle_start))
         return points
         
     def draw_points(self, points: list[Point]):
