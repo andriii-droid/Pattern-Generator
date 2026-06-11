@@ -7,6 +7,7 @@ from draw import Draw
 from pdf import PDF
 from nicegui import ui
 from center_point import CenterPoint
+import math
 
 
 
@@ -101,14 +102,19 @@ class PatternCoordinator():
         else:
             ui.download.content(self.gcode.generate_gcode(self.patterns), file_config.filename+".gcode")
 
-    def handle_center(self, args, num_points):
+    def handle_center(self, args, num_points, snap):
         '''generates centerpoints according to the mouse location'''
         if not self.define_center:
             return
         
         point = Point(args[0] - self.canvas_dimensions[0]/2,
-                      args[1] - self.canvas_dimensions[1]/2)        
+                      args[1] - self.canvas_dimensions[1]/2)   
 
+        if snap:
+            angle = math.floor(point.polar[0] / 10) * 10
+            dist = point.polar[1]
+            point = Point().from_polar(angle, dist)
+   
         self.center.calculate_center_points(num_points=int(num_points), canvas_point=point)
 
     def optimize(self):

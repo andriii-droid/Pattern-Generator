@@ -34,6 +34,7 @@ class DashboardPage():
                 with ui.row().classes('w-full justify-between items-center mb-2'):
                     ui.label('Center').classes('text-lg font-semibold text-slate-700')
                     self.num_center_points = ui.number(label='Points', value=1, min=0, step=1).classes('w-24')
+                    self.snap = ui.switch('Snap', value=True)
                     self.define_center = ui.switch('Define Center', value=False, on_change=self.define_center)
                 ui.separator().classes('my-2')
 
@@ -85,7 +86,7 @@ class DashboardPage():
                 self.ii = ui.interactive_image(
                     blank_bg, 
                     cross=False,
-                    on_mouse=lambda e: self.coordinator.handle_center((e.image_x, e.image_y), self.num_center_points.value)).classes('h-full w-auto max-h-[700px] object-contain shadow-md rounded-lg bg-white')
+                    on_mouse=lambda e: self.coordinator.handle_center((e.image_x, e.image_y), self.num_center_points.value, bool(self.snap.value))).classes('h-full w-auto max-h-[700px] object-contain shadow-md rounded-lg bg-white')
                 self.ii.on('loaded', lambda e: self.coordinator.set_canvas_dimensions(e.args))
                 self.ii.bind_content_from(self.coordinator, 'canvas_content')
 
