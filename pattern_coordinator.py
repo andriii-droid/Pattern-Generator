@@ -111,7 +111,7 @@ class PatternCoordinator():
                       args[1] - self.canvas_dimensions[1]/2)   
 
         if snap:
-            angle = math.floor(point.polar[0] / 10) * 10
+            angle = math.floor(point.polar[0] / 15) * 15
             dist = point.polar[1]
             point = Point().from_polar(angle, dist)
    
