@@ -47,17 +47,18 @@ class PatternCoordinator():
         self.patterns = []
 
         #for each center point create one pattern
-        for cp in center_config.center_points:
+        for cp_id, cp in enumerate(center_config.center_points):
             for pattern in pattern_config.patterns:
-                pattern.center = cp
-                if isinstance(pattern, ShapeConfig):
-                    s = Shape(pattern)
-                    s.generate()
-                    self.patterns.append(s)
-                elif isinstance(pattern, SplineConfig):
-                    s = Spline(pattern)
-                    s.generate()
-                    self.patterns.append(s)
+                if cp_id in pattern.center_points:
+                    pattern.center = cp
+                    if isinstance(pattern, ShapeConfig):
+                        s = Shape(pattern)
+                        s.generate()
+                        self.patterns.append(s)
+                    elif isinstance(pattern, SplineConfig):
+                        s = Spline(pattern)
+                        s.generate()
+                        self.patterns.append(s)
                 
     def _render_to_ui(self, drawing_config: DrawingConfig):
         '''draws points and lines to the ui'''
