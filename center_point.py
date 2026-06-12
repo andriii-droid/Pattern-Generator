@@ -25,10 +25,13 @@ class CenterPoint():
         
     def draw_points(self, points: list[Point]):
         content = ""
-        for p in points:
+        for count, p in enumerate(points):
             x = p.x + self.coordinator.canvas_dimensions[0]/2
             y = p.y + self.coordinator.canvas_dimensions[1]/2
-            content += f'''<circle cx="{x}" cy="{y}" r="1" fill="black" />'''
+            content += f'''<circle cx="{x}" cy="{y}" r="1" fill="black" />
+            <text x={x+2} y="{y+2}" font-size="10" stroke="red" stroke-width="1">
+                {count}
+            </text>'''
         return content
     
     def set_canvas_dim(self, dim):
