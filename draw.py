@@ -84,8 +84,8 @@ class Draw():
         for points in shape_points_list:
             for (p1, p2) in zip(points, points[shape.config.line_points+2:]+points[0:shape.config.line_points+2]):
                 self._string_length += p1.distance(p2)
-                p1 = (p1 + self._center_point) * self._scale_factor
-                p2 = (p2 + self._center_point)  * self._scale_factor
+                p1 = (p1 + self._control_point) * self._scale_factor
+                p2 = (p2 + self._control_point)  * self._scale_factor
                 self._canvas_content += f'''<line x1="{p1.x}" y1="{p1.y}" 
                 x2="{p2.x}" y2="{p2.y}" fill="none" stroke="{col}" stroke-width="{stroke_width}" />'''
 
@@ -112,8 +112,8 @@ class Draw():
             ypat_points = yspline.points
 
         for (p1, p2) in zip(xpat_points, ypat_points[::-1]):
-            p1 = (p1 + self._center_point) * self._scale_factor
-            p2 = (p2 + self._center_point)  * self._scale_factor
+            p1 = (p1 + self._control_point) * self._scale_factor
+            p2 = (p2 + self._control_point)  * self._scale_factor
             self._canvas_content += f'''<line x1="{p1.x}" y1="{p1.y}" 
             x2="{p2.x}" y2="{p2.y}" fill="none" stroke="{col}" stroke-width="{stroke_width}" />'''  
 
@@ -131,20 +131,20 @@ class Draw():
             ypat_points = yshape.points_along_circle
 
         for (p1, p2) in zip(xpat_points, ypat_points[config.offset:]+ypat_points[:config.offset]):
-            p1 = (p1 + self._center_point) * self._scale_factor
-            p2 = (p2 + self._center_point)  * self._scale_factor
+            p1 = (p1 + self._control_point) * self._scale_factor
+            p2 = (p2 + self._control_point)  * self._scale_factor
             self._canvas_content += f'''<line x1="{p1.x}" y1="{p1.y}" 
             x2="{p2.x}" y2="{p2.y}" fill="none" stroke="{col}" stroke-width="{stroke_width}" />'''  
 
         for (p1, p2) in zip(xpat_points, ypat_points[-config.offset:]+ypat_points[:-config.offset]):
-            p1 = (p1 + self._center_point) * self._scale_factor
-            p2 = (p2 + self._center_point)  * self._scale_factor
+            p1 = (p1 + self._control_point) * self._scale_factor
+            p2 = (p2 + self._control_point)  * self._scale_factor
             self._canvas_content += f'''<line x1="{p1.x}" y1="{p1.y}" 
             x2="{p2.x}" y2="{p2.y}" fill="none" stroke="{col}" stroke-width="{stroke_width}" />'''  
             
     def draw_cords(self):  
         '''draws the coordinatesystem onto the canvas'''
-        p = (Point(0,0) + self._center_point) * self._scale_factor
+        p = (Point(0,0) + self._control_point) * self._scale_factor
         content = f'''<circle cx="{p.x}" cy="{p.y}" r="{40 * self._scale_factor}" fill="none" stroke="#000000" stroke-width=".1" />'''
         content += f'''<circle cx="{p.x}" cy="{p.y}" r="{15 * self._scale_factor}" fill="none" stroke="#000000" stroke-width=".1" />'''
         content += f'''<line x1="{0}" y1="{p.y}" x2="{p.x*2}" y2="{p.y}" fill="none" stroke="#000000" stroke-width=".1" />'''
