@@ -40,5 +40,4 @@ class CenterPoint():
     
     @property
     def center_points(self):
-        print(self._center_points)
         return [point / self._scale_factor for point in self._center_points]

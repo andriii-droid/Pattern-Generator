@@ -3,7 +3,7 @@ from models.models import ShapeConfig
 from point import Point
 
 class ShapeRow:
-    def __init__(self, on_delete_callback, id):
+    def __init__(self, on_delete_callback, id, cp_options):
         """
         Represents a single pattern row UI element.
         :param on_delete_callback: A function to call when the delete button is clicked.
@@ -45,6 +45,8 @@ class ShapeRow:
                     
                     # When deleted, trigger the parent callback passing 'self' (the whole row object)
                     ui.button(icon='delete', on_click=lambda: self.on_delete(self)).props('flat color=red')
+                    self.centers = ui.select(cp_options, multiple=True, value=0, label='Centers') \
+                        .classes('w-64').props('use-chips')
 
     def get_config(self):
         """Helper method to export the current UI state as shape config object"""

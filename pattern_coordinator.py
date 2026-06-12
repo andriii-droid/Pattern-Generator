@@ -13,7 +13,7 @@ import math
 
 class PatternCoordinator():
     '''exposes functions to the dashboard manipulate patterns '''
-    def __init__(self):
+    def __init__(self, center_callback):
         self.patterns: list[Shape | Spline] = []
         self.gcode = GCODE(self)
         self.draw = Draw()
@@ -21,6 +21,7 @@ class PatternCoordinator():
         self.center = CenterPoint(self)
         self.define_center = False
         self._canvas_content = ''''''
+        self.center_callback = center_callback
 
     def calculate_and_render(self, pattern_config: PatternConfig, 
                              drawing_config: DrawingConfig, 
@@ -116,6 +117,7 @@ class PatternCoordinator():
             point = Point().from_polar(angle, dist)
    
         self.center.calculate_center_points(num_points=int(num_points), canvas_point=point)
+        self.center_callback([x for x in range(0, len(self.center.center_points))])
 
     def optimize(self):
         pass

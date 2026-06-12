@@ -3,7 +3,7 @@ from models.models import SplineConfig
 from point import Point
 
 class SplineRow:
-    def __init__(self, on_delete_callback, id):
+    def __init__(self, on_delete_callback, id, cp_options):
         """
         Represents a single spline configuration row in the UI.
         :param on_delete_callback: A function to call when the delete button is clicked.
@@ -44,7 +44,8 @@ class SplineRow:
                         
                         # Delete button triggers the parent callback, passing this entire instance
                         ui.button(icon='delete', on_click=lambda: self.on_delete(self)).props('flat color=red class=mt-auto')
-
+                        self.centers = ui.select(cp_options, multiple=True, value=0, label='Centers') \
+                            .classes('w-64').props('use-chips')
     def get_config(self):
         """Helper method to extract current UI state into spline config object"""
         return SplineConfig(

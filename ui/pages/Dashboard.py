@@ -11,7 +11,7 @@ class DashboardPage():
     def __init__(self):
         self.pattern_page = PatternManagerPage(self.update_ui)
         self.line_page = LineManagerPage(self.pattern_page.id.active_ids)
-        self.coordinator = PatternCoordinator()
+        self.coordinator = PatternCoordinator(self.pattern_page.update_centers)
 
     def build(self):
         '''builds the dashboard'''

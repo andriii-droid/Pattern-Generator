@@ -14,6 +14,7 @@ class PatternManagerPage:
         self.id = ID()
         self.update_callback = update_callback
         self.collapsed = False
+        self.options = [0]
 
     def build(self):
         '''build the rows'''
@@ -29,7 +30,7 @@ class PatternManagerPage:
         '''add shape row'''
         with self.container:
             # Create a new row, and pass our delete method as the callback
-            new_row = ShapeRow(on_delete_callback=self.remove_row, id=self.id.new_shape_id)
+            new_row = ShapeRow(on_delete_callback=self.remove_row, id=self.id.new_shape_id, cp_options=self.options)
         self.shape_list.append(new_row)
         self.update_callback()
 
@@ -37,7 +38,7 @@ class PatternManagerPage:
         '''Add a spline row'''
         with self.container:
             # Create a new row, and pass our delete method as the callback
-            new_row = SplineRow(on_delete_callback=self.remove_row, id=self.id.new_spline_id)
+            new_row = SplineRow(on_delete_callback=self.remove_row, id=self.id.new_spline_id, cp_options=self.options)
         self.spline_list.append(new_row)
         self.update_callback()
 
@@ -75,3 +76,14 @@ class PatternManagerPage:
         else: 
             self.expand.set_text("expand")
         self.collapsed = not self.collapsed
+
+    def update_centers(self, options):
+        self.options = options
+        for shape_row in self.shape_list:
+            shape_row.centers.options = options
+            shape_row.centers.update()
+
+        for spline_row in self.spline_list:
+            spline_row.centers.options = options
+            spline_row.centers.update()
+
