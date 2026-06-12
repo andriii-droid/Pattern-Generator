@@ -17,10 +17,13 @@ class Draw():
 
     def draw_points(self, pat: Shape | Spline):
         content = ""
-        for p in pat.points:
+        for i, p in enumerate(pat.points):
+            if i == 0:
+                col = "red"
+            else: col = "black"
             x = (p.x + self._control_point.x) * self._scale_factor
             y = (p.y + self._control_point.y) * self._scale_factor
-            content += f'''<circle cx="{x}" cy="{y}" r="1" fill="black" />'''
+            content += f'''<circle cx="{x}" cy="{y}" r="1" fill="{col}" />'''
         return content
     
     def draw_lines(self, drawing_config: DrawingConfig, pat: Shape | Spline):

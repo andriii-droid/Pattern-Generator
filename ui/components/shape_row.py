@@ -45,7 +45,7 @@ class ShapeRow:
                     
                     # When deleted, trigger the parent callback passing 'self' (the whole row object)
                     ui.button(icon='delete', on_click=lambda: self.on_delete(self)).props('flat color=red')
-                    self.centers = ui.select(cp_options, multiple=True, value=0, label='Centers') \
+                    self.centers = ui.select(cp_options, value=0, label='Centers') \
                         .classes('w-64').props('use-chips')
 
     def get_config(self):

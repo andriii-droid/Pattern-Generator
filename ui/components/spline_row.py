@@ -44,7 +44,7 @@ class SplineRow:
                         
                         # Delete button triggers the parent callback, passing this entire instance
                         ui.button(icon='delete', on_click=lambda: self.on_delete(self)).props('flat color=red class=mt-auto')
-                        self.centers = ui.select(cp_options, multiple=True, value=0, label='Centers') \
+                        self.centers = ui.select(cp_options, value=0, label='Centers') \
                             .classes('w-64').props('use-chips')
     def get_config(self):
         """Helper method to extract current UI state into spline config object"""

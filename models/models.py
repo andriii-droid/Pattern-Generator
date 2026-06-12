@@ -52,7 +52,7 @@ class SplineConfig:
     end_point: Point
     center: Point
     id: int
-    center_points: list[int]
+    center_points: int
 
 @dataclass
 class PatternConfig:
