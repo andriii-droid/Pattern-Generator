@@ -1,6 +1,7 @@
 import math
 from point import Point
 from models.models import ShapeConfig
+import numpy as np
 
 
 class Shape():
@@ -11,29 +12,9 @@ class Shape():
 
     def generate(self):
         '''calls the _calculate function with specified number of corners, a specified number of times with an angle offset'''  
-        angle = 0
-        step = 360 / self.config.num_shapes
-        for _ in range(self.config.num_shapes):     #calls calc_shape multiple times
-            points_tmp = self._calculate(angle=angle, num_points=self.config.shape_type, center=self.config.center)
-            if self.config.line_points: #if there should be points genereted on each line, it gets calculated here
-                points_tmp = self._generate_points_on_shape(points=points_tmp, num_points=self.config.line_points)
-            self._points.extend(points_tmp)
-
-            angle += step   
-
-    def _calculate(self, center, angle=0, num_points=1):
-        '''calculates shape points around a center point. the number of points can be specified'''
-        points = []
-        if num_points == 1:
-            points.append(center)
-            return points
-        
-        points.append(self._new_point(center, (self.config.size/2)*self.config.offset, 90+angle))
-        rotation_angle = -360/num_points/2 + angle
-        for _ in range(num_points - 1):
-            points.append(self._new_point(points[-1], self.config.size*math.sin(math.pi/num_points), rotation_angle))
-            rotation_angle -= 360/num_points
-        return points
+        self._points = []
+        for angle in np.linspace(0, 360, (self.config.num_shapes * self.config.shape_type), endpoint=False):
+            self._points.append(Point.from_polar(angle, self.config.size))
     
     def _generate_points_on_shape(self, points, num_points):
         """
@@ -67,7 +48,10 @@ class Shape():
     
     @property
     def points(self):
-        return self._points
+        rearranged_list = []
+        for i in range(self.config.num_shapes):
+            rearranged_list.extend(self._points[i::self.config.num_shapes])     
+        return rearranged_list
     
     @property
     def sketch_points(self):
@@ -78,9 +62,4 @@ class Shape():
         
     @property
     def points_along_circle(self):
-        sorted_points = sorted(
-            self._points, 
-            key=lambda p: math.atan2(p.y, p.x)
-        )
-        
-        return sorted_points
+        return self._points
