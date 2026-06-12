@@ -58,6 +58,7 @@ class SplineRow:
             end_point=Point.from_polar(angle_degrees=self.points_ui[2]['angle_input'].value,
                                          distance=self.points_ui[2]['dist_input'].value),
             center=Point(0,0),
-            id=self.id
+            id=self.id,
+            center_points=self.centers.value
             )
         

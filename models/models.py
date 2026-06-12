@@ -40,6 +40,7 @@ class ShapeConfig:
     line_points: int
     center: Point
     id: int
+    center_points: list[int]
 
 @dataclass
 class SplineConfig:
@@ -51,6 +52,7 @@ class SplineConfig:
     end_point: Point
     center: Point
     id: int
+    center_points: list[int]
 
 @dataclass
 class PatternConfig:

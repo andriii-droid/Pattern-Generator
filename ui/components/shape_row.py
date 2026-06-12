@@ -50,6 +50,7 @@ class ShapeRow:
 
     def get_config(self):
         """Helper method to export the current UI state as shape config object"""
+        print(self.centers.value)
         return ShapeConfig(
             shape_type=int(self.shape.value),
             num_shapes=int(self.num_shapes.value),
@@ -58,5 +59,6 @@ class ShapeRow:
             offset=self.offset.value,
             line_points=int(self.line_points.value),
             center=Point(0,0),
-            id=self.id
+            id=self.id,
+            center_points=self.centers.value
         )
