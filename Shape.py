@@ -53,14 +53,17 @@ class Shape():
         rearranged_list = []
         for i in range(self.config.num_shapes):
             rearranged_list.extend(self._points[i::self.config.num_shapes])     
-        return rearranged_list
+        return [p + self.config.center for p in rearranged_list] #add center offset
     
     @property
     def sketch_points(self):
         if self.config.line_points:
-            return [self._points[0]] + [self._points[self.config.line_points+2]]
+            points = [self._points[0]] + [self._points[self.config.line_points+2]]
         else:
-            return [p for count, p in enumerate(self._points) if count % self.config.num_shapes == 0]        
+            points = [p for count, p in enumerate(self._points) if count % self.config.num_shapes == 0]  
+
+        return [p + self.config.center for p in points] #add center offset
+      
     @property
     def points_along_circle(self):
-        return self._points
+        return [p + self.config.center for p in self._points] #add center offset

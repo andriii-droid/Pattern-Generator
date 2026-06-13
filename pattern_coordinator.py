@@ -49,6 +49,7 @@ class PatternCoordinator():
         #for each center point create one pattern
         for cp_id, cp in enumerate(center_config.center_points):
             for pattern in pattern_config.patterns:
+       
                 if cp_id == pattern.center_points:
                     pattern.center = cp
                     if isinstance(pattern, ShapeConfig):
