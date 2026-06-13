@@ -86,7 +86,7 @@ class PatternCoordinator():
             line_combinations.append((xpat, ypat))
 
         for line_com, config in zip(line_combinations, drawing_config.line_configs):
-            self._canvas_content += self.draw.draw_lines_between_patterns(*line_com, config)
+            self._canvas_content += self.draw.draw_lines_between_patterns(*line_com, config, drawing_config)
 
         if drawing_config.draw_coordinates:
             self._canvas_content += self.draw.draw_cords()

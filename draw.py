@@ -92,12 +92,20 @@ class Draw():
                 self._canvas_content += f'''<line x1="{p1.x}" y1="{p1.y}" 
                 x2="{p2.x}" y2="{p2.y}" fill="none" stroke="{col}" stroke-width="{stroke_width}" />'''
 
-    def draw_lines_between_patterns(self, xpat: Shape | Spline, ypat: Shape | Spline, config):
+    def draw_lines_between_patterns(self, xpat: Shape | Spline, ypat: Shape | Spline, config, drawing_config: DrawingConfig):
         self._canvas_content = ''''''
         if isinstance(xpat, Spline) and isinstance(ypat, Spline):
             self.draw_lines_between_splines(xpat, ypat)
         elif isinstance(xpat, Shape) and isinstance(ypat, Shape):
             self.draw_lines_between_shapes(xpat, ypat, config)
+
+        #Draw Sketch Lines
+        if not drawing_config.draw_sketch:
+            pass
+        elif isinstance(xpat, Spline) and isinstance(ypat, Spline):
+            self.draw_lines_between_splines(xpat, ypat, sketch=True)
+        elif isinstance(xpat, Shape) and isinstance(ypat, Shape):
+            self.draw_lines_between_shapes(xpat, ypat, config, sketch=True)
 
         return self._canvas_content  
     
@@ -105,14 +113,12 @@ class Draw():
         if sketch:
             col = "#ff0000"
             stroke_width = 0.8
-            xpat_points = xspline.sketch_points
-            ypat_points = yspline.sketch_points
         else:
-            # col = xpat.config.hex_color TODO
-            col = "#000000"
+            col = "#000000"#xspline.config.hex_color 
             stroke_width = 0.2
-            xpat_points = xspline.points
-            ypat_points = yspline.points
+
+        xpat_points = xspline.points
+        ypat_points = yspline.points
 
         for (p1, p2) in zip(xpat_points, ypat_points[::-1]):
             self._string_length += p1.distance(p2)
@@ -120,19 +126,19 @@ class Draw():
             p2 = (p2 + self._control_point)  * self._scale_factor
             self._canvas_content += f'''<line x1="{p1.x}" y1="{p1.y}" 
             x2="{p2.x}" y2="{p2.y}" fill="none" stroke="{col}" stroke-width="{stroke_width}" />'''  
+            if sketch: break
+
 
     def draw_lines_between_shapes(self, xshape: Shape, yshape: Shape, config, sketch=False):
         if sketch:
             col = "#ff0000"
             stroke_width = 0.8
-            xpat_points = xshape.sketch_points #TODO
-            ypat_points = yshape.sketch_points
         else:
-            # col = xpat.config.hex_color TODO
-            col = "#000000"
+            col = xshape.config.hex_color
             stroke_width = 0.2
-            xpat_points = xshape.points_along_circle
-            ypat_points = yshape.points_along_circle
+
+        xpat_points = xshape.points_along_circle
+        ypat_points = yshape.points_along_circle
 
         for (p1, p2) in zip(xpat_points, ypat_points[config.offset:]+ypat_points[:config.offset]):
             self._string_length += p1.distance(p2)
@@ -140,6 +146,7 @@ class Draw():
             p2 = (p2 + self._control_point)  * self._scale_factor
             self._canvas_content += f'''<line x1="{p1.x}" y1="{p1.y}" 
             x2="{p2.x}" y2="{p2.y}" fill="none" stroke="{col}" stroke-width="{stroke_width}" />'''  
+            if sketch: break
 
         for (p1, p2) in zip(xpat_points, ypat_points[-config.offset:]+ypat_points[:-config.offset]):
             self._string_length += p1.distance(p2)
@@ -147,6 +154,7 @@ class Draw():
             p2 = (p2 + self._control_point)  * self._scale_factor
             self._canvas_content += f'''<line x1="{p1.x}" y1="{p1.y}" 
             x2="{p2.x}" y2="{p2.y}" fill="none" stroke="{col}" stroke-width="{stroke_width}" />'''  
+            if sketch: break
             
     def draw_cords(self):  
         '''draws the coordinatesystem onto the canvas'''
