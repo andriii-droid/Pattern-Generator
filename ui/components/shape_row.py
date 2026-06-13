@@ -26,8 +26,10 @@ class ShapeRow:
             with ui.expansion(f"Shape {self.id}", value=True).classes('font-semibold text-s text-slate-500 mt-1 w-full') as self.expand:
                 with ui.row().classes('items-center w-full'):
                     self.shape = ui.select(label='Shape', options=shape_options, value=3).classes('w-28')
-                    self.num_shapes = ui.number(label='Number', value=20, min=1, step=1).classes('w-24')
-                    self.size = ui.number(label='Size', value=80, min=1).classes('w-24')
+                    self.line_type = ui.select(label="Linetype", options=['line', 'dotted'], value='line').classes('w-26').on_value_change(handle_type_change)
+                    self.num_shapes = ui.number(label='Number', value=20, min=1, step=1).classes('w-24') \
+                        .bind_visibility_from(self.line_type, 'value', backward=lambda v: v == 'line') 
+                    self.size = ui.number(label='Size', value=40, min=1).classes('w-24')
                     
                     # Simple color hex state stored on the class instance
                     self.hex_color = '#000000'
@@ -38,7 +40,6 @@ class ShapeRow:
                     self.offset = ui.slider(min=0, max=1, step=0.01, value=1).classes('w-32')
                     ui.label().bind_text_from(self.offset, 'value').classes('w-6')
                     
-                    self.line_type = ui.select(label="Linetype", options=['line', 'dotted'], value='line').classes('w-26').on_value_change(handle_type_change)
                     
                     self.line_points = ui.number(label="Points", value=0, min=-1, step=1).classes('w-24') \
                         .bind_visibility_from(self.line_type, 'value', backward=lambda v: v == 'dotted') 
@@ -50,7 +51,6 @@ class ShapeRow:
 
     def get_config(self):
         """Helper method to export the current UI state as shape config object"""
-        print(self.centers.value)
         return ShapeConfig(
             shape_type=int(self.shape.value),
             num_shapes=int(self.num_shapes.value),

@@ -15,6 +15,8 @@ class Shape():
         self._points = []
         for angle in np.linspace(0, 360, (self.config.num_shapes * self.config.shape_type), endpoint=False):
             self._points.append(Point.from_polar(angle, self.config.size))
+        if self.config.line_points:
+            self._points = self._generate_points_on_shape(self._points, self.config.line_points)
     
     def _generate_points_on_shape(self, points, num_points):
         """
