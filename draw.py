@@ -115,6 +115,7 @@ class Draw():
             ypat_points = yspline.points
 
         for (p1, p2) in zip(xpat_points, ypat_points[::-1]):
+            self._string_length += p1.distance(p2)
             p1 = (p1 + self._control_point) * self._scale_factor
             p2 = (p2 + self._control_point)  * self._scale_factor
             self._canvas_content += f'''<line x1="{p1.x}" y1="{p1.y}" 
@@ -134,12 +135,14 @@ class Draw():
             ypat_points = yshape.points_along_circle
 
         for (p1, p2) in zip(xpat_points, ypat_points[config.offset:]+ypat_points[:config.offset]):
+            self._string_length += p1.distance(p2)
             p1 = (p1 + self._control_point) * self._scale_factor
             p2 = (p2 + self._control_point)  * self._scale_factor
             self._canvas_content += f'''<line x1="{p1.x}" y1="{p1.y}" 
             x2="{p2.x}" y2="{p2.y}" fill="none" stroke="{col}" stroke-width="{stroke_width}" />'''  
 
         for (p1, p2) in zip(xpat_points, ypat_points[-config.offset:]+ypat_points[:-config.offset]):
+            self._string_length += p1.distance(p2)
             p1 = (p1 + self._control_point) * self._scale_factor
             p2 = (p2 + self._control_point)  * self._scale_factor
             self._canvas_content += f'''<line x1="{p1.x}" y1="{p1.y}" 
