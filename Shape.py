@@ -60,8 +60,7 @@ class Shape():
         if self.config.line_points:
             return [self._points[0]] + [self._points[self.config.line_points+2]]
         else:
-            return self._points[0:self.config.shape_type]
-        
+            return [p for count, p in enumerate(self._points) if count % self.config.num_shapes == 0]        
     @property
     def points_along_circle(self):
         return self._points

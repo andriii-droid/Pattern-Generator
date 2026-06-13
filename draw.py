@@ -48,7 +48,7 @@ class Draw():
         elif isinstance(pat, Shape) and not pat.config.line_points:
             self.draw_shape_lines(pat, sketch=True)
         elif isinstance(pat, Shape) and pat.config.line_points:
-            self.draw_shape_lines(pat,  sketch=True)
+            self.draw_shape_lines(pat, sketch=True)
         return self._canvas_content
 
     
