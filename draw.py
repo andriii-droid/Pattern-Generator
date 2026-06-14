@@ -66,7 +66,7 @@ class Draw():
         point_lists = [points[i:i + shape.config.shape_type] for i in range(0, len(points), shape.config.shape_type)]
         for point_shape in point_lists:
             for (p1, p2) in zip(point_shape, point_shape[1:]+[point_shape[0]]):
-                self._string_length += p1.distance(p2)
+                if not sketch: self._string_length += p1.distance(p2)
                 p1 = (p1 + self._control_point) * self._scale_factor
                 p2 = (p2 + self._control_point)  * self._scale_factor
                 self._canvas_content += f'''<line x1="{p1.x}" y1="{p1.y}" 
@@ -86,7 +86,7 @@ class Draw():
         shape_points_list = self._split_list(points_list, shape.config.num_shapes) #needs to be used, when multiple Num_shapes is greater then 1 with linepoints is defined
         for points in shape_points_list:
             for (p1, p2) in zip(points, points[shape.config.line_points+2:]+points[0:shape.config.line_points+2]):
-                self._string_length += p1.distance(p2)
+                if not sketch: self._string_length += p1.distance(p2)
                 p1 = (p1 + self._control_point) * self._scale_factor
                 p2 = (p2 + self._control_point)  * self._scale_factor
                 self._canvas_content += f'''<line x1="{p1.x}" y1="{p1.y}" 
@@ -94,7 +94,9 @@ class Draw():
 
     def draw_lines_between_patterns(self, xpat: Shape | Spline, ypat: Shape | Spline, config, drawing_config: DrawingConfig):
         self._canvas_content = ''''''
-        if isinstance(xpat, Spline) and isinstance(ypat, Spline):
+        if not drawing_config.draw_lines:
+            pass
+        elif isinstance(xpat, Spline) and isinstance(ypat, Spline):
             self.draw_lines_between_splines(xpat, ypat)
         elif isinstance(xpat, Shape) and isinstance(ypat, Shape):
             self.draw_lines_between_shapes(xpat, ypat, config)
@@ -121,7 +123,7 @@ class Draw():
         ypat_points = yspline.points
 
         for (p1, p2) in zip(xpat_points, ypat_points[::-1]):
-            self._string_length += p1.distance(p2)
+            if not sketch: self._string_length += p1.distance(p2)
             p1 = (p1 + self._control_point) * self._scale_factor
             p2 = (p2 + self._control_point)  * self._scale_factor
             self._canvas_content += f'''<line x1="{p1.x}" y1="{p1.y}" 
@@ -141,7 +143,7 @@ class Draw():
         ypat_points = yshape.points_along_circle
 
         for (p1, p2) in zip(xpat_points, ypat_points[config.offset:]+ypat_points[:config.offset]):
-            self._string_length += p1.distance(p2)
+            if not sketch: self._string_length += p1.distance(p2)
             p1 = (p1 + self._control_point) * self._scale_factor
             p2 = (p2 + self._control_point)  * self._scale_factor
             self._canvas_content += f'''<line x1="{p1.x}" y1="{p1.y}" 
@@ -149,7 +151,7 @@ class Draw():
             if sketch: break
 
         for (p1, p2) in zip(xpat_points, ypat_points[-config.offset:]+ypat_points[:-config.offset]):
-            self._string_length += p1.distance(p2)
+            if not sketch: self._string_length += p1.distance(p2)
             p1 = (p1 + self._control_point) * self._scale_factor
             p2 = (p2 + self._control_point)  * self._scale_factor
             self._canvas_content += f'''<line x1="{p1.x}" y1="{p1.y}" 
