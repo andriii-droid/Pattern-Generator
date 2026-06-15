@@ -15,7 +15,13 @@ class SplineRow:
         self.points_ui = []
 
         with ui.column().classes('items-left w-full bg-slate-50 p-3 rounded-lg shadow-sm') as self.row:
-            with ui.expansion(f"Spline {self.id}", value=True).classes('font-semibold text-s text-slate-500 mt-1 w-full') as self.expand:
+            with ui.expansion(value=True).classes('font-semibold text-s text-slate-500 mt-1 w-full') as self.expand:
+                with self.expand.add_slot('header'):
+                    with ui.row().classes('w-full items-center justify-between'):
+                        ui.label(f"Spline {self.id}").classes('text-lg font-medium')
+                        
+                        # .stop prevents the click from opening/closing the expansion
+                        ui.button(icon='delete', on_click=lambda: self.on_delete(self)).props('flat color=red class=mt-auto').on('click.stop')
                 with ui.row().classes('items-center w-full'):
                     
                     # Left Column: Coordinates for the 3 points
@@ -41,8 +47,6 @@ class SplineRow:
                     with ui.column().classes('grow h-full bg-slate-50 p-3 rounded-lg shadow-sm items-start gap-4'):
                         self.num_points = ui.number(label="Points", value=2, min=2, step=1).classes('w-24')
                         
-                        # Delete button triggers the parent callback, passing this entire instance
-                        ui.button(icon='delete', on_click=lambda: self.on_delete(self)).props('flat color=red class=mt-auto')
                         self.centers = ui.select(cp_options, value=0, label='Centers') \
                             .classes('w-64').props('use-chips')
     def get_config(self):

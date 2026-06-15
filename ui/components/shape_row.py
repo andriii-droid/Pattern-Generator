@@ -23,7 +23,14 @@ class ShapeRow:
 
         # Use standard 'self.' attributes so other classes can easily read their values
         with ui.column().classes('items-left w-full bg-slate-50 p-3 rounded-lg shadow-sm') as self.row:
-            with ui.expansion(f"Shape {self.id}", value=True).classes('font-semibold text-s text-slate-500 mt-1 w-full') as self.expand:
+            with ui.expansion(value=True).classes('font-semibold text-s text-slate-500 mt-1 w-full') as self.expand:
+                with self.expand.add_slot('header'):
+                    with ui.row().classes('w-full items-center justify-between'):
+                        ui.label(f"Shape {self.id}").classes('text-lg font-medium')
+                        
+                        # .stop prevents the click from opening/closing the expansion
+                        ui.button(icon='delete', on_click=lambda: self.on_delete(self)).props('flat color=red class=mt-auto').on('click.stop')
+
                 with ui.row().classes('items-center w-full'):
                     self.shape = ui.select(label='Shape', options=shape_options, value=3).classes('w-28')
                     self.line_type = ui.select(label="Linetype", options=['line', 'dotted'], value='line').classes('w-26').on_value_change(handle_type_change)
@@ -44,8 +51,6 @@ class ShapeRow:
                     self.line_points = ui.number(label="Points", value=0, min=-1, step=1).classes('w-24') \
                         .bind_visibility_from(self.line_type, 'value', backward=lambda v: v == 'dotted') 
                     
-                    # When deleted, trigger the parent callback passing 'self' (the whole row object)
-                    ui.button(icon='delete', on_click=lambda: self.on_delete(self)).props('flat color=red')
                     self.centers = ui.select(cp_options, value=0, label='Centers') \
                         .classes('w-64').props('use-chips')
 
