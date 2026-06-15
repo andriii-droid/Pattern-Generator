@@ -22,7 +22,13 @@ class DashboardPage():
     
     # LEFT COLUMN: Controls Card
             with ui.card().classes('p-6 shadow-lg rounded-xl bg-white h-fit'):
-                ui.label('Pattern Generator').classes('text-2xl font-bold text-slate-800 mb-2')
+                with ui.row().classes('w-full items-center'):
+                    ui.label('Pattern Generator').classes('text-2xl font-bold text-slate-800 mb-2')
+                    ui.button('Generate Pattern', icon='picture_as_pdf', 
+                            on_click=lambda: self.coordinator.calculate_and_render(pattern_config=self.pattern_page.get_config(),
+                                                                                drawing_config=self.get_drawing_config(),
+                                                                                center_config=self.get_center_config())
+                            ).classes('grow').props('color=primary size=md')
                 
                 self.filename_input = ui.input(label='Filename', placeholder='output', suffix='.pdf/.gcode').classes('w-full mb-4')
                 with ui.row().classes('w-full justify-between items-center mb-2'):
@@ -54,13 +60,6 @@ class DashboardPage():
                 ui.separator().classes('my-2')
                 with ui.row().classes('w-full items-left mb-2'):
                     self.line_page.build()
-                    
-                # Updated Action: Generates data AND triggers the UI refresh
-                ui.button('Generate Pattern', icon='picture_as_pdf', 
-                        on_click=lambda: self.coordinator.calculate_and_render(pattern_config=self.pattern_page.get_config(),
-                                                                               drawing_config=self.get_drawing_config(),
-                                                                               center_config=self.get_center_config())
-                        ).classes('w-full py-2 text-lg').props('color=primary')
 
                         # RIGHT COLUMN: Preview Card
             with ui.card().classes('p-6 shadow-lg rounded-xl bg-white h-[860px] items-center'):
