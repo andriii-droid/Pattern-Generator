@@ -30,27 +30,27 @@ class SplineRow:
                             target_object=self.centers, 
                             target_name='value', 
                             backward=lambda v: f"Centerpoint {v}")
-                    with ui.column().classes('items-left bg-slate-50 p-3 rounded-lg shadow-sm'):
-                        point_labels = ["Start Point", "Control Point", "End Point"]
-                        
-                        for i in range(3):
-                            ui.label(point_labels[i]).classes('font-semibold text-xs text-slate-500 mt-1')
-                            with ui.row().classes('gap-2'):
-                                # Generate unique default angles based on your original logic
-                                default_angle = (i - 1) * 45
-                                
-                                angle_input = ui.number(label='Angle', value=default_angle, step=1).classes('w-24')
-                                dist_input = ui.number(label='Distance', value=40, min=1, step=1).classes('w-24')
-                                
-                                # Store references to the active UI elements as a dictionary pair
-                                self.points_ui.append({
-                                    'angle_input': angle_input,
-                                    'dist_input': dist_input
-                                })
-                    
-                    # Right Column: Spline settings & controls
-                    with ui.column().classes('grow h-full bg-slate-50 p-3 rounded-lg shadow-sm items-start gap-4'):
-                        self.num_points = ui.number(label="Points", value=2, min=2, step=1).classes('w-24')
+                    with ui.row().classes(' w-full'):
+                        with ui.column().classes('items-left bg-slate-50 p-3 rounded-lg shadow-sm'):
+                            point_labels = ["Start Point", "Control Point", "End Point"]
+                            
+                            for i in range(3):
+                                ui.label(point_labels[i]).classes('font-semibold text-xs text-slate-500 mt-1')
+                                with ui.row().classes('gap-2'):
+                                    # Generate unique default angles based on your original logic
+                                    default_angle = (i - 1) * 45
+                                    
+                                    angle_input = ui.number(label='Angle', value=default_angle, step=1).classes('w-24')
+                                    dist_input = ui.number(label='Distance', value=40, min=1, step=1).classes('w-24')
+                                    
+                                    # Store references to the active UI elements as a dictionary pair
+                                    self.points_ui.append({
+                                        'angle_input': angle_input,
+                                        'dist_input': dist_input
+                                    })
+                        with ui.column().classes():
+                            self.num_points = ui.number(label="Points", value=2, min=2, step=1).classes('grow self-start')                        
+
                         
     def get_config(self):
         """Helper method to extract current UI state into spline config object"""
