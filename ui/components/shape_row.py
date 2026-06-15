@@ -32,6 +32,9 @@ class ShapeRow:
                         ui.button(icon='delete', on_click=lambda: self.on_delete(self)).props('flat color=red class=mt-auto').on('click.stop')
 
                 with ui.row().classes('items-center w-full'):
+                    ui.label('Center').classes('font-semibold text-xs text-slate-500 mt-1 self-start')
+                    self.centers = ui.radio(cp_options, value=0).classes('grow').props('inline')
+                with ui.row().classes('items-center w-full'):
                     self.shape = ui.select(label='Shape', options=shape_options, value=3).classes('w-28')
                     self.line_type = ui.select(label="Linetype", options=['line', 'dotted'], value='line').classes('w-26').on_value_change(handle_type_change)
                     self.num_shapes = ui.number(label='Number', value=20, min=1, step=1).classes('w-24') \
@@ -50,9 +53,6 @@ class ShapeRow:
                     
                     self.line_points = ui.number(label="Points", value=0, min=-1, step=1).classes('w-24') \
                         .bind_visibility_from(self.line_type, 'value', backward=lambda v: v == 'dotted') 
-                    
-                    self.centers = ui.select(cp_options, value=0, label='Centers') \
-                        .classes('w-64').props('use-chips')
 
     def get_config(self):
         """Helper method to export the current UI state as shape config object"""

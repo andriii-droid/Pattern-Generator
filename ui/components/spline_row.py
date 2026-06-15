@@ -23,8 +23,9 @@ class SplineRow:
                         # .stop prevents the click from opening/closing the expansion
                         ui.button(icon='delete', on_click=lambda: self.on_delete(self)).props('flat color=red class=mt-auto').on('click.stop')
                 with ui.row().classes('items-center w-full'):
-                    
-                    # Left Column: Coordinates for the 3 points
+                    with ui.row().classes('items-center w-full'):
+                        ui.label('Center').classes('font-semibold text-xs text-slate-500 mt-1 self-start')
+                        self.centers = ui.radio(cp_options, value=0).classes('grow').props('inline')
                     with ui.column().classes('items-left bg-slate-50 p-3 rounded-lg shadow-sm'):
                         point_labels = ["Start Point", "Control Point", "End Point"]
                         
@@ -47,8 +48,6 @@ class SplineRow:
                     with ui.column().classes('grow h-full bg-slate-50 p-3 rounded-lg shadow-sm items-start gap-4'):
                         self.num_points = ui.number(label="Points", value=2, min=2, step=1).classes('w-24')
                         
-                        self.centers = ui.select(cp_options, value=0, label='Centers') \
-                            .classes('w-64').props('use-chips')
     def get_config(self):
         """Helper method to extract current UI state into spline config object"""
         return SplineConfig(
