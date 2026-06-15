@@ -18,14 +18,18 @@ class SplineRow:
             with ui.expansion(value=True).classes('font-semibold text-s text-slate-500 mt-1 w-full') as self.expand:
                 with self.expand.add_slot('header'):
                     with ui.row().classes('w-full items-center justify-between'):
-                        ui.label(f"Spline {self.id}").classes('text-lg font-medium')
-                        
-                        # .stop prevents the click from opening/closing the expansion
+                        with ui.row():
+                            ui.label(f"Spline {self.id}").classes('text-lg font-medium')
+                            self.label = ui.label().classes('font-semibold text-s text-slate-500 mt-1 self-end justify-start')
                         ui.button(icon='delete', on_click=lambda: self.on_delete(self)).props('flat color=red class=mt-auto').on('click.stop')
                 with ui.row().classes('items-center w-full'):
                     with ui.row().classes('items-center w-full'):
                         ui.label('Center').classes('font-semibold text-xs text-slate-500 mt-1 self-start')
                         self.centers = ui.radio(cp_options, value=0).classes('grow').props('inline')
+                        self.label.bind_text_from(
+                            target_object=self.centers, 
+                            target_name='value', 
+                            backward=lambda v: f"Centerpoint {v}")
                     with ui.column().classes('items-left bg-slate-50 p-3 rounded-lg shadow-sm'):
                         point_labels = ["Start Point", "Control Point", "End Point"]
                         
