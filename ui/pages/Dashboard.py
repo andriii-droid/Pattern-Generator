@@ -32,7 +32,7 @@ class DashboardPage():
                 
                 self.filename_input = ui.input(label='Filename', placeholder='output', suffix='.pdf/.gcode').classes('w-full mb-4')
                 with ui.row().classes('w-full justify-between items-center mb-2'):
-                    self.cord = ui.switch('Coordinates', value=False)
+                    self.cord = ui.switch('Coordinates', value=False, on_change=lambda e: self.coordinator.draw_cords(bool(e.value)))
                     self.gcode_x = ui.number(label='GCODE X Offset', value=self.coordinator.gcode_offset_x, min=0, step=0.1, on_change=lambda e: setattr(self.coordinator, 'gcode_offset', (e.value, self.gcode_y.value))).classes('w-24')
                     self.gcode_y = ui.number(label='GCODE Y Offset', value=self.coordinator.gcode_offset_y, min=0, step=0.1, on_change=lambda e: setattr(self.coordinator, 'gcode_offset', (self.gcode_x.value, e.value))).classes('w-24')
                 
@@ -95,7 +95,6 @@ class DashboardPage():
             draw_points=bool(self.points.value),
             draw_lines=bool(self.lines.value),
             draw_sketch=bool(self.sketch.value),
-            draw_coordinates=bool(self.cord.value),
             line_configs=self.line_page.get_config()
         )
 

@@ -25,7 +25,6 @@ class DrawingConfig:
     draw_points: bool
     draw_lines: bool
     draw_sketch: bool
-    draw_coordinates: bool
     line_configs: list[LineConfig]
 
 
