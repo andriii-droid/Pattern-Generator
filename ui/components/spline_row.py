@@ -39,7 +39,6 @@ class SplineRow:
                     
                     # Right Column: Spline settings & controls
                     with ui.column().classes('grow h-full bg-slate-50 p-3 rounded-lg shadow-sm items-start gap-4'):
-                        self.show_spline = ui.switch('Show Spline', value=False)
                         self.num_points = ui.number(label="Points", value=2, min=2, step=1).classes('w-24')
                         
                         # Delete button triggers the parent callback, passing this entire instance
@@ -49,7 +48,6 @@ class SplineRow:
     def get_config(self):
         """Helper method to extract current UI state into spline config object"""
         return SplineConfig(
-            show_spline=bool(self.show_spline.value),
             num_points=int(self.num_points.value),
             start_point=Point.from_polar(angle_degrees=self.points_ui[0]['angle_input'].value,
                                          distance=self.points_ui[0]['dist_input'].value),

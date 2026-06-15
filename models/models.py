@@ -45,7 +45,6 @@ class ShapeConfig:
 @dataclass
 class SplineConfig:
     """Data contract for complex spline tracks."""
-    show_spline: bool
     num_points: int
     start_point: Point
     control_point: Point
