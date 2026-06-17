@@ -24,15 +24,29 @@ class DashboardPage():
     
     # LEFT COLUMN: Controls Card
             with ui.card().classes('p-6 shadow-lg rounded-xl bg-white h-fit'):
-                with ui.row().classes('w-full items-center'):
+                with ui.row().classes('w-full items-center justify-between'):
                     ui.label('Pattern Generator').classes('text-2xl font-bold text-slate-800 mb-2')
+                    ui.button('Reset', icon='refresh',
+                        on_click=lambda: self.config.save_config()
+                        ).props('flat color=red size=md')
+                with ui.row().classes('w-full items-center'):
                     ui.button('Generate Pattern', icon='picture_as_pdf', 
                             on_click=lambda: self.coordinator.calculate_and_render(pattern_config=self.pattern_page.get_config(),
                                                                                 drawing_config=self.get_drawing_config(),
                                                                                 center_config=self.get_center_config())
-                            ).classes('grow').props('color=primary size=md')
-                
-                self.filename_input = ui.input(label='Filename', placeholder='output', suffix='.pdf/.gcode').classes('w-full mb-4')
+                            ).classes('w-full').props('color=primary size=md')
+                    ui.label('Config').classes('text-lg font-semibold text-slate-700')
+                    ui.button('Save', icon='save',
+                        on_click=lambda: self.config.save_config()
+                        ).props('flat color=orange size=md')
+                    ui.button('Download', icon='file_download',
+                        on_click=lambda: self.config.save_config()
+                        ).props('flat color=orange size=md')
+                    ui.button('Upload', icon='file_upload',
+                        on_click=lambda: self.config.save_config()
+                        ).props('flat color=orange size=md')
+                    ui.separator().classes('my-2')
+                    self.filename_input = ui.input(label='Filename', placeholder='output', suffix='.pdf/.gcode').classes('w-full mb-4')
                 with ui.row().classes('w-full justify-between items-center mb-2'):
                     self.cord = ui.switch('Coordinates', value=False, on_change=lambda e: self.coordinator.draw_cords(bool(e.value)))
                     self.gcode_x = ui.number(label='GCODE X Offset', value=self.coordinator.gcode_offset_x, min=0, step=0.1, on_change=lambda e: setattr(self.coordinator, 'gcode_offset', (e.value, self.gcode_y.value))).classes('w-24')
@@ -70,9 +84,6 @@ class DashboardPage():
                 with ui.row().classes('w-full justify-between items-center mb-4'):
                     ui.label('Preview').classes('text-2xl font-bold text-slate-800')
                     with ui.row().classes('gap-2'):
-                        ui.button('Save Config', icon='save',
-                                on_click=lambda: self.config.save_config()
-                                ).props('flat color=orange size=md')
                         ui.button('Save PDF', icon='save',
                                 on_click=lambda: self.coordinator.export_to_pdf(file_config=self.get_file_config())
                                 ).props('flat color=green size=md')
