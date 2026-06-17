@@ -1,8 +1,9 @@
 import json
-from ui.pages.Dashboard import DashboardPage
+from nicegui import ui
+
 
 class JSONConfig():
-    def __init__(self, page: DashboardPage):
+    def __init__(self, page):
         '''loads starting config'''
         self.global_controls_list = []
         controls = {"Coordinates":page.cord,
@@ -22,6 +23,7 @@ class JSONConfig():
 
     def save_config(self):
         '''Saves current config as json to file'''
+        ui.notify('Config has been saved!', type="positive")
 
         global_config = {"global_settings":{control.config_id:control.value for control in self.global_controls_list}}
         with open('config1.json', 'w') as f:

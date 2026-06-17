@@ -5,6 +5,8 @@ from pattern_coordinator import PatternCoordinator
 from models.models import FileConfig, DrawingConfig, CenterConfig
 from point import Point
 import urllib.parse
+from json_config import JSONConfig
+
 
 class DashboardPage():
     '''handles the dashboard'''
@@ -68,6 +70,9 @@ class DashboardPage():
                 with ui.row().classes('w-full justify-between items-center mb-4'):
                     ui.label('Preview').classes('text-2xl font-bold text-slate-800')
                     with ui.row().classes('gap-2'):
+                        ui.button('Save Config', icon='save',
+                                on_click=lambda: self.config.save_config()
+                                ).props('flat color=orange size=md')
                         ui.button('Save PDF', icon='save',
                                 on_click=lambda: self.coordinator.export_to_pdf(file_config=self.get_file_config())
                                 ).props('flat color=green size=md')
@@ -88,6 +93,9 @@ class DashboardPage():
                     on_mouse=lambda e: self.coordinator.handle_center((e.image_x, e.image_y), self.num_center_points.value, bool(self.snap.value))).classes('h-full w-auto max-h-[700px] object-contain shadow-md rounded-lg bg-white')
                 self.ii.on('loaded', lambda e: self.coordinator.set_canvas_dimensions(e.args))
                 self.ii.bind_content_from(self.coordinator, 'canvas_content')
+
+        self.config = JSONConfig(self)
+        self.config.load_config()
 
     def get_drawing_config(self):
         '''collects drawing config data'''

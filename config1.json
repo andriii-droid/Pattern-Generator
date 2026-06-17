@@ -1,13 +1,13 @@
 {
     "global_settings": {
-        "Coordinates": true,
+        "Coordinates": false,
         "Gcode X": 10.5,
         "Gcode Y": 23.5,
-        "Number Centerpoints": 17,
+        "Number Centerpoints": 1.0,
         "Snap": true,
-        "Define Center": false,
+        "Define Center": true,
         "Draw points": true,
-        "Draw lines": true,
-        "Draw sketch lines": false
+        "Draw lines": false,
+        "Draw sketch lines": true
     }
 }
