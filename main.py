@@ -7,5 +7,6 @@ def main_page():
     page = DashboardPage()
     page.build()
     config = JSONConfig(page)
-    config.save_config()
+    # config.save_config()
+    config.load_config()
 ui.run(title="PDF Pattern Generator")

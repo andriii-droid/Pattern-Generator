@@ -4,7 +4,7 @@ from ui.pages.Dashboard import DashboardPage
 class JSONConfig():
     def __init__(self, page: DashboardPage):
         '''loads starting config'''
-        self.global_controls = []
+        self.global_controls_list = []
         controls = {"Coordinates":page.cord,
                     "Gcode X":page.gcode_x,
                     "Gcode Y":page.gcode_y,
@@ -17,14 +17,26 @@ class JSONConfig():
         
         for id, control in controls.items():
             control.config_id = id
-            self.global_controls.append(control)
+            self.global_controls_list.append(control)
            
 
     def save_config(self):
         '''Saves current config as json to file'''
 
-        global_config = {"global_settings":{control.config_id:control.value for control in self.global_controls}}
+        global_config = {"global_settings":{control.config_id:control.value for control in self.global_controls_list}}
         with open('config1.json', 'w') as f:
             json.dump(global_config, f, indent=4)
 
+    def load_config(self):
+        '''loads config to UI'''
+        global_settings = {}
+        with open('config1.json', 'r') as f:
+            config = json.load(f)
+            global_settings = config["global_settings"]
+        
+        for control in self.global_controls_list:
+            control.value = global_settings[control.config_id]
+            control.update()
+
+            
 

@@ -1,9 +1,9 @@
 {
     "global_settings": {
-        "Coordinates": false,
+        "Coordinates": true,
         "Gcode X": 10.5,
         "Gcode Y": 23.5,
-        "Number Centerpoints": 1,
+        "Number Centerpoints": 17,
         "Snap": true,
         "Define Center": false,
         "Draw points": true,
