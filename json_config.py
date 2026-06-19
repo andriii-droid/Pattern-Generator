@@ -1,5 +1,5 @@
 import json
-from nicegui import ui
+from nicegui import ui, events
 
 
 class JSONConfig():
@@ -42,6 +42,24 @@ class JSONConfig():
         '''downloads current config'''
         ui.notify('Current config downloaded!', type='positive')
         ui.download.file('config/current_config.json')
+
+    def upload_config(self, e: events.UploadEventArguments):
+        try:
+
+            raw_bytes = e.file.read()
+            
+
+            # Parse the bytes directly into your dictionary
+            data = json.loads(raw_bytes)
+
+            # Access your nested configuration data smoothly!
+            global_settings = data.get("global_settings", {})
+            snap_value = global_settings.get("Snap", False)
+
+            ui.notify(f"Config Loaded! Snap is set to: {snap_value}")
+            print(data)
+        except Exception as err:
+            ui.notify(f"Failed to process file: {err}", type="negative")
 
     def _load_config(self, file):
         '''loads specified config'''

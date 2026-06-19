@@ -42,9 +42,9 @@ class DashboardPage():
                     ui.button('Download', icon='file_download',
                         on_click=lambda: self.config.download_current_config()
                         ).props('flat color=orange size=md')
-                    ui.button('Upload', icon='file_upload',
-                        on_click=lambda: self.config.save_current_config()
-                        ).props('flat color=orange size=md')
+                    uploader = ui.upload(auto_upload=True, on_upload=lambda e: self.config.upload_config(e)).props('accept=.json').classes('hidden')                    
+                    ui.button('UPLOAD', icon='upload', color='blue', 
+                        on_click=lambda: uploader.run_method('pickFiles')).props('flat color=orange size=md')
                     ui.separator().classes('my-2')
                     self.filename_input = ui.input(label='Filename', placeholder='output', suffix='.pdf/.gcode').classes('w-full mb-4')
                 with ui.row().classes('w-full justify-between items-center mb-2'):
