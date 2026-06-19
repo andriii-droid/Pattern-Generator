@@ -5,9 +5,9 @@
         "Gcode Y": 23.5,
         "Number Centerpoints": 1,
         "Snap": true,
-        "Define Center": true,
+        "Define Center": false,
         "Draw points": true,
-        "Draw lines": false,
-        "Draw sketch lines": true
+        "Draw lines": true,
+        "Draw sketch lines": false
     }
 }

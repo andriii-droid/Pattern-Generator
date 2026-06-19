@@ -27,7 +27,7 @@ class DashboardPage():
                 with ui.row().classes('w-full items-center justify-between'):
                     ui.label('Pattern Generator').classes('text-2xl font-bold text-slate-800 mb-2')
                     ui.button('Reset', icon='refresh',
-                        on_click=lambda: self.config.save_config()
+                        on_click=lambda: self.config.load_default_config()
                         ).props('flat color=red size=md')
                 with ui.row().classes('w-full items-center'):
                     ui.button('Generate Pattern', icon='picture_as_pdf', 
@@ -37,13 +37,13 @@ class DashboardPage():
                             ).classes('w-full').props('color=primary size=md')
                     ui.label('Config').classes('text-lg font-semibold text-slate-700')
                     ui.button('Save', icon='save',
-                        on_click=lambda: self.config.save_config()
+                        on_click=lambda: self.config.save_current_config()
                         ).props('flat color=orange size=md')
                     ui.button('Download', icon='file_download',
-                        on_click=lambda: self.config.save_config()
+                        on_click=lambda: self.config.save_current_config()
                         ).props('flat color=orange size=md')
                     ui.button('Upload', icon='file_upload',
-                        on_click=lambda: self.config.save_config()
+                        on_click=lambda: self.config.save_current_config()
                         ).props('flat color=orange size=md')
                     ui.separator().classes('my-2')
                     self.filename_input = ui.input(label='Filename', placeholder='output', suffix='.pdf/.gcode').classes('w-full mb-4')
@@ -106,7 +106,7 @@ class DashboardPage():
                 self.ii.bind_content_from(self.coordinator, 'canvas_content')
 
         self.config = JSONConfig(self)
-        self.config.load_config()
+        self.config.load_current_config()
 
     def get_drawing_config(self):
         '''collects drawing config data'''
