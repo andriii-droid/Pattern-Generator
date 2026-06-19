@@ -38,6 +38,11 @@ class JSONConfig():
         '''load default config'''
         self._load_config("config/default_config.json")
 
+    def download_current_config(self):
+        '''downloads current config'''
+        ui.notify('Current config downloaded!', type='positive')
+        ui.download.file('config/current_config.json')
+
     def _load_config(self, file):
         '''loads specified config'''
         global_settings = {}

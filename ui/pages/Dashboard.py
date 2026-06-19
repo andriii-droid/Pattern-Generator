@@ -40,7 +40,7 @@ class DashboardPage():
                         on_click=lambda: self.config.save_current_config()
                         ).props('flat color=orange size=md')
                     ui.button('Download', icon='file_download',
-                        on_click=lambda: self.config.save_current_config()
+                        on_click=lambda: self.config.download_current_config()
                         ).props('flat color=orange size=md')
                     ui.button('Upload', icon='file_upload',
                         on_click=lambda: self.config.save_current_config()
