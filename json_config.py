@@ -37,6 +37,7 @@ class JSONConfig():
     def load_default_config(self):
         '''load default config'''
         self._load_config("config/default_config.json")
+        ui.notify("Default config loaded!", type="positive")
 
     def download_current_config(self):
         '''downloads current config'''
@@ -44,6 +45,7 @@ class JSONConfig():
         ui.download.file('config/current_config.json')
 
     async def upload_config(self, e: events.UploadEventArguments):
+        '''loads a config to the ui'''
         try:
             file_content = await e.file.text()
 
@@ -61,8 +63,8 @@ class JSONConfig():
             ui.notify(f"An error occurred: {ex}", type="negative")
         finally:
             e.sender.reset()
+            ui.notify("Config loaded!", type="positive")
 
-            
     def _load_config(self, file):
         '''loads specified config'''
         global_settings = {}
