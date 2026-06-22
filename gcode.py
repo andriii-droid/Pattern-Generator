@@ -2,10 +2,12 @@ from pathlib import Path
 import time
 from shape import Shape
 from spline import Spline
+from point import Point
 
 class GCODE():
     def __init__(self, coordinator):
         self.coordinator = coordinator
+        self.a6 = Point(105/2, 148/2)
 
     def generate_gcode(self, patterns: list[Shape | Spline]):
         '''generates a gcode file using the points of a pattern as coordinates'''
@@ -23,7 +25,7 @@ class GCODE():
         start += "G1 Z20 F1200 ; Lift nozzle to 20mm quickly for safety\n"
         start += f"G1 X{self.coordinator.gcode_offset_x} Y{self.coordinator.gcode_offset_y} F4800 ; Move over the Homing Point, if set correctly\n"
         start += "M117 Attention Required! ; Display message on the screen\n"
-        start += "M0 Click to Resume ; Stop print, wait for LCD button press\n"
+        start += "M0 Click to Resume\n"
         end = "G1 Z40 F1200 ; Lift nozzle safely up to 20mm when done\n"
         end += "G1 X0 Y200 F4800 ; Present the bed (pushes bed forward, moves X to 0)\n"
         end += "M84 ; Disable stepper motors\n"
@@ -31,8 +33,8 @@ class GCODE():
         content = start
             
         for pat in patterns:
-            for p in pat.points:
-                content += f"G1 X{p.cartesian[0] + offset_x:.3f} Y{p.cartesian[1] + offset_y:.3f} F4800;\n"
+            for p in pat.points_along_circle:
+                content += f"G1 X{p.x + self.a6.x + offset_x:.3f} Y{p.y + self.a6.y + offset_y:.3f} F4800;\n"
                 content += "G1 Z0 F4800\n" 
                 content += "G1 Z15 F4800\n"
         content += end

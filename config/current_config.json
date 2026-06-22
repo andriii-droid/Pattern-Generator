@@ -1,8 +1,8 @@
 {
     "global_settings": {
         "Coordinates": false,
-        "Gcode X": 10.5,
-        "Gcode Y": 23.5,
+        "Gcode X": 20.0,
+        "Gcode Y": 19.0,
         "Number Centerpoints": 1,
         "Snap": true,
         "Define Center": false,
