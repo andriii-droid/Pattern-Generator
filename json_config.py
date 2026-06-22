@@ -43,24 +43,26 @@ class JSONConfig():
         ui.notify('Current config downloaded!', type='positive')
         ui.download.file('config/current_config.json')
 
-    def upload_config(self, e: events.UploadEventArguments):
+    async def upload_config(self, e: events.UploadEventArguments):
         try:
+            file_content = await e.file.text()
 
-            raw_bytes = e.file.read()
+            config_data = json.loads(file_content)
+            global_settings = config_data["global_settings"]
+            print(global_settings)
+
+            for control in self.global_controls_list:
+                control.value = global_settings[control.config_id]
+                control.update()
+
+        except json.JSONDecodeError:
+            ui.notify("Error: Invalid JSON format.", type="negative")
+        except Exception as ex:
+            ui.notify(f"An error occurred: {ex}", type="negative")
+        finally:
+            e.sender.reset()
+
             
-
-            # Parse the bytes directly into your dictionary
-            data = json.loads(raw_bytes)
-
-            # Access your nested configuration data smoothly!
-            global_settings = data.get("global_settings", {})
-            snap_value = global_settings.get("Snap", False)
-
-            ui.notify(f"Config Loaded! Snap is set to: {snap_value}")
-            print(data)
-        except Exception as err:
-            ui.notify(f"Failed to process file: {err}", type="negative")
-
     def _load_config(self, file):
         '''loads specified config'''
         global_settings = {}
