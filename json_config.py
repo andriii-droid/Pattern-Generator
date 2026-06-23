@@ -10,6 +10,7 @@ class JSONConfig():
                     "Gcode X":page.gcode_x,
                     "Gcode Y":page.gcode_y,
                     "Number Centerpoints":page.num_center_points,
+                    "Center Offset":page.offset_center,
                     "Snap":page.snap,
                     "Define Center":page.define_center,
                     "Draw points":page.points,

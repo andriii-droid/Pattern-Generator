@@ -40,27 +40,41 @@ class PatternCoordinator():
             ui.notify(e, type="negative")
         self._render_to_ui(drawing_config=drawing_config)
 
-
-
     def _calculate(self, pattern_config: PatternConfig, 
                    center_config: CenterConfig):
         '''calculates the specified patterns and stores the patterns'''
         self.patterns = []
+        done = False
 
-        #for each center point create one pattern
-        for cp_id, cp in enumerate(center_config.center_points):
-            for pattern in pattern_config.patterns:
-       
-                if cp_id == pattern.center_points:
-                    pattern.center = cp
-                    if isinstance(pattern, ShapeConfig):
-                        s = Shape(pattern)
-                        s.generate()
-                        self.patterns.append(s)
-                    elif isinstance(pattern, SplineConfig):
-                        s = Spline(pattern)
-                        s.generate()
-                        self.patterns.append(s)
+        while(True):
+            #for each center point create one pattern
+            for cp_id, cp in enumerate(center_config.center_points):
+                for pattern in pattern_config.patterns:
+        
+                    if cp_id == pattern.center_points:
+                        pattern.center = cp
+                        if isinstance(pattern, ShapeConfig):
+                            s = Shape(pattern)
+                            s.generate()
+                            self.patterns.append(s)
+                        elif isinstance(pattern, SplineConfig):
+                            s = Spline(pattern)
+                            s.generate()
+                            self.patterns.append(s)
+            
+            if not center_config.center_offset or done:
+                break
+            else:
+                y = []
+                x = []
+                for pat in self.patterns:
+                    y.extend([point.y for point in pat.points])
+                    x.extend([point.x for point in pat.points])
+                y_offset = - (max(y) + min(y)) / 2
+                x_offset = - (max(x) + min(x)) / 2
+                        
+                center_config.center_points = [p + Point(x_offset,y_offset) for p in center_config.center_points]
+                done = True
                 
     def _render_to_ui(self, drawing_config: DrawingConfig):
         '''draws points and lines to the ui'''

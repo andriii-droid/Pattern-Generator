@@ -5,6 +5,7 @@ from point import Point
 class CenterConfig:
     '''Data contract for centerpoints'''
     center_points: list[Point]
+    center_offset: bool
 
 @dataclass
 class FileConfig:

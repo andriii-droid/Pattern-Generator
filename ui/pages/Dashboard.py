@@ -57,7 +57,8 @@ class DashboardPage():
                     ui.label('Center').classes('text-lg font-semibold text-slate-700')
                     self.num_center_points = ui.number(label='Points', value=1, min=0, step=1).classes('w-24')
                     self.snap = ui.switch('Snap', value=True)
-                    self.define_center = ui.switch('Define Center', value=False, on_change=self.define_center)
+                    self.define_center = ui.switch('Define', value=False, on_change=self.define_center)
+                    self.offset_center = ui.switch('Offset', value=False)
                 ui.separator().classes('my-2')
 
                 with ui.row().classes('w-full justify-between items-center mb-2'):
@@ -128,7 +129,8 @@ class DashboardPage():
     def get_center_config(self):
         '''collects setting config data'''
         return CenterConfig(
-            center_points=self.coordinator.center.center_points
+            center_points=self.coordinator.center.center_points,
+            center_offset=bool(self.offset_center.value)
         )
     
     def update_ui(self):

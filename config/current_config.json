@@ -3,9 +3,10 @@
         "Coordinates": false,
         "Gcode X": 20.0,
         "Gcode Y": 19.0,
-        "Number Centerpoints": 1,
+        "Number Centerpoints": 2.0,
+        "Center Offset": true,
         "Snap": true,
-        "Define Center": false,
+        "Define Center": true,
         "Draw points": true,
         "Draw lines": true,
         "Draw sketch lines": false
