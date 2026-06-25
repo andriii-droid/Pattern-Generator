@@ -11,7 +11,8 @@ from json_config import JSONConfig
 class DashboardPage():
     '''handles the dashboard'''
     def __init__(self):
-        self.pattern_page = PatternManagerPage(self.update_ui)
+        self.config = JSONConfig()
+        self.pattern_page = PatternManagerPage(self.update_ui, self.config)
         self.line_page = LineManagerPage(self.pattern_page.id.active_ids)
         self.coordinator = PatternCoordinator(self.pattern_page.update_centers)
 
@@ -106,7 +107,7 @@ class DashboardPage():
                 self.ii.on('loaded', lambda e: self.coordinator.set_canvas_dimensions(e.args))
                 self.ii.bind_content_from(self.coordinator, 'canvas_content')
 
-        self.config = JSONConfig(self)
+        self.config.add_settings(self)
         self.config.load_current_config()
 
     def get_drawing_config(self):

@@ -3,10 +3,13 @@ from nicegui import ui, events
 
 
 class JSONConfig():
-    def __init__(self, page):
+    def __init__(self):
         '''loads starting config'''
         self.global_controls_list = []
-        controls = {"Coordinates":page.cord,
+        self.shapes_controls = []
+
+    def add_settings(self, page):
+        setting_controls = {"Coordinates":page.cord,
                     "Gcode X":page.gcode_x,
                     "Gcode Y":page.gcode_y,
                     "Number Centerpoints":page.num_center_points,
@@ -16,19 +19,55 @@ class JSONConfig():
                     "Draw points":page.points,
                     "Draw lines":page.lines,
                     "Draw sketch lines":page.sketch}
-        
-        for id, control in controls.items():
+        for id, control in setting_controls.items():
             control.config_id = id
             self.global_controls_list.append(control)
-           
+    
+    def add_shape(self, shape):
+        shape_controls_list = []
+        shape_controls = {"id": shape.id,
+                        "Centerpoint": shape.centers,
+                        "Shape": shape.shape,
+                        "Line Type": shape.line_type,
+                        "Number Shapes": shape.num_shapes,
+                        "Size": shape.size,
+                        "Hex Color": shape.hex_color,
+                        "Offset": shape.offset}
+        for id, control in shape_controls.items():
+            try:
+                control.config_id = id
+                shape_controls_list.append(control)
+            except:
+                shape_controls_list.append({id:control})
+        self.shapes_controls.append(shape_controls_list)
+
+    def remove_shape(self, shape):
+        for shape_control in self.shapes_controls:
+            if shape.id == shape_control[0]["id"]:
+                self.shapes_controls.remove(shape_control)
+                break
+                
 
     def save_current_config(self):
         '''Saves current config as json to file'''
         ui.notify('Config has been saved!', type="positive")
 
-        global_config = {"global_settings":{control.config_id:control.value for control in self.global_controls_list}}
+        config = {"global_settings":{control.config_id:control.value for control in self.global_controls_list}}
+        shapes_config = {}
+        for shape in self.shapes_controls:
+            shape_config = {}
+            for control in shape:
+                if not isinstance(control, dict):
+                     shape_config.update({control.config_id:control.value})
+                else:
+                    shape_config.update(control)
+            shapes_config.update({shape_config["id"]:shape_config})
+
+        print(shapes_config)
+
+        config.update({"shape_config":shapes_config})
         with open('config/current_config.json', 'w') as f:
-            json.dump(global_config, f, indent=4)
+            json.dump(config, f, indent=4)
 
     def load_current_config(self):
         '''loads current config to UI'''

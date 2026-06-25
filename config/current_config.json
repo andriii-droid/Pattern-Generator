@@ -10,5 +10,17 @@
         "Draw points": true,
         "Draw lines": true,
         "Draw sketch lines": false
+    },
+    "shape_config": {
+        "2": {
+            "id": 2,
+            "Centerpoint": 0,
+            "Shape": 3,
+            "Line Type": "line",
+            "Number Shapes": 20,
+            "Size": 40,
+            "Hex Color": "#000000",
+            "Offset": 1
+        }
     }
 }

@@ -3,11 +3,12 @@ from ui.components.shape_row import ShapeRow
 from ui.components.spline_row import SplineRow
 from models.models import PatternConfig
 from helpers.id import ID
+from json_config import JSONConfig
 
 
 class PatternManagerPage:
     '''handles shape and spline rows'''
-    def __init__(self, update_callback):
+    def __init__(self, update_callback, config):
         # Store instances of PatternRow objects rather than dictionaries
         self.shape_list: list[ShapeRow] = []
         self.spline_list: list[SplineRow] = []
@@ -15,6 +16,7 @@ class PatternManagerPage:
         self.update_callback = update_callback
         self.collapsed = False
         self.options = [0]
+        self.config = config
 
     def build(self):
         '''build the rows'''
@@ -32,6 +34,7 @@ class PatternManagerPage:
             # Create a new row, and pass our delete method as the callback
             new_row = ShapeRow(on_delete_callback=self.remove_row, id=self.id.new_shape_id, cp_options=self.options)
         self.shape_list.append(new_row)
+        self.config.add_shape(new_row)
         self.update_callback()
 
     def add_spline_row(self):
@@ -49,6 +52,7 @@ class PatternManagerPage:
         self.update_callback()
         if isinstance(row_instance, ShapeRow):
             self.shape_list.remove(row_instance)
+            self.config.remove_shape(row_instance)
         elif isinstance(row_instance, SplineRow):
             self.spline_list.remove(row_instance)
 
